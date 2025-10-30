@@ -1,0 +1,10 @@
+<resources>
+    <string name="character">Character</string>
+
+    <string name="character_list">Character List</string>
+    <string name="character_creation">Character Creation</string>
+    <string name="character_screen">Character Screen</string>
+    <string name="acquire_item">Acquire Item</string>
+
+    <string name="back_button">Back</string>
+</resources>

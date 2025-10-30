@@ -1,0 +1,147 @@
+package com.erhodes.falloutapp
+
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.presentation.CharacterViewModel
+import com.erhodes.falloutapp.presentation.ItemViewModel
+import com.erhodes.falloutapp.ui.AcquireItemScreen
+import com.erhodes.falloutapp.ui.CharacterCreation
+import com.erhodes.falloutapp.ui.CharacterList
+import com.erhodes.falloutapp.ui.CharacterScreen
+import com.erhodes.falloutapp.util.AppLogger
+import falloutapp.composeapp.generated.resources.Res
+import falloutapp.composeapp.generated.resources.acquire_item
+import falloutapp.composeapp.generated.resources.back_button
+import falloutapp.composeapp.generated.resources.character_creation
+import falloutapp.composeapp.generated.resources.character_list
+import falloutapp.composeapp.generated.resources.character_screen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.imageResource
+import org.jetbrains.compose.resources.stringResource
+
+enum class FalloutScreen(val title: StringResource) {
+    CharacterList(title = Res.string.character_list),
+    CharacterCreation(title = Res.string.character_creation),
+    CharacterScreen(title = Res.string.character_screen),
+    AddItemScreen(title = Res.string.acquire_item)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun FalloutAppBar(
+    currentScreen: FalloutScreen,
+    canNavigateBack: Boolean,
+    navigateUp: () -> Unit
+) {
+    TopAppBar(
+        title = { Text(stringResource(currentScreen.title)) },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(Res.string.back_button)
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Composable
+fun FalloutApp(
+    viewModel: CharacterViewModel = viewModel { CharacterViewModel() },
+    itemViewModel: ItemViewModel = viewModel { ItemViewModel() },
+    navController: NavHostController = rememberNavController()
+) {
+    // Get current back stack entry
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    // Get the name of the current screen
+    val currentScreen = FalloutScreen.valueOf(
+        backStackEntry?.destination?.route ?: FalloutScreen.CharacterScreen.name
+    )
+    Scaffold(
+        topBar = {
+            FalloutAppBar(
+                currentScreen = currentScreen,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                navigateUp = { navController.navigateUp() }
+            )
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = FalloutScreen.CharacterList.name,
+            modifier = Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
+        ) {
+            composable(route = FalloutScreen.CharacterList.name) {
+                val characterList = remember { viewModel.characters }
+                CharacterList(
+                    characterList,
+                    onSelect = {
+                        viewModel.setActiveCharacter(it)
+                        navController.navigate(FalloutScreen.CharacterScreen.name)
+                    },
+                    onNewCharacter = { navController.navigate(FalloutScreen.CharacterCreation.name) }
+                )
+            }
+            composable(route = FalloutScreen.CharacterCreation.name) {
+                CharacterCreation(
+                    onComplete = {
+                        viewModel.addCharacter(it)
+                        navController.navigate(FalloutScreen.CharacterList.name)
+                    }
+                )
+            }
+            composable(route = FalloutScreen.CharacterScreen.name) {
+                val uiState by viewModel.activeCharacterState.collectAsState()
+
+                CharacterScreen(
+                    state = uiState,
+                    onEquipItem = { viewModel.equipItemToCharacter(it) },
+                    onUnequipItem = { viewModel.unequipItemFromCharacter(it) },
+                    onAddItem = {
+                        navController.navigate(FalloutScreen.AddItemScreen.name)
+                    }
+                )
+            }
+            composable(route = FalloutScreen.AddItemScreen.name) {
+                AcquireItemScreen(
+                    items = itemViewModel.getAvailableItems(),
+                    onAcquireItem = {
+                        viewModel.addNewItemToActiveCharacter(it)
+                        navController.popBackStack()
+                    }
+                )
+            }
+        }
+    }
+}
