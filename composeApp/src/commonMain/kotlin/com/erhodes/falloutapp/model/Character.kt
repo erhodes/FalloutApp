@@ -12,6 +12,7 @@ class Character(
     val agility: Int = 1,
     val intelligence: Int = 1,
     val luck: Int = 1,
+    val skills: ArrayList<Int> = arrayListOf<Int>(2,2,2,2,2,2,2,2,2,2,2,2)
 ) {
 
     var load = 0
@@ -22,6 +23,10 @@ class Character(
 
     val loadout = ArrayList<Item>()
     val inventory = ArrayList<Item>()
+
+    fun getMaxSkillValue(): Int {
+        return 5
+    }
 
     fun addItemToInventory(item: Item) {
         inventory.add(item)

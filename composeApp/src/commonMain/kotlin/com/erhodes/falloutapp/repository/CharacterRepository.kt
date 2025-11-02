@@ -46,6 +46,13 @@ class CharacterRepository(
         saveCharacters()
 	}
 
+    fun increaseSkillsForCharacter(increases: List<Int>, character: Character) {
+        for (i in 0 until increases.size) {
+            character.skills[i]+=increases[i]
+        }
+        saveCharacters()
+    }
+
     fun addNewItemToCharacter(newItem: ItemTemplate, character: Character) {
         character.addItemToInventory(Item(newItem))
         saveCharacters()

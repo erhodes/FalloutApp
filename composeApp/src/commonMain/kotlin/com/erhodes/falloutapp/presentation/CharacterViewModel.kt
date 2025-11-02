@@ -1,7 +1,6 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
-import com.erhodes.falloutapp.data.store
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
@@ -25,8 +24,12 @@ class CharacterViewModel(
     private val _activeCharacterState = MutableStateFlow(CharacterUiState(activeCharacter))
     val activeCharacterState = _activeCharacterState.asStateFlow()
 
+    private var addSkillsState = BonusSkillUiState(activeCharacter, 1)
+    private val _bonusSkillsState = MutableStateFlow(addSkillsState)
+    val bonusSkillsState = _bonusSkillsState.asStateFlow()
+
     //TODO add DI and move this logic to the creation view model
-    fun addCharacter(name: String, uiState: CharacterCreationUiState) {
+    fun addCharacter(name: String, uiState: CharacterCreationUiState): Character {
         val newChar =
             Character(
                 name = name,
@@ -36,10 +39,12 @@ class CharacterViewModel(
                 charisma = uiState.charisma,
                 intelligence = uiState.intelligence,
                 agility = uiState.agility,
-                luck = uiState.luck
+                luck = uiState.luck,
+                skills = uiState.skills
             )
 
         repo.add(newChar)
+        return newChar
     }
 
     fun setActiveCharacter(character: Character) {
@@ -48,6 +53,33 @@ class CharacterViewModel(
             _activeCharacterState.update{ CharacterUiState(activeCharacter) }
         }
 
+    }
+
+    private fun updateBonusSkillsState(newState: BonusSkillUiState) {
+        addSkillsState = newState
+        scope.launch {
+            _bonusSkillsState.update { addSkillsState }
+        }
+    }
+
+    fun resetBonusSkillsState(bonuses: Int) {
+        updateBonusSkillsState(BonusSkillUiState(activeCharacter, bonuses))
+    }
+
+    fun onIncreaseSkillClicked(ordinal: Int) {
+        if (activeCharacter.skills[ordinal] + 1 >= activeCharacter.getMaxSkillValue()) return
+        addSkillsState.appliedBonuses[ordinal]++
+        updateBonusSkillsState(addSkillsState.copy(bonuses = addSkillsState.bonuses-1))
+    }
+
+    fun onDecreaseSkillClicked(ordinal: Int) {
+        if (activeCharacter.skills[ordinal] - 1 <= 0) return
+        addSkillsState.appliedBonuses[ordinal]--
+        updateBonusSkillsState(addSkillsState.copy(bonuses = addSkillsState.bonuses+1))
+    }
+
+    fun onIncreaseSkillsFinalized() {
+        repo.increaseSkillsForCharacter(addSkillsState.appliedBonuses, activeCharacter)
     }
 
     fun addNewItemToActiveCharacter(newItem: ItemTemplate) {

@@ -2,11 +2,15 @@ package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.presentation.CharacterCreationUiState
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.agility
@@ -14,9 +18,13 @@ import falloutapp.composeapp.generated.resources.charisma
 import falloutapp.composeapp.generated.resources.endurance
 import falloutapp.composeapp.generated.resources.intelligence
 import falloutapp.composeapp.generated.resources.luck
+import falloutapp.composeapp.generated.resources.major
+import falloutapp.composeapp.generated.resources.minor
 import falloutapp.composeapp.generated.resources.perception
+import falloutapp.composeapp.generated.resources.skills
 import falloutapp.composeapp.generated.resources.special
 import falloutapp.composeapp.generated.resources.strength
+import falloutapp.composeapp.generated.resources.unselect
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -25,6 +33,8 @@ fun CharacterCreationScreen(
     uiState: CharacterCreationUiState,
     onIncrement: (Int) -> Unit,
     onDecrement: (Int) -> Unit,
+    onMajorClicked: (Int) -> Unit,
+    onMinorClicked: (Int) -> Unit,
     onComplete: (String) -> Unit
 ) {
     Column {
@@ -85,8 +95,43 @@ fun CharacterCreationScreen(
 
         }
 
+        Text(stringResource(Res.string.skills))
+        Text("Majors remaining: ${uiState.majorsRemaining}  Minors remaining: ${uiState.minorsRemaining}")
+//        val ordinal = 0
+//        Row {
+//            Text(stringResource(Skills.entries[ordinal].description))
+//            Button(
+//                onClick = { },
+//                enabled = uiState.skills[ordinal] == 5
+//            ) {
+//                Text(stringResource(Res.string.major))
+//            }
+//            Button(
+//                onClick = {},
+//                enabled = uiState.skills[ordinal] == 4
+//            ) {
+//                Text(stringResource(Res.string.minor))
+//            }
+//        }
+
+        Row {
+            Column(
+                modifier = Modifier.padding(end = 10.dp)
+            ) {
+                for (i in 0.. 5) {
+                    SkillAllocationPanel(i, uiState.skills[i], onMajorClicked, onMinorClicked)
+                }
+            }
+            Column {
+                for (i in 6.. 11) {
+                    SkillAllocationPanel(i, uiState.skills[i], onMajorClicked, onMinorClicked)
+                }
+            }
+        }
+
         Button(
-            onClick = { onComplete(text) }
+            onClick = { onComplete(text) },
+            enabled = text.isNotEmpty()
         ) {
             Text("Done")
         }
@@ -94,15 +139,49 @@ fun CharacterCreationScreen(
 }
 
 @Composable
+fun SkillAllocationPanel(ordinal: Int, value: Int, onSelectMajor: (Int) -> Unit, onSelectMinor: (Int) -> Unit) {
+    Row {
+        Text(stringResource(Skills.entries[ordinal].description))
+        Button(
+            onClick = { onSelectMajor(ordinal) }
+        ) {
+            if (value == 5) {
+                Text(stringResource(Res.string.unselect))
+            } else {
+                Text(stringResource(Res.string.major))
+            }
+
+        }
+        Button(
+            onClick = { onSelectMinor(ordinal) }
+        ) {
+            if (value == 4) {
+                Text(stringResource(Res.string.unselect))
+            } else {
+                Text(stringResource(Res.string.minor))
+            }
+        }
+    }
+}
+
+@Composable
 fun SpecialAllocation(label: String, value: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
-    Column {
+    Column(
+        modifier = Modifier.padding(end = 10.dp)
+    ) {
         Text(label)
         Text("$value")
         Row {
-            Button(onClick = onIncrement) {
+            Button(
+                enabled = value != 3,
+                onClick = onIncrement
+            ) {
                 Text("+")
             }
-            Button(onClick = onDecrement) {
+            Button(
+                enabled = value != 1,
+                onClick = onDecrement
+            ) {
                 Text("-")
             }
         }
@@ -115,6 +194,8 @@ fun CharacterCreationScreenPreview() {
     MaterialTheme {
         CharacterCreationScreen(
             CharacterCreationUiState(),
+            {},
+            {},
             {},
             {}
         ) {  }

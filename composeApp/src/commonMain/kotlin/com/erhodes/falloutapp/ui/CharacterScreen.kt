@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -16,8 +17,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
+import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.repository.ItemRepository
+import falloutapp.composeapp.generated.resources.Res
+import falloutapp.composeapp.generated.resources.skills
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -46,6 +51,24 @@ fun CharacterScreen(state: CharacterUiState,
             SpecialPanel("I", character.intelligence)
             SpecialPanel("A", character.agility)
             SpecialPanel("L", character.luck)
+        }
+        HorizontalDivider(thickness = 2.dp)
+
+        //Skills
+        Text(stringResource(Res.string.skills))
+        Row {
+            Column(
+                modifier = Modifier.padding(end = 10.dp)
+            ) {
+                for (i in 0.. 5) {
+                    Text("${stringResource(Skills.entries[i].description)}: ${character.skills[i]}")
+                }
+            }
+            Column {
+                for (i in 6.. 11) {
+                    Text("${stringResource(Skills.entries[i].description)}: ${character.skills[i]}")
+                }
+            }
         }
         HorizontalDivider(thickness = 2.dp)
 

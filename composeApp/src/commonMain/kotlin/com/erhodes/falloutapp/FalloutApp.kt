@@ -27,15 +27,19 @@ import com.erhodes.falloutapp.presentation.CharacterCreationViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.ItemViewModel
 import com.erhodes.falloutapp.ui.AcquireItemScreen
+import com.erhodes.falloutapp.ui.BonusSkillsScreen
 import com.erhodes.falloutapp.ui.CharacterCreationScreen
 import com.erhodes.falloutapp.ui.CharacterList
 import com.erhodes.falloutapp.ui.CharacterScreen
+import com.erhodes.falloutapp.util.AppLogger
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.acquire_item
 import falloutapp.composeapp.generated.resources.back_button
+import falloutapp.composeapp.generated.resources.bonus_skills
 import falloutapp.composeapp.generated.resources.character_creation
 import falloutapp.composeapp.generated.resources.character_list
 import falloutapp.composeapp.generated.resources.character_screen
+import kotlinx.coroutines.flow.channelFlow
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,7 +47,8 @@ enum class FalloutScreen(val title: StringResource) {
     CharacterList(title = Res.string.character_list),
     CharacterCreation(title = Res.string.character_creation),
     CharacterScreen(title = Res.string.character_screen),
-    AddItemScreen(title = Res.string.acquire_item)
+    AddItemScreen(title = Res.string.acquire_item),
+    BonusSkillsScreen(title = Res.string.bonus_skills)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,9 +119,14 @@ fun FalloutApp(
                     uiState = uiState,
                     onIncrement = { creationViewModel.incrementStat(it) },
                     onDecrement = { creationViewModel.decrementStat(it) },
+                    onMajorClicked = { creationViewModel.onMajorClicked(it) },
+                    onMinorClicked = { creationViewModel.onMinorClicked(it) },
                     onComplete = {
-                        viewModel.addCharacter(it, uiState)
-                        navController.navigate(FalloutScreen.CharacterList.name)
+                        val newChar = viewModel.addCharacter(it, uiState)
+                        viewModel.setActiveCharacter(newChar)
+                        viewModel.resetBonusSkillsState(newChar.intelligence)
+                        navController.navigate(FalloutScreen.BonusSkillsScreen.name)
+//                        navController.navigate(FalloutScreen.CharacterList.name)
                     }
                 )
             }
@@ -138,6 +148,18 @@ fun FalloutApp(
                     onAcquireItem = {
                         viewModel.addNewItemToActiveCharacter(it)
                         navController.popBackStack()
+                    }
+                )
+            }
+            composable(route = FalloutScreen.BonusSkillsScreen.name) {
+                val uiState by viewModel.bonusSkillsState.collectAsState()
+                BonusSkillsScreen(
+                    uiState = uiState,
+                    onIncreaseClicked = { viewModel.onIncreaseSkillClicked(it) },
+                    onDecreaseClicked = { viewModel.onDecreaseSkillClicked(it) },
+                    onFinalizeClicked = {
+                        viewModel.onIncreaseSkillsFinalized()
+                        navController.navigate(FalloutScreen.CharacterList.name)
                     }
                 )
             }

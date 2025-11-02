@@ -5,8 +5,11 @@
     <string name="character_creation">Character Creation</string>
     <string name="character_screen">Character Screen</string>
     <string name="acquire_item">Acquire Item</string>
+    <string name="bonus_skills">Bonus Skills</string>
 
     <string name="back_button">Back</string>
+
+    <string name="done">Done</string>
 
 
     <string name="special">SPECIAL</string>
@@ -17,4 +20,23 @@
     <string name="intelligence">Intelligence</string>
     <string name="agility">Agility</string>
     <string name="luck">Luck</string>
+
+    <string name="skills">Skills</string>
+    <string name="athletics">Athletics</string>
+    <string name="engineering">Engineering</string>
+    <string name="guns">Guns</string>
+    <string name="medicine">Medicine</string>
+    <string name="melee">Melee</string>
+    <string name="sabotage">Sabotage</string>
+    <string name="science">Science</string>
+    <string name="sneak">Sneak</string>
+    <string name="social_sciences">Social Sciences</string>
+    <string name="speech">Speech</string>
+    <string name="survival">Survival</string>
+    <string name="throwing">Throwing</string>
+
+    <string name="major">Major</string>
+    <string name="minor">Minor</string>
+
+    <string name="unselect">Unselect</string>
 </resources>
