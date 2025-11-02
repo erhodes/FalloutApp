@@ -1,6 +1,7 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
+import com.erhodes.falloutapp.data.store
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
@@ -24,9 +25,6 @@ class CharacterViewModel(
     private val _activeCharacterState = MutableStateFlow(CharacterUiState(activeCharacter))
     val activeCharacterState = _activeCharacterState.asStateFlow()
 
-//    private val _activeCharacterFlow = MutableSharedFlow<Character>(1)
-//    val activeCharacterFlow = _activeCharacterFlow.asSharedFlow()
-
     fun addCharacter(name: String) {
         repo.add(name)
     }
@@ -35,8 +33,6 @@ class CharacterViewModel(
         activeCharacter = character
         scope.launch {
             _activeCharacterState.update{ CharacterUiState(activeCharacter) }
-//            _activeCharacterFlow.emit(activeCharacter)
-//            _activeCharacterState.emit(activeCharacter)
         }
 
     }
@@ -50,8 +46,6 @@ class CharacterViewModel(
         activeCharacter.equipItem(item)
         scope.launch {
             _activeCharacterState.update{ CharacterUiState(activeCharacter) }
-//            _activeCharacterFlow.emit(activeCharacter)
-//            _activeCharacterState.update{ activeCharacter }
         }
     }
 

@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.invoke
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -7,6 +8,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    kotlin("plugin.serialization") version "2.2.20"
 }
 
 kotlin {
@@ -55,6 +57,12 @@ kotlin {
             implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
 
             implementation(libs.navigation.compose)
+
+            implementation(libs.kstore)
+            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+        }
+        webMain.dependencies {
+            implementation(libs.kstore.storage)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

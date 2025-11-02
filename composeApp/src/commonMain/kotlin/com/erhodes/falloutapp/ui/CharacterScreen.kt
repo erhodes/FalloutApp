@@ -37,6 +37,19 @@ fun CharacterScreen(state: CharacterUiState,
         HorizontalDivider(thickness = 2.dp)
 
         Row(
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            SpecialPanel("S", character.strength)
+            SpecialPanel("P", character.perception)
+            SpecialPanel("E", character.endurance)
+            SpecialPanel("C", character.charisma)
+            SpecialPanel("I", character.intelligence)
+            SpecialPanel("A", character.agility)
+            SpecialPanel("L", character.luck)
+        }
+        HorizontalDivider(thickness = 2.dp)
+
+        Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -80,6 +93,14 @@ fun CharacterScreen(state: CharacterUiState,
         ) {
             Text("Add Item")
         }
+    }
+}
+
+@Composable
+fun SpecialPanel(title: String, value: Int) {
+    Column {
+        Text(title)
+        Text("$value")
     }
 }
 

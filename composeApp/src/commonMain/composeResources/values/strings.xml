@@ -7,4 +7,12 @@
     <string name="acquire_item">Acquire Item</string>
 
     <string name="back_button">Back</string>
+
+    <string name="strength">Strength</string>
+    <string name="perception">Perception</string>
+    <string name="endurance">Endurance</string>
+    <string name="charisma">Charisma</string>
+    <string name="intelligence">Intelligence</string>
+    <string name="agility">Agility</string>
+    <string name="lucy">Luck</string>
 </resources>

@@ -1,11 +1,18 @@
 package com.erhodes.falloutapp.model
 
 class Character(
-    val name: String
+    val name: String,
+    val strength: Int = 1,
+    val perception: Int = 1,
+    val endurance: Int = 1,
+    val charisma: Int = 1,
+    val agility: Int = 1,
+    val intelligence: Int = 1,
+    val luck: Int = 1,
 ) {
 
     var load = 0
-    val loadoutLimit = 5
+    val loadoutLimit = strength + 4
 
     var inventoryWeight = 0
     var inventoryLimit = 10

@@ -1,6 +1,10 @@
 package com.erhodes.falloutapp.repository
 
+import com.erhodes.falloutapp.data.CharacterDataSource
 import com.erhodes.falloutapp.model.Character
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Simple in-memory repository for Characters.
@@ -9,15 +13,24 @@ import com.erhodes.falloutapp.model.Character
  * It provides basic CRUD operations and a lightweight subscription callback
  * mechanism suitable for MVVM consumers in Compose.
  */
-class CharacterRepository {
+class CharacterRepository(
+    private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
+) {
 
 	val characters = mutableListOf<Character>()
 	private val listeners = mutableSetOf<(List<Character>) -> Unit>()
 
+    val dataSource = CharacterDataSource()
+
 	init {
 		// Seed with a couple of sample characters to make UI previews easier.
-		characters.add(Character("Vault Dweller"))
-		characters.add(Character("Wanderer"))
+//		characters.add(Character("Vault Dweller"))
+//		characters.add(Character("Wanderer"))
+
+        scope.launch {
+            characters.addAll(dataSource.loadCharacters())
+        }
+
 	}
 
 	/** Return a snapshot of all characters. */
@@ -27,6 +40,8 @@ class CharacterRepository {
 	fun add(character: Character) {
 		characters.add(character)
 		notifyListeners()
+
+        dataSource.saveCharacters(characters)
 	}
 
 	/** Convenience: add by name. */
