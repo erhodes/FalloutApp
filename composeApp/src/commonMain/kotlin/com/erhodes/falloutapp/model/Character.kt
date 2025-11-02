@@ -1,5 +1,8 @@
 package com.erhodes.falloutapp.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class Character(
     val name: String,
     val strength: Int = 1,

@@ -38,12 +38,22 @@ class CharacterViewModel(
     }
 
     fun addNewItemToActiveCharacter(newItem: ItemTemplate) {
-        activeCharacter.addItemToInventory(Item(newItem))
+        repo.addNewItemToCharacter(newItem, activeCharacter)
+        scope.launch {
+            _activeCharacterState.update{ CharacterUiState(activeCharacter) }
+        }
+    }
+
+    fun removeItemFromActiveCharacter(item: Item) {
+        repo.removeItemFromCharacter(item, activeCharacter)
+        scope.launch {
+            _activeCharacterState.update{ CharacterUiState(activeCharacter) }
+        }
     }
 
     fun equipItemToCharacter(item: Item) {
         AppLogger.d("Eric","lets equip an item")
-        activeCharacter.equipItem(item)
+        repo.equipItemToCharacter(item, activeCharacter)
         scope.launch {
             _activeCharacterState.update{ CharacterUiState(activeCharacter) }
         }
@@ -51,7 +61,7 @@ class CharacterViewModel(
 
     fun unequipItemFromCharacter(item: Item) {
         AppLogger.d("Eric","lets UNequip an item")
-        activeCharacter.unequipItem(item)
+        repo.unequipItemFromCharacter(item, activeCharacter)
         scope.launch {
             _activeCharacterState.update { CharacterUiState(activeCharacter) }
         }

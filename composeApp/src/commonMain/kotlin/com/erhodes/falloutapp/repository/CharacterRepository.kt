@@ -2,6 +2,8 @@ package com.erhodes.falloutapp.repository
 
 import com.erhodes.falloutapp.data.CharacterDataSource
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Item
+import com.erhodes.falloutapp.model.ItemTemplate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,8 +43,32 @@ class CharacterRepository(
 		characters.add(character)
 		notifyListeners()
 
-        dataSource.saveCharacters(characters)
+        saveCharacters()
 	}
+
+    fun addNewItemToCharacter(newItem: ItemTemplate, character: Character) {
+        character.addItemToInventory(Item(newItem))
+        saveCharacters()
+    }
+
+    fun removeItemFromCharacter(item: Item, character: Character) {
+        character.removeItemFromInventory(item)
+        saveCharacters()
+    }
+
+    fun equipItemToCharacter(item: Item, character: Character) {
+        character.equipItem(item)
+        saveCharacters()
+    }
+
+    fun unequipItemFromCharacter(item: Item, character: Character) {
+        character.unequipItem(item)
+        saveCharacters()
+    }
+
+    private fun saveCharacters() {
+        dataSource.saveCharacters(characters)
+    }
 
 	/** Convenience: add by name. */
 	fun add(name: String) = add(Character(name))

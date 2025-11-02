@@ -1,5 +1,8 @@
 package com.erhodes.falloutapp.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 open class Item(
     /**
      * What item is this an instance of
