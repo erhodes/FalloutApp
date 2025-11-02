@@ -25,8 +25,21 @@ class CharacterViewModel(
     private val _activeCharacterState = MutableStateFlow(CharacterUiState(activeCharacter))
     val activeCharacterState = _activeCharacterState.asStateFlow()
 
-    fun addCharacter(name: String) {
-        repo.add(name)
+    //TODO add DI and move this logic to the creation view model
+    fun addCharacter(name: String, uiState: CharacterCreationUiState) {
+        val newChar =
+            Character(
+                name = name,
+                strength = uiState.strength,
+                perception = uiState.perception,
+                endurance = uiState.endurance,
+                charisma = uiState.charisma,
+                intelligence = uiState.intelligence,
+                agility = uiState.agility,
+                luck = uiState.luck
+            )
+
+        repo.add(newChar)
     }
 
     fun setActiveCharacter(character: Character) {

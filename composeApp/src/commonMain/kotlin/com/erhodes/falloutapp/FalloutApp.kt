@@ -7,7 +7,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -24,25 +23,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.presentation.CharacterCreationViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.ItemViewModel
 import com.erhodes.falloutapp.ui.AcquireItemScreen
-import com.erhodes.falloutapp.ui.CharacterCreation
+import com.erhodes.falloutapp.ui.CharacterCreationScreen
 import com.erhodes.falloutapp.ui.CharacterList
 import com.erhodes.falloutapp.ui.CharacterScreen
-import com.erhodes.falloutapp.util.AppLogger
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.acquire_item
 import falloutapp.composeapp.generated.resources.back_button
 import falloutapp.composeapp.generated.resources.character_creation
 import falloutapp.composeapp.generated.resources.character_list
 import falloutapp.composeapp.generated.resources.character_screen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.stringResource
 
 enum class FalloutScreen(val title: StringResource) {
@@ -78,6 +72,7 @@ fun FalloutAppBar(
 fun FalloutApp(
     viewModel: CharacterViewModel = viewModel { CharacterViewModel() },
     itemViewModel: ItemViewModel = viewModel { ItemViewModel() },
+    creationViewModel: CharacterCreationViewModel = viewModel { CharacterCreationViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     // Get current back stack entry
@@ -114,9 +109,13 @@ fun FalloutApp(
                 )
             }
             composable(route = FalloutScreen.CharacterCreation.name) {
-                CharacterCreation(
+                val uiState by creationViewModel.creationUiState.collectAsState()
+                CharacterCreationScreen(
+                    uiState = uiState,
+                    onIncrement = { creationViewModel.incrementStat(it) },
+                    onDecrement = { creationViewModel.decrementStat(it) },
                     onComplete = {
-                        viewModel.addCharacter(it)
+                        viewModel.addCharacter(it, uiState)
                         navController.navigate(FalloutScreen.CharacterList.name)
                     }
                 )

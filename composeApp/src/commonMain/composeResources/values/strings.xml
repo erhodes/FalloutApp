@@ -8,11 +8,13 @@
 
     <string name="back_button">Back</string>
 
+
+    <string name="special">SPECIAL</string>
     <string name="strength">Strength</string>
     <string name="perception">Perception</string>
     <string name="endurance">Endurance</string>
     <string name="charisma">Charisma</string>
     <string name="intelligence">Intelligence</string>
     <string name="agility">Agility</string>
-    <string name="lucy">Luck</string>
+    <string name="luck">Luck</string>
 </resources>

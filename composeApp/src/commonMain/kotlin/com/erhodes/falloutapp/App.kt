@@ -6,33 +6,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.erhodes.falloutapp.repository.CharacterRepository
-import com.erhodes.falloutapp.ui.CharacterCreation
-import com.erhodes.falloutapp.ui.CharacterList
-import com.erhodes.falloutapp.ui.CharacterScreen
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import falloutapp.composeapp.generated.resources.Res
-import falloutapp.composeapp.generated.resources.character_creation
-import falloutapp.composeapp.generated.resources.character_list
-import falloutapp.composeapp.generated.resources.character_screen
 import falloutapp.composeapp.generated.resources.compose_multiplatform
-import org.jetbrains.compose.resources.StringResource
 
 @Composable
 fun oldApp() {
