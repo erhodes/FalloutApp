@@ -26,11 +26,13 @@ import androidx.navigation.compose.rememberNavController
 import com.erhodes.falloutapp.presentation.CharacterCreationViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.ItemViewModel
+import com.erhodes.falloutapp.repository.PerkRepository
 import com.erhodes.falloutapp.ui.AcquireItemScreen
 import com.erhodes.falloutapp.ui.BonusSkillsScreen
 import com.erhodes.falloutapp.ui.CharacterCreationScreen
 import com.erhodes.falloutapp.ui.CharacterList
 import com.erhodes.falloutapp.ui.CharacterScreen
+import com.erhodes.falloutapp.ui.PerkSelectScreen
 import com.erhodes.falloutapp.util.AppLogger
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.acquire_item
@@ -39,6 +41,7 @@ import falloutapp.composeapp.generated.resources.bonus_skills
 import falloutapp.composeapp.generated.resources.character_creation
 import falloutapp.composeapp.generated.resources.character_list
 import falloutapp.composeapp.generated.resources.character_screen
+import falloutapp.composeapp.generated.resources.select_perk
 import kotlinx.coroutines.flow.channelFlow
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -48,7 +51,8 @@ enum class FalloutScreen(val title: StringResource) {
     CharacterCreation(title = Res.string.character_creation),
     CharacterScreen(title = Res.string.character_screen),
     AddItemScreen(title = Res.string.acquire_item),
-    BonusSkillsScreen(title = Res.string.bonus_skills)
+    BonusSkillsScreen(title = Res.string.bonus_skills),
+    PerkSelectScreen(title = Res.string.select_perk)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -126,7 +130,6 @@ fun FalloutApp(
                         viewModel.setActiveCharacter(newChar)
                         viewModel.resetBonusSkillsState(newChar.intelligence)
                         navController.navigate(FalloutScreen.BonusSkillsScreen.name)
-//                        navController.navigate(FalloutScreen.CharacterList.name)
                     }
                 )
             }
@@ -135,6 +138,8 @@ fun FalloutApp(
 
                 CharacterScreen(
                     state = uiState,
+                    onAddPerk = { navController.navigate(FalloutScreen.PerkSelectScreen.name) },
+                    onRemovePerk = { viewModel.onRemovePerk(it) },
                     onEquipItem = { viewModel.equipItemToCharacter(it) },
                     onUnequipItem = { viewModel.unequipItemFromCharacter(it) },
                     onAddItem = {
@@ -160,6 +165,15 @@ fun FalloutApp(
                     onFinalizeClicked = {
                         viewModel.onIncreaseSkillsFinalized()
                         navController.navigate(FalloutScreen.CharacterList.name)
+                    }
+                )
+            }
+            composable(route = FalloutScreen.PerkSelectScreen.name) {
+                PerkSelectScreen(
+                    perks = PerkRepository.getAllPerks(),
+                    onSelect = {
+                        viewModel.onPerkSelected(it)
+                        navController.popBackStack()
                     }
                 )
             }

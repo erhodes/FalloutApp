@@ -4,6 +4,7 @@ import com.erhodes.falloutapp.data.CharacterDataSource
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
+import com.erhodes.falloutapp.model.Perk
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,6 +51,16 @@ class CharacterRepository(
         for (i in 0 until increases.size) {
             character.skills[i]+=increases[i]
         }
+        saveCharacters()
+    }
+
+    fun addPerkToCharacter(perk: Perk, character: Character) {
+        character.gainPerk(perk)
+        saveCharacters()
+    }
+
+    fun removePerkFromCharacter(perk: Perk, character: Character) {
+        character.removePerk(perk)
         saveCharacters()
     }
 

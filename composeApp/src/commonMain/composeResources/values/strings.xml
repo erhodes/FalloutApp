@@ -6,6 +6,7 @@
     <string name="character_screen">Character Screen</string>
     <string name="acquire_item">Acquire Item</string>
     <string name="bonus_skills">Bonus Skills</string>
+    <string name="select_perk">Select Perk</string>
 
     <string name="back_button">Back</string>
 
@@ -38,5 +39,10 @@
     <string name="major">Major</string>
     <string name="minor">Minor</string>
 
+    <string name="select">Select</string>
     <string name="unselect">Unselect</string>
+
+    <string name="perks">Perks</string>
+    <string name="add_perk">Add Perk</string>
+    <string name="remove_perk">Remove Perk</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
+import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CoroutineScope
@@ -80,6 +81,17 @@ class CharacterViewModel(
 
     fun onIncreaseSkillsFinalized() {
         repo.increaseSkillsForCharacter(addSkillsState.appliedBonuses, activeCharacter)
+    }
+
+    fun onPerkSelected(perk: Perk) {
+        repo.addPerkToCharacter(perk, activeCharacter)
+    }
+
+    fun onRemovePerk(perk: Perk) {
+        repo.removePerkFromCharacter(perk, activeCharacter)
+        scope.launch {
+            _activeCharacterState.update{ CharacterUiState(activeCharacter) }
+        }
     }
 
     fun addNewItemToActiveCharacter(newItem: ItemTemplate) {

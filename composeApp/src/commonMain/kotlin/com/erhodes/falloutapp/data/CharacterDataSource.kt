@@ -18,13 +18,14 @@ class CharacterDataSource(
     val json: Json = Json {
         serializersModule = SerializersModule {
             contextual(ItemTemplateSerializer)
+            contextual(PerkSerializer)
         }
     }
 
     fun saveCharacters(characters: List<Character>) {
         val string = json.encodeToString(characters)
 
-        AppLogger.d("Eric","json is $string")
+        AppLogger.d("Eric","saving json $string")
         scope.launch {
             kStore.set(string)
         }
@@ -34,7 +35,7 @@ class CharacterDataSource(
         val result = ArrayList<Character>()
         val jsonString = kStore.get()
 
-        AppLogger.d("Eric","read in $jsonString")
+        AppLogger.d("Eric","loading json $jsonString")
         if (!jsonString.isNullOrEmpty()) {
             val characters = json.decodeFromString<List<Character>>(jsonString)
             result.addAll(characters)

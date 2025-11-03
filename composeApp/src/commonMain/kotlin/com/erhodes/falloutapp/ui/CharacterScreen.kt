@@ -17,16 +17,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
+import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.repository.ItemRepository
 import falloutapp.composeapp.generated.resources.Res
+import falloutapp.composeapp.generated.resources.add_perk
+import falloutapp.composeapp.generated.resources.perks
+import falloutapp.composeapp.generated.resources.remove_perk
 import falloutapp.composeapp.generated.resources.skills
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CharacterScreen(state: CharacterUiState,
+                    onAddPerk: () -> Unit,
+                    onRemovePerk: (Perk) -> Unit,
                     onEquipItem: (Item) -> Unit,
                     onUnequipItem: (Item) -> Unit,
                     onAddItem: () -> Unit
@@ -72,6 +78,30 @@ fun CharacterScreen(state: CharacterUiState,
         }
         HorizontalDivider(thickness = 2.dp)
 
+        //Perks
+        Text(stringResource(Res.string.perks))
+        character.perks.forEach { perk ->
+            Row {
+                PerkPanel(perk)
+                Button(
+                    onClick = { onRemovePerk(perk) }
+                ) {
+                    Text(stringResource(Res.string.remove_perk))
+                }
+            }
+        }
+        Button(
+            onClick = onAddPerk,
+            enabled = character.perks.size < character.level
+        ) {
+            Text(stringResource(Res.string.add_perk))
+        }
+
+        HorizontalDivider(thickness = 2.dp)
+        Text("Level ${character.level}")
+
+        // Inventory
+        HorizontalDivider(thickness = 2.dp)
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
@@ -120,6 +150,14 @@ fun CharacterScreen(state: CharacterUiState,
 }
 
 @Composable
+fun PerkPanel(perk: Perk) {
+    Column {
+        Text(perk.name)
+        Text(perk.description)
+    }
+}
+
+@Composable
 fun SpecialPanel(title: String, value: Int) {
     Column {
         Text(title)
@@ -131,13 +169,18 @@ fun SpecialPanel(title: String, value: Int) {
 @Composable
 fun CharacterScreenPreview() {
     val character = Character("Tom")
-    val armor =Item(ItemRepository.LEATHER_ARMOR)
-    character.addItemToInventory(armor)
-    character.addItemToInventory(Item(ItemRepository.BANNER))
-    character.equipItem(armor)
+//    val armor =Item(ItemRepository.LEATHER_ARMOR)
+//    character.addItemToInventory(armor)
+//    character.addItemToInventory(Item(ItemRepository.BANNER))
+//    character.equipItem(armor)
     MaterialTheme {
         CharacterScreen(
-            CharacterUiState(character), {},  {}, {}
+            CharacterUiState(character),
+            {},
+            {},
+            {},
+            {},
+            {}
         )
     }
 }

@@ -15,6 +15,8 @@ class Character(
     val skills: ArrayList<Int> = arrayListOf<Int>(2,2,2,2,2,2,2,2,2,2,2,2)
 ) {
 
+    var level = 1
+
     var load = 0
     val loadoutLimit = strength + 4
 
@@ -24,8 +26,19 @@ class Character(
     val loadout = ArrayList<Item>()
     val inventory = ArrayList<Item>()
 
+    val perks = HashSet<Perk>()
+
     fun getMaxSkillValue(): Int {
         return 5
+    }
+
+    fun gainPerk(perk: Perk) {
+        if (perks.size > level) return
+        perks.add(perk)
+    }
+
+    fun removePerk(perk: Perk) {
+        perks.remove(perk)
     }
 
     fun addItemToInventory(item: Item) {
