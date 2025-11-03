@@ -16,6 +16,12 @@ class Character(
 ) {
 
     var level = 1
+    var milestones = 0
+
+    var damageTaken = 0
+    var stress = 5
+    var radiation = 0
+    var fatigue = 0
 
     var load = 0
     val loadoutLimit = strength + 4
@@ -28,8 +34,16 @@ class Character(
 
     val perks = HashSet<Perk>()
 
+    fun gainMilestone() {
+        milestones++
+        if (milestones >= 3) {
+            level++
+            milestones = 0
+        }
+    }
+
     fun getMaxSkillValue(): Int {
-        return 5
+        return 5 + level/2
     }
 
     fun gainPerk(perk: Perk) {

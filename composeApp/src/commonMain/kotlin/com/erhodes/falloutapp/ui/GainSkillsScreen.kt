@@ -8,21 +8,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Skills
-import com.erhodes.falloutapp.presentation.BonusSkillUiState
-import com.erhodes.falloutapp.util.AppLogger
+import com.erhodes.falloutapp.presentation.GainSkillUiState
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.done
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun BonusSkillsScreen(uiState: BonusSkillUiState, onIncreaseClicked: (Int) -> Unit, onDecreaseClicked: (Int) -> Unit, onFinalizeClicked: () -> Unit) {
+fun GainSkillsScreen(uiState: GainSkillUiState, onIncreaseClicked: (Int) -> Unit, onDecreaseClicked: (Int) -> Unit, onFinalizeClicked: () -> Unit) {
     Column {
         Text("You may increase ${uiState.bonuses} more skills")
         for (i in 0 .. 11) {
-            BonusSkillPanel(
-                i,
-                uiState.character.skills[i] + uiState.appliedBonuses[i],
+            val skillLevel = uiState.character.skills[i] + uiState.appliedBonuses[i]
+            ModifySkillPanel(
+                ordinal = i,
+                value = skillLevel,
+                increaseEnabled = skillLevel < uiState.character.getMaxSkillValue() && uiState.bonuses > 0,
+                decreaseEnabled = uiState.appliedBonuses[i] > 0,
                 onIncreaseClicked = onIncreaseClicked,
                 onDecreaseClicked = onDecreaseClicked
             )
@@ -36,15 +38,21 @@ fun BonusSkillsScreen(uiState: BonusSkillUiState, onIncreaseClicked: (Int) -> Un
 }
 
 @Composable
-fun BonusSkillPanel(ordinal: Int, value: Int, onIncreaseClicked: (Int) -> Unit, onDecreaseClicked: (Int) -> Unit) {
+fun ModifySkillPanel(ordinal: Int,
+                     value: Int,
+                     increaseEnabled: Boolean,
+                     decreaseEnabled: Boolean,
+                     onIncreaseClicked: (Int) -> Unit, onDecreaseClicked: (Int) -> Unit) {
     Row {
         Text("${stringResource(Skills.entries[ordinal].description)} $value")
         Button(
+            enabled = increaseEnabled,
             onClick = { onIncreaseClicked(ordinal) }
         ) {
             Text("+")
         }
         Button(
+            enabled = decreaseEnabled,
             onClick = { onDecreaseClicked(ordinal) }
         ) {
             Text("-")
@@ -54,10 +62,10 @@ fun BonusSkillPanel(ordinal: Int, value: Int, onIncreaseClicked: (Int) -> Unit, 
 
 @Preview
 @Composable
-fun BonusSkillScreenPreview() {
+fun GainSkillScreenPreview() {
     MaterialTheme {
-        BonusSkillsScreen(
-            uiState = BonusSkillUiState(character = Character("Tom"), 2),
+        GainSkillsScreen(
+            uiState = GainSkillUiState(character = Character("Tom"), 2, false),
             {},
             {},
             {}

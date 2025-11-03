@@ -25,9 +25,9 @@ class CharacterViewModel(
     private val _activeCharacterState = MutableStateFlow(CharacterUiState(activeCharacter))
     val activeCharacterState = _activeCharacterState.asStateFlow()
 
-    private var addSkillsState = BonusSkillUiState(activeCharacter, 1)
-    private val _bonusSkillsState = MutableStateFlow(addSkillsState)
-    val bonusSkillsState = _bonusSkillsState.asStateFlow()
+    private var gainSkillsState = GainSkillUiState(activeCharacter, 1, true)
+    private val _gainSkillsUiState = MutableStateFlow(gainSkillsState)
+    val gainSkillsUiState = _gainSkillsUiState.asStateFlow()
 
     //TODO add DI and move this logic to the creation view model
     fun addCharacter(name: String, uiState: CharacterCreationUiState): Character {
@@ -56,31 +56,32 @@ class CharacterViewModel(
 
     }
 
-    private fun updateBonusSkillsState(newState: BonusSkillUiState) {
-        addSkillsState = newState
+    private fun updateBonusSkillsState(newState: GainSkillUiState) {
+        gainSkillsState = newState
         scope.launch {
-            _bonusSkillsState.update { addSkillsState }
+            _gainSkillsUiState.update { gainSkillsState }
         }
     }
 
-    fun resetBonusSkillsState(bonuses: Int) {
-        updateBonusSkillsState(BonusSkillUiState(activeCharacter, bonuses))
+    fun resetBonusSkillsState(bonuses: Int, milestone: Boolean) {
+        updateBonusSkillsState(GainSkillUiState(activeCharacter, bonuses, milestone))
     }
 
     fun onIncreaseSkillClicked(ordinal: Int) {
-        if (activeCharacter.skills[ordinal] + 1 >= activeCharacter.getMaxSkillValue()) return
-        addSkillsState.appliedBonuses[ordinal]++
-        updateBonusSkillsState(addSkillsState.copy(bonuses = addSkillsState.bonuses-1))
+        if (activeCharacter.skills[ordinal] + 1 > activeCharacter.getMaxSkillValue()
+            || gainSkillsState.bonuses <= 0) return
+        gainSkillsState.appliedBonuses[ordinal]++
+        updateBonusSkillsState(gainSkillsState.copy(bonuses = gainSkillsState.bonuses-1))
     }
 
     fun onDecreaseSkillClicked(ordinal: Int) {
-        if (activeCharacter.skills[ordinal] - 1 <= 0) return
-        addSkillsState.appliedBonuses[ordinal]--
-        updateBonusSkillsState(addSkillsState.copy(bonuses = addSkillsState.bonuses+1))
+        if (gainSkillsState.appliedBonuses[ordinal] <= 0) return
+        gainSkillsState.appliedBonuses[ordinal]--
+        updateBonusSkillsState(gainSkillsState.copy(bonuses = gainSkillsState.bonuses+1))
     }
 
     fun onIncreaseSkillsFinalized() {
-        repo.increaseSkillsForCharacter(addSkillsState.appliedBonuses, activeCharacter)
+        repo.increaseSkillsForCharacter(gainSkillsState.appliedBonuses, activeCharacter, gainSkillsState.milestone)
     }
 
     fun onPerkSelected(perk: Perk) {

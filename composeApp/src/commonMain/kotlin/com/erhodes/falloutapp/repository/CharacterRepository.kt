@@ -47,10 +47,11 @@ class CharacterRepository(
         saveCharacters()
 	}
 
-    fun increaseSkillsForCharacter(increases: List<Int>, character: Character) {
+    fun increaseSkillsForCharacter(increases: List<Int>, character: Character, milestone: Boolean) {
         for (i in 0 until increases.size) {
             character.skills[i]+=increases[i]
         }
+        if (milestone) character.gainMilestone()
         saveCharacters()
     }
 

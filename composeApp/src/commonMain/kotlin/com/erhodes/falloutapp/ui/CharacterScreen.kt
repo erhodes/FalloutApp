@@ -23,6 +23,7 @@ import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.repository.ItemRepository
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_perk
+import falloutapp.composeapp.generated.resources.gain_milestone
 import falloutapp.composeapp.generated.resources.perks
 import falloutapp.composeapp.generated.resources.remove_perk
 import falloutapp.composeapp.generated.resources.skills
@@ -31,6 +32,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CharacterScreen(state: CharacterUiState,
+                    onGainMilestone: () -> Unit,
                     onAddPerk: () -> Unit,
                     onRemovePerk: (Perk) -> Unit,
                     onEquipItem: (Item) -> Unit,
@@ -79,7 +81,7 @@ fun CharacterScreen(state: CharacterUiState,
         HorizontalDivider(thickness = 2.dp)
 
         //Perks
-        Text(stringResource(Res.string.perks))
+        Text("${stringResource(Res.string.perks)} ${character.perks.size}/${character.level}")
         character.perks.forEach { perk ->
             Row {
                 PerkPanel(perk)
@@ -98,7 +100,12 @@ fun CharacterScreen(state: CharacterUiState,
         }
 
         HorizontalDivider(thickness = 2.dp)
-        Text("Level ${character.level}")
+        Text("Level ${character.level} Milestones ${character.milestones}")
+        Button(
+            onClick = onGainMilestone
+        ) {
+            Text(stringResource(Res.string.gain_milestone))
+        }
 
         // Inventory
         HorizontalDivider(thickness = 2.dp)
@@ -176,6 +183,7 @@ fun CharacterScreenPreview() {
     MaterialTheme {
         CharacterScreen(
             CharacterUiState(character),
+            {},
             {},
             {},
             {},

@@ -45,4 +45,6 @@
     <string name="perks">Perks</string>
     <string name="add_perk">Add Perk</string>
     <string name="remove_perk">Remove Perk</string>
+
+    <string name="gain_milestone">Gain Milestone</string>
 </resources>
