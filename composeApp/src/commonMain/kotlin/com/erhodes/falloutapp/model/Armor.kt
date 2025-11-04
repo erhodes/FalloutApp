@@ -1,5 +1,10 @@
 package com.erhodes.falloutapp.model
 
-class Armor(base: ArmorTemplate): Item(base) {
+import kotlinx.serialization.Serializable
+
+//@Serializable
+class Armor(val base: ArmorTemplate): Item(base) {
     var damageTaken = 0
+//    val durability = base.durability
+//    val toughness = base.toughness
 }

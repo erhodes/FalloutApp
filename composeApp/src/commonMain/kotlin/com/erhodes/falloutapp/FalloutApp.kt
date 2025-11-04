@@ -136,6 +136,9 @@ fun FalloutApp(
 
                 CharacterScreen(
                     state = uiState,
+                    onTakeDamage = { viewModel.onDamageCharacterClicked(it) },
+                    onHealDamage = { viewModel.onHealCharacterClicked(it) },
+                    onRepair = { viewModel.onRepairArmorClicked(it) },
                     onGainMilestone = {
                         viewModel.resetBonusSkillsState(1, true)
                         navController.navigate(FalloutScreen.BonusSkillsScreen.name)

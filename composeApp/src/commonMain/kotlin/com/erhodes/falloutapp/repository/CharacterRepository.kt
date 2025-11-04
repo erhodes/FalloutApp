@@ -85,6 +85,21 @@ class CharacterRepository(
         saveCharacters()
     }
 
+    fun damageCharacter(amount: Int, character: Character) {
+        character.takeDamage(amount)
+        saveCharacters()
+    }
+
+    fun healCharacter(amount: Int, character: Character) {
+        character.healDamage(amount)
+        saveCharacters()
+    }
+
+    fun repairArmorForCharacter(amount: Int, character: Character) {
+        character.repairArmor(amount)
+        saveCharacters()
+    }
+
     private fun saveCharacters() {
         dataSource.saveCharacters(characters)
     }

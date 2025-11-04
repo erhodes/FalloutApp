@@ -12,6 +12,9 @@
 
     <string name="done">Done</string>
 
+    <string name="take_damage">Take Damage</string>
+    <string name="heal">Heal</string>
+    <string name="repair">Repair</string>
 
     <string name="special">SPECIAL</string>
     <string name="strength">Strength</string>

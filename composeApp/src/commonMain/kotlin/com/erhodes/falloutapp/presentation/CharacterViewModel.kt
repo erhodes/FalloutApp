@@ -110,7 +110,6 @@ class CharacterViewModel(
     }
 
     fun equipItemToCharacter(item: Item) {
-        AppLogger.d("Eric","lets equip an item")
         repo.equipItemToCharacter(item, activeCharacter)
         scope.launch {
             _activeCharacterState.update{ CharacterUiState(activeCharacter) }
@@ -118,10 +117,30 @@ class CharacterViewModel(
     }
 
     fun unequipItemFromCharacter(item: Item) {
-        AppLogger.d("Eric","lets UNequip an item")
         repo.unequipItemFromCharacter(item, activeCharacter)
         scope.launch {
             _activeCharacterState.update { CharacterUiState(activeCharacter) }
         }
+    }
+
+    private fun updateActiveCharacter() {
+        scope.launch {
+            _activeCharacterState.update { CharacterUiState(activeCharacter) }
+        }
+    }
+
+    fun onDamageCharacterClicked(amount: Int) {
+        repo.damageCharacter(amount, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun onHealCharacterClicked(amount: Int) {
+        repo.healCharacter(amount, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun onRepairArmorClicked(amount: Int) {
+        repo.repairArmorForCharacter(amount, activeCharacter)
+        updateActiveCharacter()
     }
 }

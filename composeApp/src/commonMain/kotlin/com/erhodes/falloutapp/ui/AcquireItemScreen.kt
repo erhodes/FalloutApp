@@ -10,7 +10,7 @@ import com.erhodes.falloutapp.repository.ItemRepository
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun AcquireItemScreen(items: List<ItemTemplate>, onAcquireItem: (ItemTemplate) -> Unit) {
+fun AcquireItemScreen(items: Collection<ItemTemplate>, onAcquireItem: (ItemTemplate) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

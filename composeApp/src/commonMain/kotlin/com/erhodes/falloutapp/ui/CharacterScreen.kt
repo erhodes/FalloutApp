@@ -6,13 +6,20 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Character
@@ -20,18 +27,23 @@ import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.presentation.CharacterUiState
-import com.erhodes.falloutapp.repository.ItemRepository
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_perk
 import falloutapp.composeapp.generated.resources.gain_milestone
+import falloutapp.composeapp.generated.resources.heal
 import falloutapp.composeapp.generated.resources.perks
 import falloutapp.composeapp.generated.resources.remove_perk
+import falloutapp.composeapp.generated.resources.repair
 import falloutapp.composeapp.generated.resources.skills
+import falloutapp.composeapp.generated.resources.take_damage
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CharacterScreen(state: CharacterUiState,
+                    onTakeDamage: (Int) -> Unit,
+                    onHealDamage: (Int) -> Unit,
+                    onRepair: (Int) -> Unit,
                     onGainMilestone: () -> Unit,
                     onAddPerk: () -> Unit,
                     onRemovePerk: (Perk) -> Unit,
@@ -49,6 +61,37 @@ fun CharacterScreen(state: CharacterUiState,
         )
         HorizontalDivider(thickness = 2.dp)
 
+        // Status
+        Text("Damage Taken ${character.damageTaken}/5")
+
+        Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
+
+        var amount by remember { mutableStateOf("") }
+        OutlinedTextField(
+            value = amount,
+            onValueChange = { amount = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text("Amount") }
+        )
+        Row {
+            Button(
+                onClick = { onTakeDamage(amount.toInt()) }
+            ) {
+                Text(stringResource(Res.string.take_damage))
+            }
+            Button(
+                onClick = { onHealDamage(amount.toInt()) }
+            ) {
+                Text(stringResource(Res.string.heal))
+            }
+            Button(
+                onClick = { onRepair(amount.toInt()) }
+            ) {
+                Text(stringResource(Res.string.repair))
+            }
+        }
+
+        // SPECIAL
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -183,6 +226,9 @@ fun CharacterScreenPreview() {
     MaterialTheme {
         CharacterScreen(
             CharacterUiState(character),
+            {},
+            {},
+            {},
             {},
             {},
             {},

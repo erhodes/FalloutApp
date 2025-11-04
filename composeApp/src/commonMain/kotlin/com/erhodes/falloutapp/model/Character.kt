@@ -1,6 +1,7 @@
 package com.erhodes.falloutapp.model
 
 import kotlinx.serialization.Serializable
+import kotlin.math.max
 
 @Serializable
 class Character(
@@ -25,6 +26,7 @@ class Character(
 
     var load = 0
     val loadoutLimit = strength + 4
+//    var equippedArmor: Armor? = null
 
     var inventoryWeight = 0
     var inventoryLimit = 10
@@ -70,6 +72,7 @@ class Character(
      */
     fun equipItem(item: Item) {
         if (!inventory.contains(item)) return
+        if (item is Armor) return equipArmor(item)
         if (item.load + load > loadoutLimit) return
 
         load += item.load
@@ -81,5 +84,53 @@ class Character(
         load -= item.load
         loadout.remove(item)
         addItemToInventory(item)
+    }
+
+    private fun equipArmor(armor: Armor) {
+//        if (equippedArmor != null) return
+//        load += (armor.load - 1)
+//        equippedArmor = armor
+        removeItemFromInventory(armor)
+    }
+
+//    private fun unequipArmor(armor: Armor) {
+//        load -= (armor.load - 1)
+//        equippedArmor = null
+//        addItemToInventory(armor)
+//    }
+
+    fun getArmorDamage(): Int {
+        return 0
+//        return equippedArmor?.damageTaken ?: 0
+    }
+
+    fun getArmorDurability(): Int {
+        return 1
+//        return equippedArmor?.durability ?: 0
+    }
+
+    fun takeDamage(amount: Int) {
+        if (amount <= 0 ) return
+        var modifiedDamage = amount
+//        equippedArmor?.let { armor ->
+//            armor.damageTaken += max(0, amount - armor.toughness)
+//            if (armor.damageTaken > armor.durability) {
+//                modifiedDamage = armor.damageTaken - armor.durability
+//                armor.damageTaken = armor.durability
+//            }
+//        }
+        damageTaken += modifiedDamage
+    }
+
+    fun healDamage(amount: Int) {
+        damageTaken -= amount
+        if (damageTaken < 0) damageTaken = 0
+    }
+
+    fun repairArmor(amount: Int) {
+//        equippedArmor?.let {
+//            it.damageTaken -= amount
+//            if (it.damageTaken < 0) it.damageTaken = 0
+//        }
     }
 }

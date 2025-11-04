@@ -5,9 +5,8 @@ import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.repository.ItemRepository
 
 class ItemViewModel: ViewModel() {
-    private val repo = ItemRepository()
 
-    fun getAvailableItems(): List<ItemTemplate> {
-        return repo.availableItems
+    fun getAvailableItems(): Collection<ItemTemplate> {
+        return ItemRepository.itemList.values
     }
 }

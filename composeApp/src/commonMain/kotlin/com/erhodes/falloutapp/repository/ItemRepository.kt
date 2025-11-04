@@ -4,8 +4,6 @@ import com.erhodes.falloutapp.model.ArmorTemplate
 import com.erhodes.falloutapp.model.ItemTemplate
 
 class ItemRepository {
-    val availableItems = ArrayList<ItemTemplate>()
-
     companion object {
         val itemList = HashMap<Int, ItemTemplate>()
         const val ID_BANNER = 0
@@ -25,20 +23,11 @@ class ItemRepository {
 
         init {
             itemList[ID_BANNER] = BANNER
+            itemList[ID_LEATHER_ARMOR] = LEATHER_ARMOR
         }
 
         fun getItemTemplateById(id: Int): ItemTemplate {
             return itemList[id]!!
         }
-    }
-
-    init {
-        // some sample items for now
-        availableItems.add(
-            LEATHER_ARMOR
-        )
-        availableItems.add(
-            BANNER
-        )
     }
 }
