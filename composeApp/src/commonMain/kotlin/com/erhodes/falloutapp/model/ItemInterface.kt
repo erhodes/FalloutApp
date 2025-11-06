@@ -1,8 +1,6 @@
 package com.erhodes.falloutapp.model
 
-import kotlinx.serialization.Serializable
-
-interface Item {
+interface ItemInterface {
     /**
      * What item is this an instance of
      */

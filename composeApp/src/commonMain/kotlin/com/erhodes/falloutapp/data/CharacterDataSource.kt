@@ -1,6 +1,9 @@
 package com.erhodes.falloutapp.data
 
+import com.erhodes.falloutapp.model.Armor
+import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -8,6 +11,8 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.contextual
+import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
 
 class CharacterDataSource(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
@@ -19,6 +24,10 @@ class CharacterDataSource(
         serializersModule = SerializersModule {
             contextual(ItemTemplateSerializer)
             contextual(PerkSerializer)
+            polymorphic(Item::class){
+                subclass(BasicItem::class)
+                subclass(Armor::class)
+            }
         }
     }
 

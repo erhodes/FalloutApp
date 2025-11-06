@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.model
 
+import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.serialization.Serializable
 import kotlin.math.max
 
@@ -26,7 +27,12 @@ class Character(
 
     var load = 0
     val loadoutLimit = strength + 4
-//    var equippedArmor: Armor? = null
+    var equippedArmor: Armor? = null
+
+
+//    val transport = Ship(2, VehicleTemplate(1))
+//
+//    val wheels = Car(3, CarTemplate(2, false))
 
     var inventoryWeight = 0
     var inventoryLimit = 10
@@ -81,44 +87,49 @@ class Character(
     }
 
     fun unequipItem(item: Item) {
+        if (item == equippedArmor) unequipArmor(item as Armor)
+        if (!loadout.contains(item)) return
         load -= item.load
         loadout.remove(item)
         addItemToInventory(item)
     }
 
     private fun equipArmor(armor: Armor) {
-//        if (equippedArmor != null) return
-//        load += (armor.load - 1)
-//        equippedArmor = armor
+        AppLogger.d("Eric","equipping ${armor.name} current armor is ${equippedArmor != null}")
+        if (equippedArmor != null) {
+            AppLogger.d("Eric","nope")
+            return
+        }
+        AppLogger.d("Eric","yes")
+        load += (armor.load - 1)
+        equippedArmor = armor
         removeItemFromInventory(armor)
     }
 
-//    private fun unequipArmor(armor: Armor) {
-//        load -= (armor.load - 1)
-//        equippedArmor = null
-//        addItemToInventory(armor)
-//    }
+    private fun unequipArmor(armor: Armor) {
+        load -= (armor.load - 1)
+        equippedArmor = null
+        addItemToInventory(armor)
+    }
 
     fun getArmorDamage(): Int {
-        return 0
-//        return equippedArmor?.damageTaken ?: 0
+        return equippedArmor?.damageTaken ?: 0
     }
 
     fun getArmorDurability(): Int {
-        return 1
-//        return equippedArmor?.durability ?: 0
+        return equippedArmor?.durability ?: 0
     }
 
     fun takeDamage(amount: Int) {
         if (amount <= 0 ) return
         var modifiedDamage = amount
-//        equippedArmor?.let { armor ->
-//            armor.damageTaken += max(0, amount - armor.toughness)
-//            if (armor.damageTaken > armor.durability) {
-//                modifiedDamage = armor.damageTaken - armor.durability
-//                armor.damageTaken = armor.durability
-//            }
-//        }
+        equippedArmor?.let { armor ->
+            armor.damageTaken += max(0, amount - armor.toughness)
+            if (armor.damageTaken > armor.durability) {
+                modifiedDamage = armor.damageTaken - armor.durability
+                armor.damageTaken = armor.durability
+            }
+        }
         damageTaken += modifiedDamage
     }
 
@@ -128,9 +139,9 @@ class Character(
     }
 
     fun repairArmor(amount: Int) {
-//        equippedArmor?.let {
-//            it.damageTaken -= amount
-//            if (it.damageTaken < 0) it.damageTaken = 0
-//        }
+        equippedArmor?.let {
+            it.damageTaken -= amount
+            if (it.damageTaken < 0) it.damageTaken = 0
+        }
     }
 }

@@ -1,6 +1,9 @@
 package com.erhodes.falloutapp.repository
 
 import com.erhodes.falloutapp.data.CharacterDataSource
+import com.erhodes.falloutapp.model.Armor
+import com.erhodes.falloutapp.model.ArmorTemplate
+import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
@@ -66,7 +69,12 @@ class CharacterRepository(
     }
 
     fun addNewItemToCharacter(newItem: ItemTemplate, character: Character) {
-        character.addItemToInventory(Item(newItem))
+        if (newItem is ArmorTemplate) {
+            character.addItemToInventory(Armor(newItem, 0))
+        } else {
+            character.addItemToInventory(BasicItem(newItem))
+        }
+
         saveCharacters()
     }
 

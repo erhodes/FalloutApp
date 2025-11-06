@@ -29,6 +29,7 @@ import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_perk
+import falloutapp.composeapp.generated.resources.equip
 import falloutapp.composeapp.generated.resources.gain_milestone
 import falloutapp.composeapp.generated.resources.heal
 import falloutapp.composeapp.generated.resources.perks
@@ -36,6 +37,7 @@ import falloutapp.composeapp.generated.resources.remove_perk
 import falloutapp.composeapp.generated.resources.repair
 import falloutapp.composeapp.generated.resources.skills
 import falloutapp.composeapp.generated.resources.take_damage
+import falloutapp.composeapp.generated.resources.unequip
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -163,10 +165,13 @@ fun CharacterScreen(state: CharacterUiState,
             )
         }
         HorizontalDivider(thickness = 2.dp)
+        character.equippedArmor?.let {
+            ArmorDisplay(it, stringResource(Res.string.unequip), { onUnequipItem(it) })
+        }
         character.loadout.forEach {
             ItemDisplay(
                 item = it,
-                buttonLabel = "Unequip",
+                buttonLabel = stringResource(Res.string.unequip),
                 buttonAction = { onUnequipItem(it) }
             )
         }
@@ -185,7 +190,7 @@ fun CharacterScreen(state: CharacterUiState,
         character.inventory.forEach {
             ItemDisplay(
                 item = it,
-                buttonLabel = "Equip",
+                buttonLabel = stringResource(Res.string.equip),
                 buttonAction = { onEquipItem(it) }
             )
         }

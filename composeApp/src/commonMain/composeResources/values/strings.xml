@@ -50,4 +50,7 @@
     <string name="remove_perk">Remove Perk</string>
 
     <string name="gain_milestone">Gain Milestone</string>
+
+    <string name="equip">Equip</string>
+    <string name="unequip">Unequip</string>
 </resources>
