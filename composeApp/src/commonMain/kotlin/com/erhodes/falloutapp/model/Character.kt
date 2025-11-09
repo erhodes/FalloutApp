@@ -94,13 +94,67 @@ class Character(
         addItemToInventory(item)
     }
 
+    fun increaseStackCountForItem(item: Item, count: Int) {
+        // if there was an ItemContainer class I could move the logic there, instead of managing these two arrays like this
+        if (item !is StackableItem) return
+        var inLoadout = false
+        var limit: Int
+        if (inventory.contains(item)) {
+            limit = inventoryLimit
+        } else if (loadout.contains(item)) {
+            inLoadout = true
+            limit = loadoutLimit
+        } else {
+            return
+        }
+        val oldLoad = item.load
+        item.count += count
+        val loadDif = item.load - oldLoad
+
+        if (load + loadDif > limit) {
+            // too heavy!
+            item.count -= count
+            return
+        }
+
+        if (inLoadout) {
+            load += loadDif
+        } else {
+            inventoryWeight += loadDif
+        }
+    }
+
+    fun decreaseStackCountForItem(item: Item, count: Int) {
+        if (inventory.contains(item)) {
+            (item as StackableItem).count-=count
+            recalculateInventoryLoad()
+        } else if (loadout.contains(item)) {
+            (item as StackableItem).count-=count
+            recalculateLoadoutLoad()
+        }
+    }
+
+    private fun recalculateLoadoutLoad() {
+        var weight = 0
+        loadout.forEach {
+            weight+=it.load
+        }
+        load = weight
+    }
+
+    private fun recalculateInventoryLoad() {
+        var weight = 0
+        inventory.forEach {
+            weight+=it.load
+        }
+        inventoryWeight = weight
+    }
+
     private fun equipArmor(armor: Armor) {
         AppLogger.d("Eric","equipping ${armor.name} current armor is ${equippedArmor != null}")
         if (equippedArmor != null) {
-            AppLogger.d("Eric","nope")
             return
         }
-        AppLogger.d("Eric","yes")
         load += (armor.load - 1)
         equippedArmor = armor
         removeItemFromInventory(armor)

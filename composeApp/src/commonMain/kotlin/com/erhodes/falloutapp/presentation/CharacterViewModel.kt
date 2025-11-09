@@ -5,6 +5,7 @@ import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CoroutineScope
@@ -93,6 +94,28 @@ class CharacterViewModel(
         scope.launch {
             _activeCharacterState.update{ CharacterUiState(activeCharacter) }
         }
+    }
+
+    fun increaseStackCountForActiveCharacter(item: Item, count: Int) {
+        if (item is Weapon) return addAmmoToWeapon(item, count)
+        repo.increaseStackCountForCharacter(item, count, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun decreaseStackCountForActiveCharacter(item: Item, count: Int) {
+        if (item is Weapon) return removeAmmoFromWeapon(item, count)
+        repo.decreaseStackCountForCharacter(item, count, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun addAmmoToWeapon(weapon: Weapon, count: Int) {
+        repo.addAmmoToWeapon(weapon, count)
+        updateActiveCharacter()
+    }
+
+    fun removeAmmoFromWeapon(weapon: Weapon, count: Int) {
+        repo.removeAmmoFromWeapon(weapon, count)
+        updateActiveCharacter()
     }
 
     fun addNewItemToActiveCharacter(newItem: ItemTemplate) {

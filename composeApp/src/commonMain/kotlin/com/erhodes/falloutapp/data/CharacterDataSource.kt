@@ -4,6 +4,8 @@ import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
+import com.erhodes.falloutapp.model.StackableItem
+import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +29,8 @@ class CharacterDataSource(
             polymorphic(Item::class){
                 subclass(BasicItem::class)
                 subclass(Armor::class)
+                subclass(StackableItem::class)
+                subclass(Weapon::class)
             }
         }
     }

@@ -1,6 +1,5 @@
 package com.erhodes.falloutapp.model
 
-import com.erhodes.falloutapp.data.ArmorTemplateSerializer
 import kotlinx.serialization.Serializable
 
 //@Serializable(with = ArmorTemplateSerializer::class)

@@ -8,6 +8,10 @@ import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.StackableItem
+import com.erhodes.falloutapp.model.StackableItemTemplate
+import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.model.WeaponTemplate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -68,9 +72,35 @@ class CharacterRepository(
         saveCharacters()
     }
 
+    fun increaseStackCountForCharacter(item: Item, count: Int, character: Character) {
+        character.increaseStackCountForItem(item, count)
+        saveCharacters()
+    }
+
+    fun decreaseStackCountForCharacter(item: Item, count: Int, character: Character) {
+        character.decreaseStackCountForItem(item, count)
+        saveCharacters()
+    }
+
+    fun addAmmoToWeapon(weapon: Weapon, count: Int) {
+        if (weapon.ammo + count > weapon.magazineSize) return
+        weapon.ammo += count
+        saveCharacters()
+    }
+
+    fun removeAmmoFromWeapon(weapon: Weapon, count: Int) {
+        if (weapon.ammo - count < 0) return
+        weapon.ammo -= count
+        saveCharacters()
+    }
+
     fun addNewItemToCharacter(newItem: ItemTemplate, character: Character) {
         if (newItem is ArmorTemplate) {
             character.addItemToInventory(Armor(newItem, 0))
+        } else if (newItem is WeaponTemplate) {
+            character.addItemToInventory(Weapon(newItem, 0))
+        } else if (newItem is StackableItemTemplate) {
+            character.addItemToInventory(StackableItem(newItem, 1))
         } else {
             character.addItemToInventory(BasicItem(newItem))
         }

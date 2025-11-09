@@ -147,6 +147,8 @@ fun FalloutApp(
                     onRemovePerk = { viewModel.onRemovePerk(it) },
                     onEquipItem = { viewModel.equipItemToCharacter(it) },
                     onUnequipItem = { viewModel.unequipItemFromCharacter(it) },
+                    onIncreaseItem = { viewModel.increaseStackCountForActiveCharacter(it, 1) },
+                    onDecreaseItem = { viewModel.decreaseStackCountForActiveCharacter(it, 1) },
                     onAddItem = {
                         navController.navigate(FalloutScreen.AddItemScreen.name)
                     }

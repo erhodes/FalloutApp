@@ -26,7 +26,10 @@ import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Skills
+import com.erhodes.falloutapp.model.StackableItem
+import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.presentation.CharacterUiState
+import com.erhodes.falloutapp.util.AppLogger
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_perk
 import falloutapp.composeapp.generated.resources.equip
@@ -51,9 +54,12 @@ fun CharacterScreen(state: CharacterUiState,
                     onRemovePerk: (Perk) -> Unit,
                     onEquipItem: (Item) -> Unit,
                     onUnequipItem: (Item) -> Unit,
+                    onIncreaseItem: (Item) -> Unit,
+                    onDecreaseItem: (Item) -> Unit,
                     onAddItem: () -> Unit
 ) {
     val character = state.character
+    AppLogger.d("Eric","inventory load is ${character.inventoryWeight}")
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -169,11 +175,34 @@ fun CharacterScreen(state: CharacterUiState,
             ArmorDisplay(it, stringResource(Res.string.unequip), { onUnequipItem(it) })
         }
         character.loadout.forEach {
-            ItemDisplay(
-                item = it,
-                buttonLabel = stringResource(Res.string.unequip),
-                buttonAction = { onUnequipItem(it) }
-            )
+            // todo figure out how to reuse this code in the inventory section
+            //  the problem here is that I need to pass in a new value to trigger recomposition
+            //  if I just pass in the item, compose will see the same item and do nothing
+            if (it is StackableItem) {
+                StackableItemPanel(
+                    it,
+                    it.count,
+                    increaseButton = { onIncreaseItem(it) },
+                    decreaseButton = { onDecreaseItem(it) },
+                    buttonLabel = stringResource(Res.string.unequip),
+                    buttonAction = { onUnequipItem(it) },
+                )
+            } else if (it is Weapon) {
+                WeaponPanel(
+                    it,
+                    it.ammo,
+                    increaseButton = { onIncreaseItem(it) },
+                    decreaseButton = { onDecreaseItem(it) },
+                    buttonLabel = stringResource(Res.string.unequip),
+                    buttonAction = { onUnequipItem(it) },
+                )
+            } else {
+                ItemDisplay(
+                    item = it,
+                    buttonLabel = stringResource(Res.string.unequip),
+                    buttonAction = { onUnequipItem(it) },
+                )
+            }
         }
 
         Row(
@@ -188,18 +217,129 @@ fun CharacterScreen(state: CharacterUiState,
         }
         HorizontalDivider(thickness = 2.dp)
         character.inventory.forEach {
-            ItemDisplay(
-                item = it,
-                buttonLabel = stringResource(Res.string.equip),
-                buttonAction = { onEquipItem(it) }
-            )
+            if (it is StackableItem) {
+                StackableItemPanel(
+                    it,
+                    it.count,
+                    increaseButton = { onIncreaseItem(it) },
+                    decreaseButton = { onDecreaseItem(it) },
+                    buttonLabel = stringResource(Res.string.equip),
+                    buttonAction = { onEquipItem(it) },
+                )
+            } else if (it is Weapon) {
+                WeaponPanel(
+                    it,
+                    it.ammo,
+                    increaseButton = { onIncreaseItem(it) },
+                    decreaseButton = { onDecreaseItem(it) },
+                    buttonLabel = stringResource(Res.string.equip),
+                    buttonAction = { onEquipItem(it) },
+                )
+            } else {
+                ItemDisplay(
+                    item = it,
+                    buttonLabel = stringResource(Res.string.equip),
+                    buttonAction = { onEquipItem(it) },
+                )
+            }
         }
-
 
         Button(
             onClick = onAddItem
         ) {
             Text("Add Item")
+        }
+    }
+}
+
+
+@Composable
+fun WeaponPanel(
+    weapon: Weapon,
+    ammo: Int,
+    increaseButton: () -> Unit,
+    decreaseButton: () -> Unit,
+    buttonLabel: String,
+    buttonAction: () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(weapon.name)
+
+        Column(
+            modifier = Modifier.weight(0.3f)
+        ) {
+            val spacing = 0.05f
+            Row {
+                Text("Successes", Modifier.weight(spacing))
+                Text("Damage", Modifier.weight(spacing))
+                Text("Ability", Modifier.weight(spacing))
+            }
+            for (i in 0 until 3) {
+                Row {
+                    Text("$i", Modifier.weight(spacing))
+                    Text("${weapon.damage[i]}", Modifier.weight(spacing))
+                    Text(weapon.ability[i], Modifier.weight(spacing))
+                }
+            }
+        }
+
+        if (weapon.magazineSize > 0) {
+            Text(
+                modifier = Modifier.padding(horizontal = 10.dp),
+                text = "Ammo $ammo/${weapon.magazineSize}"
+            )
+            Button(
+                onClick = increaseButton
+            ) {
+                Text("+")
+            }
+            Button(
+                onClick = decreaseButton
+            ) {
+                Text("-")
+            }
+        }
+        Button(
+            onClick = buttonAction
+        ) {
+            Text(buttonLabel)
+        }
+    }
+}
+
+@Composable
+fun StackableItemPanel(
+    stackable: StackableItem,
+    count: Int,
+    increaseButton: () -> Unit,
+    decreaseButton: () -> Unit,
+    buttonLabel: String,
+    buttonAction: () -> Unit
+) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(stackable.name)
+        Text(
+            modifier = Modifier.padding(horizontal = 10.dp),
+            text = "Quantity $count"
+        )
+        Button(
+            onClick = increaseButton
+        ) {
+            Text("+")
+        }
+        Button(
+            onClick = decreaseButton
+        ) {
+            Text("-")
+        }
+        Button(
+            onClick = buttonAction
+        ) {
+            Text(buttonLabel)
         }
     }
 }
@@ -231,6 +371,8 @@ fun CharacterScreenPreview() {
     MaterialTheme {
         CharacterScreen(
             CharacterUiState(character),
+            {},
+            {},
             {},
             {},
             {},
