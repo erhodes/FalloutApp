@@ -22,6 +22,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.Perk
@@ -196,6 +197,12 @@ fun CharacterScreen(state: CharacterUiState,
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
                 )
+            } else if (it is Armor) {
+                ArmorDisplay(
+                    armor = it,
+                    buttonLabel = stringResource(Res.string.unequip),
+                    buttonAction = { onUnequipItem(it) },
+                )
             } else {
                 ItemDisplay(
                     item = it,
@@ -232,6 +239,12 @@ fun CharacterScreen(state: CharacterUiState,
                     it.ammo,
                     increaseButton = { onIncreaseItem(it) },
                     decreaseButton = { onDecreaseItem(it) },
+                    buttonLabel = stringResource(Res.string.equip),
+                    buttonAction = { onEquipItem(it) },
+                )
+            } else if (it is Armor) {
+                ArmorDisplay(
+                    armor = it,
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
                 )

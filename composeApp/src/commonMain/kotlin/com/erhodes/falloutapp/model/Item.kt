@@ -9,6 +9,8 @@ interface Item {
     val template: ItemTemplate
     val name: String
         get() = template.name
+    val description: String
+        get() = template.description
     val load: Int
         get() = template.load
 }

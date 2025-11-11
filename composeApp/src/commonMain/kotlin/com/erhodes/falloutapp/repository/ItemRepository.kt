@@ -11,33 +11,39 @@ class ItemRepository {
         const val ID_BANNER = 0
         val BANNER = ItemTemplate(
             "Banner",
+            "Treat your CHA as 5 points higher when determining the range of abilities.",
             1,
             ID_BANNER
         )
         const val ID_LEATHER_ARMOR = 1
         val LEATHER_ARMOR = ArmorTemplate(
             "Leather",
+            "Layers of boiled leather provide adequate protection.",
             2,
             id = ID_LEATHER_ARMOR,
             3,
             0
         )
+        const val ID_ASSAULT_RIFLE = 2
+        val ASSAULT_RIFLE = WeaponTemplate(
+            name = "Assault Rifle",
+            description = "An old AK-47. Its famed reliability ensures it continues to spew bullets decades after the end of civilization.",
+            load = 2,
+            id = 2,
+            damage = listOf(1, 2, 3),
+            ability = listOf("", "Suppress 2", "Suppress 3"),
+            passive = "Burst",
+            range = 15,
+            magazineSize = 6
+        )
 
         init {
             itemList[ID_BANNER] = BANNER
             itemList[ID_LEATHER_ARMOR] = LEATHER_ARMOR
-            itemList[2] = WeaponTemplate(
-                name = "Assault Rifle",
-                load = 2,
-                id = 2,
-                damage = listOf(1, 2, 3),
-                ability = listOf("", "Suppress 2", "Suppress 3"),
-                passive = "Burst",
-                range = 15,
-                magazineSize = 6
-            )
+            itemList[ID_ASSAULT_RIFLE] = ASSAULT_RIFLE
             itemList[3] = WeaponTemplate(
                 name = "Sledgehammer",
+                "Equally effective at smashing walls and skulls",
                 load = 2,
                 id = 3,
                 damage = listOf(1, 2, 3),
@@ -48,6 +54,7 @@ class ItemRepository {
             )
             itemList[4] = WeaponTemplate(
                 name = "Frag Grenade",
+                description = "A MK2 fragmentation-type anti-personnel hand grenade.",
                 load = 1,
                 id = 4,
                 damage = listOf(1, 2, 3),
@@ -58,9 +65,21 @@ class ItemRepository {
             )
             itemList[5] = StackableItemTemplate(
                 name = "Caps",
+                description = "The lifeblood of the post-apocalyptic economy.",
                 load = 1,
                 id = 5,
                 max = 10
+            )
+            itemList[6] = WeaponTemplate(
+                name = "Laser Rifle",
+                description = "A worn out AER9 Laser Rifle. Smells like burning ozone when fired",
+                load = 2,
+                id = 6,
+                damage = listOf(1, 2, 3),
+                ability = listOf("", "Burn 2", "Burn 4"),
+                passive = "Burst",
+                range = 15,
+                magazineSize = 6
             )
 
         }

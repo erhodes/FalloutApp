@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -46,9 +47,8 @@ fun oldApp() {
 }
 
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
+    FalloutAppTheme {
         FalloutApp()
     }
 }
