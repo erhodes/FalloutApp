@@ -37,6 +37,15 @@ class ItemRepository {
             magazineSize = 6
         )
 
+        const val ID_CAPS = 5
+        val CAPS = StackableItemTemplate(
+            name = "Caps",
+            description = "The lifeblood of the post-nuclear economy.",
+            load = 1,
+            id = 5,
+            max = 10
+        )
+
         init {
             itemList[ID_BANNER] = BANNER
             itemList[ID_LEATHER_ARMOR] = LEATHER_ARMOR
@@ -63,13 +72,7 @@ class ItemRepository {
                 range = 8,
                 magazineSize = 0
             )
-            itemList[5] = StackableItemTemplate(
-                name = "Caps",
-                description = "The lifeblood of the post-apocalyptic economy.",
-                load = 1,
-                id = 5,
-                max = 10
-            )
+            itemList[ID_CAPS] = CAPS
             itemList[6] = WeaponTemplate(
                 name = "Laser Rifle",
                 description = "A worn out AER9 Laser Rifle. Smells like burning ozone when fired",

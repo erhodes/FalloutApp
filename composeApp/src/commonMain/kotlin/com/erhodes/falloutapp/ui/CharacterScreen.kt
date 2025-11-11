@@ -60,7 +60,6 @@ fun CharacterScreen(state: CharacterUiState,
                     onAddItem: () -> Unit
 ) {
     val character = state.character
-    AppLogger.d("Eric","inventory load is ${character.inventoryWeight}")
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -115,7 +114,7 @@ fun CharacterScreen(state: CharacterUiState,
         HorizontalDivider(thickness = 2.dp)
 
         //Skills
-        Text(stringResource(Res.string.skills))
+        Text(stringResource(Res.string.skills), style = MaterialTheme.typography.titleLarge)
         Row {
             Column(
                 modifier = Modifier.padding(end = 10.dp)
@@ -133,7 +132,15 @@ fun CharacterScreen(state: CharacterUiState,
         HorizontalDivider(thickness = 2.dp)
 
         //Perks
-        Text("${stringResource(Res.string.perks)} ${character.perks.size}/${character.level}")
+        Row {
+            Text(
+                text = stringResource(Res.string.perks),
+                style = MaterialTheme.typography.titleLarge
+            )
+
+            Text("${character.perks.size}/${character.level}")
+        }
+
         character.perks.forEach { perk ->
             Row {
                 PerkPanel(perk)
@@ -165,7 +172,10 @@ fun CharacterScreen(state: CharacterUiState,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Loadout")
+            Text(
+                text = "Loadout",
+                style = MaterialTheme.typography.titleLarge
+            )
             Text(
                 text = "${character.load}/${character.loadoutLimit}",
                 textAlign = TextAlign.End
@@ -216,7 +226,7 @@ fun CharacterScreen(state: CharacterUiState,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Inventory")
+            Text(text = "Inventory", style = MaterialTheme.typography.titleLarge)
             Text(
                 text = "${character.inventoryWeight}/${character.inventoryLimit}",
                 textAlign = TextAlign.End
@@ -266,96 +276,96 @@ fun CharacterScreen(state: CharacterUiState,
 }
 
 
-@Composable
-fun WeaponPanel(
-    weapon: Weapon,
-    ammo: Int,
-    increaseButton: () -> Unit,
-    decreaseButton: () -> Unit,
-    buttonLabel: String,
-    buttonAction: () -> Unit
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(weapon.name)
+//@Composable
+//fun WeaponPanel(
+//    weapon: Weapon,
+//    ammo: Int,
+//    increaseButton: () -> Unit,
+//    decreaseButton: () -> Unit,
+//    buttonLabel: String,
+//    buttonAction: () -> Unit
+//) {
+//    Row(
+//        horizontalArrangement = Arrangement.SpaceBetween
+//    ) {
+//        Text(weapon.name)
+//
+//        Column(
+//            modifier = Modifier.weight(0.3f)
+//        ) {
+//            val spacing = 0.05f
+//            Row {
+//                Text("Successes", Modifier.weight(spacing))
+//                Text("Damage", Modifier.weight(spacing))
+//                Text("Ability", Modifier.weight(spacing))
+//            }
+//            for (i in 0 until 3) {
+//                Row {
+//                    Text("$i", Modifier.weight(spacing))
+//                    Text("${weapon.damage[i]}", Modifier.weight(spacing))
+//                    Text(weapon.ability[i], Modifier.weight(spacing))
+//                }
+//            }
+//        }
+//
+//        if (weapon.magazineSize > 0) {
+//            Text(
+//                modifier = Modifier.padding(horizontal = 10.dp),
+//                text = "Ammo $ammo/${weapon.magazineSize}"
+//            )
+//            Button(
+//                onClick = increaseButton
+//            ) {
+//                Text("+")
+//            }
+//            Button(
+//                onClick = decreaseButton
+//            ) {
+//                Text("-")
+//            }
+//        }
+//        Button(
+//            onClick = buttonAction
+//        ) {
+//            Text(buttonLabel)
+//        }
+//    }
+//}
 
-        Column(
-            modifier = Modifier.weight(0.3f)
-        ) {
-            val spacing = 0.05f
-            Row {
-                Text("Successes", Modifier.weight(spacing))
-                Text("Damage", Modifier.weight(spacing))
-                Text("Ability", Modifier.weight(spacing))
-            }
-            for (i in 0 until 3) {
-                Row {
-                    Text("$i", Modifier.weight(spacing))
-                    Text("${weapon.damage[i]}", Modifier.weight(spacing))
-                    Text(weapon.ability[i], Modifier.weight(spacing))
-                }
-            }
-        }
-
-        if (weapon.magazineSize > 0) {
-            Text(
-                modifier = Modifier.padding(horizontal = 10.dp),
-                text = "Ammo $ammo/${weapon.magazineSize}"
-            )
-            Button(
-                onClick = increaseButton
-            ) {
-                Text("+")
-            }
-            Button(
-                onClick = decreaseButton
-            ) {
-                Text("-")
-            }
-        }
-        Button(
-            onClick = buttonAction
-        ) {
-            Text(buttonLabel)
-        }
-    }
-}
-
-@Composable
-fun StackableItemPanel(
-    stackable: StackableItem,
-    count: Int,
-    increaseButton: () -> Unit,
-    decreaseButton: () -> Unit,
-    buttonLabel: String,
-    buttonAction: () -> Unit
-) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(stackable.name)
-        Text(
-            modifier = Modifier.padding(horizontal = 10.dp),
-            text = "Quantity $count"
-        )
-        Button(
-            onClick = increaseButton
-        ) {
-            Text("+")
-        }
-        Button(
-            onClick = decreaseButton
-        ) {
-            Text("-")
-        }
-        Button(
-            onClick = buttonAction
-        ) {
-            Text(buttonLabel)
-        }
-    }
-}
+//@Composable
+//fun StackableItemPanel(
+//    stackable: StackableItem,
+//    count: Int,
+//    increaseButton: () -> Unit,
+//    decreaseButton: () -> Unit,
+//    buttonLabel: String,
+//    buttonAction: () -> Unit
+//) {
+//    Row(
+//        horizontalArrangement = Arrangement.SpaceBetween
+//    ) {
+//        Text(stackable.name)
+//        Text(
+//            modifier = Modifier.padding(horizontal = 10.dp),
+//            text = "Quantity $count"
+//        )
+//        Button(
+//            onClick = increaseButton
+//        ) {
+//            Text("+")
+//        }
+//        Button(
+//            onClick = decreaseButton
+//        ) {
+//            Text("-")
+//        }
+//        Button(
+//            onClick = buttonAction
+//        ) {
+//            Text(buttonLabel)
+//        }
+//    }
+//}
 
 @Composable
 fun PerkPanel(perk: Perk) {
