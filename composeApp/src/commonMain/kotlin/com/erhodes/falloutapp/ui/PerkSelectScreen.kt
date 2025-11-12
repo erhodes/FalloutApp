@@ -6,8 +6,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.repository.PerkRepository
+import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.select
 import org.jetbrains.compose.resources.stringResource
@@ -25,7 +27,10 @@ fun PerkSelectScreen(perks: Collection<Perk>, onSelect: (Perk) -> Unit) {
 @Composable
 fun PerkSelectPanel(perk: Perk, onSelect: (Perk) -> Unit) {
     Row {
-        PerkPanel(perk)
+        PerkPanel(
+            perk = perk,
+        )
+
         Button(
             onClick = { onSelect(perk) }
         ) {
@@ -37,7 +42,7 @@ fun PerkSelectPanel(perk: Perk, onSelect: (Perk) -> Unit) {
 @Preview
 @Composable
 fun PerkSelectScreenPreview() {
-    MaterialTheme {
+    FalloutAppTheme {
         PerkSelectScreen(PerkRepository.getAllPerks(), {})
     }
 }

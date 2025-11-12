@@ -1,5 +1,8 @@
 package com.erhodes.falloutapp.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +13,10 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,29 +31,50 @@ import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun GenericItemDisplay(title: String, stats: String, buttonLabel: String, buttonAction: () -> Unit,  modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun GenericItemDisplay(
+    title: String,
+    summary: String,
+    buttonLabel: String,
+    buttonAction: () -> Unit,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    var isExpanded by rememberSaveable { mutableStateOf(true) }
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
+            .padding(vertical = 5.dp)
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium
-        )
-        Text(
-            text = stats
-        )
-        Row(
-            modifier = Modifier.fillMaxWidth()
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surfaceDim)
+                .clickable{ isExpanded = !isExpanded }
         ) {
-            content()
-            Button(
-                onClick = buttonAction,
-                modifier = Modifier.padding(start = 10.dp)
-            ) {
-                Text(buttonLabel)
-            }
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                text = summary
+            )
         }
 
+        AnimatedVisibility(
+            modifier = Modifier.fillMaxWidth(),
+            visible = isExpanded
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                content()
+                Button(
+                    onClick = buttonAction,
+                    modifier = Modifier.padding(start = 10.dp)
+                ) {
+                    Text(buttonLabel)
+                }
+            }
+        }
     }
 }
 
@@ -54,7 +82,7 @@ fun GenericItemDisplay(title: String, stats: String, buttonLabel: String, button
 fun ItemDisplay(item: Item, buttonLabel: String, buttonAction: () -> Unit) {
     GenericItemDisplay(
         title = item.name,
-        stats = "Load ${item.load}",
+        summary = "Load ${item.load}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction,
     ) {
@@ -94,7 +122,7 @@ fun ItemDisplay(item: Item, buttonLabel: String, buttonAction: () -> Unit) {
 fun ItemTemplateDisplay(template: ItemTemplate, buttonLabel: String, buttonAction: () -> Unit) {
     GenericItemDisplay(
         title = template.name,
-        stats = "Load: ${template.load}",
+        summary = "Load: ${template.load}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction
     ) {
@@ -133,7 +161,7 @@ fun ItemTemplateDisplay(template: ItemTemplate, buttonLabel: String, buttonActio
 fun ArmorDisplay(armor: Armor, buttonLabel: String, buttonAction: () -> Unit) {
     GenericItemDisplay(
         title = armor.name,
-        stats = "Load: ${armor.load}  Durability: ${armor.damageTaken}/${armor.durability} Toughness:${armor.toughness}",
+        summary = "Load: ${armor.load}  Durability: ${armor.damageTaken}/${armor.durability} Toughness:${armor.toughness}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction
     ) {
@@ -152,62 +180,64 @@ fun WeaponPanel(
 ) {
     GenericItemDisplay(
         title = weapon.name,
-        stats = weapon.description,
+        summary = "Load: ${weapon.load}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction
     ) {
-        Row {
-            Column(
-                modifier = Modifier.width(300.dp)
-            ) {
-                val spacing = 0.03f
-                Row(
-                    horizontalArrangement = Arrangement.Start,
+        Column {
+            Text(weapon.description)
+            Row {
+                Column(
+                    modifier = Modifier.width(300.dp)
                 ) {
-                    Text(
-                        text ="Successes",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(spacing)
-                    )
-                    Text(
-                        text = "Damage",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(spacing)
-                    )
-                    Text(
-                        text = "Ability",
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.weight(spacing)
-                    )
-                }
-                for (i in 0 until 3) {
+                    val spacing = 0.03f
                     Row(
-                        horizontalArrangement = Arrangement.Start
+                        horizontalArrangement = Arrangement.Start,
                     ) {
-                        Text("$i", Modifier.weight(spacing))
-                        Text("${weapon.damage[i]}", Modifier.weight(spacing))
-                        Text(weapon.ability[i], Modifier.weight(spacing))
+                        Text(
+                            text ="Successes",
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(spacing)
+                        )
+                        Text(
+                            text = "Damage",
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(spacing)
+                        )
+                        Text(
+                            text = "Ability",
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.weight(spacing)
+                        )
+                    }
+                    for (i in 0 until 3) {
+                        Row(
+                            horizontalArrangement = Arrangement.Start
+                        ) {
+                            Text("$i", Modifier.weight(spacing))
+                            Text("${weapon.damage[i]}", Modifier.weight(spacing))
+                            Text(weapon.ability[i], Modifier.weight(spacing))
+                        }
+                    }
+                }
+                if (weapon.magazineSize > 0) {
+                    Text(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        text = "Ammo $ammo/${weapon.magazineSize}"
+                    )
+                    Button(
+                        onClick = increaseButton
+                    ) {
+                        Text("+")
+                    }
+                    Button(
+                        onClick = decreaseButton
+                    ) {
+                        Text("-")
                     }
                 }
             }
-            if (weapon.magazineSize > 0) {
-                Text(
-                    modifier = Modifier.padding(horizontal = 10.dp),
-                    text = "Ammo $ammo/${weapon.magazineSize}"
-                )
-                Button(
-                    onClick = increaseButton
-                ) {
-                    Text("+")
-                }
-                Button(
-                    onClick = decreaseButton
-                ) {
-                    Text("-")
-                }
-            }
         }
-
     }
 }
 
@@ -222,23 +252,28 @@ fun StackableItemPanel(
 ) {
     GenericItemDisplay(
         title = stackable.name,
-        stats = stackable.description,
+        summary = "Up to ${stackable.max} per load. Current Load: ${stackable.load} ",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction
     ) {
-        Text(
-            modifier = Modifier.padding(horizontal = 10.dp),
-            text = "Quantity $count"
-        )
-        Button(
-            onClick = increaseButton
-        ) {
-            Text("+")
-        }
-        Button(
-            onClick = decreaseButton
-        ) {
-            Text("-")
+        Column {
+            Text(stackable.description)
+            Row {
+                Text(
+                    modifier = Modifier.padding(horizontal = 10.dp),
+                    text = "Quantity $count"
+                )
+                Button(
+                    onClick = increaseButton
+                ) {
+                    Text("+")
+                }
+                Button(
+                    onClick = decreaseButton
+                ) {
+                    Text("-")
+                }
+            }
         }
     }
 }

@@ -42,6 +42,7 @@ import falloutapp.composeapp.generated.resources.repair
 import falloutapp.composeapp.generated.resources.skills
 import falloutapp.composeapp.generated.resources.take_damage
 import falloutapp.composeapp.generated.resources.unequip
+import falloutapp.composeapp.generated.resources.vitals
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -65,7 +66,13 @@ fun CharacterScreen(state: CharacterUiState,
     ) {
         Text(
             text = character.name,
-            style = TextStyle.Default
+            style = MaterialTheme.typography.displayMedium,
+            modifier = Modifier.padding(bottom = 10.dp)
+        )
+
+        Text(
+            text = stringResource(Res.string.vitals),
+            style = MaterialTheme.typography.titleMedium
         )
         HorizontalDivider(thickness = 2.dp)
 
@@ -366,14 +373,6 @@ fun CharacterScreen(state: CharacterUiState,
 //        }
 //    }
 //}
-
-@Composable
-fun PerkPanel(perk: Perk) {
-    Column {
-        Text(perk.name)
-        Text(perk.description)
-    }
-}
 
 @Composable
 fun SpecialPanel(title: String, value: Int) {
