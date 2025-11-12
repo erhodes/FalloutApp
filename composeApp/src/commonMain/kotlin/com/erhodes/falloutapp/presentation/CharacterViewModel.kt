@@ -166,4 +166,19 @@ class CharacterViewModel(
         repo.repairArmorForCharacter(amount, activeCharacter)
         updateActiveCharacter()
     }
+
+    fun onModifyStressClicked(amount: Int) {
+        repo.modifyStressForCharacter(amount, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun onModifyFatigueClicked(amount: Int) {
+        repo.modifyFatigueForCharacter(amount, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun onModifyRadiationClicked(amount: Int) {
+        repo.modifyRadiationForCharacter(amount, activeCharacter)
+        updateActiveCharacter()
+    }
 }

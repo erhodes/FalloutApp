@@ -139,6 +139,9 @@ fun FalloutApp(
                     onTakeDamage = { viewModel.onDamageCharacterClicked(it) },
                     onHealDamage = { viewModel.onHealCharacterClicked(it) },
                     onRepair = { viewModel.onRepairArmorClicked(it) },
+                    onModifyStress = { viewModel.onModifyStressClicked(it) },
+                    onModifyFatigue = { viewModel.onModifyFatigueClicked(it) },
+                    onModifyRadiation = { viewModel.onModifyRadiationClicked(it) },
                     onGainMilestone = {
                         viewModel.resetBonusSkillsState(1, true)
                         navController.navigate(FalloutScreen.BonusSkillsScreen.name)

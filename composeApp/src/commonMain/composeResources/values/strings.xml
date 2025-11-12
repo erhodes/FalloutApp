@@ -55,4 +55,7 @@
     <string name="unequip">Unequip</string>
 
     <string name="vitals">Vitals</string>
+    <string name="stress">Stress</string>
+    <string name="fatigue">Fatigue</string>
+    <string name="radiation">Radiation</string>
 </resources>

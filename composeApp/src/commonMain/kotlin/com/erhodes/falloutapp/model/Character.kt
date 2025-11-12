@@ -17,11 +17,15 @@ class Character(
     val skills: ArrayList<Int> = arrayListOf<Int>(2,2,2,2,2,2,2,2,2,2,2,2)
 ) {
 
+    companion object {
+        const val MAX_STRESS = 5
+    }
+
     var level = 1
     var milestones = 0
 
     var damageTaken = 0
-    var stress = 5
+    var stress = 0
     var radiation = 0
     var fatigue = 0
 
@@ -178,10 +182,12 @@ class Character(
         if (amount <= 0 ) return
         var modifiedDamage = amount
         equippedArmor?.let { armor ->
-            armor.damageTaken += max(0, amount - armor.toughness)
+            armor.damageTaken += max(0, modifiedDamage - armor.toughness)
             if (armor.damageTaken > armor.durability) {
                 modifiedDamage = armor.damageTaken - armor.durability
                 armor.damageTaken = armor.durability
+            } else {
+                modifiedDamage = 0
             }
         }
         damageTaken += modifiedDamage
@@ -197,5 +203,25 @@ class Character(
             it.damageTaken -= amount
             if (it.damageTaken < 0) it.damageTaken = 0
         }
+    }
+
+    fun modifyStress(amount: Int) {
+        if (stress + amount !in 0..MAX_STRESS) return
+        stress += amount
+    }
+
+    fun modifyFatigue(amount: Int) {
+        if (fatigue + amount < getMinimumFatigue()) return
+        fatigue += amount
+    }
+
+    fun getMinimumFatigue(): Int {
+        return radiation/10
+    }
+
+    fun modifyRadiation(amount: Int) {
+        if (radiation + amount < 0) return
+        radiation += amount
+        fatigue = max(fatigue, getMinimumFatigue())
     }
 }

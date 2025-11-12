@@ -28,7 +28,6 @@ class CharacterRepository(
 ) {
 
 	val characters = mutableListOf<Character>()
-	private val listeners = mutableSetOf<(List<Character>) -> Unit>()
 
     val dataSource = CharacterDataSource()
 
@@ -43,13 +42,8 @@ class CharacterRepository(
 
 	}
 
-	/** Return a snapshot of all characters. */
-	fun getAll(): List<Character> = characters.toList()
-
-	/** Add a character instance. Notifies subscribers. */
 	fun add(character: Character) {
 		characters.add(character)
-		notifyListeners()
 
         saveCharacters()
 	}
@@ -138,59 +132,23 @@ class CharacterRepository(
         saveCharacters()
     }
 
+    fun modifyStressForCharacter(amount: Int, character: Character) {
+        character.modifyStress(amount)
+        saveCharacters()
+    }
+
+    fun modifyFatigueForCharacter(amount: Int, character: Character) {
+        character.modifyFatigue(amount)
+        saveCharacters()
+    }
+
+    fun modifyRadiationForCharacter(amount: Int, character: Character) {
+        character.modifyRadiation(amount)
+        saveCharacters()
+    }
+
     private fun saveCharacters() {
         dataSource.saveCharacters(characters)
     }
-
-	/** Convenience: add by name. */
-	fun add(name: String) = add(Character(name))
-
-	/** Remove characters matching [name]. Returns true if anything was removed. */
-	fun removeByName(name: String): Boolean {
-		val removed = characters.removeAll { it.name == name }
-		if (removed) notifyListeners()
-		return removed
-	}
-
-	/** Update the first character with [oldName] to have [newName]. */
-	fun updateName(oldName: String, newName: String): Boolean {
-		val idx = characters.indexOfFirst { it.name == oldName }
-		return if (idx >= 0) {
-			characters[idx] = Character(newName)
-			notifyListeners()
-			true
-		} else {
-			false
-		}
-	}
-
-	/** Remove all characters. */
-	fun clear() {
-		if (characters.isNotEmpty()) {
-			characters.clear()
-			notifyListeners()
-		}
-	}
-
-	/**
-	 * Subscribe to changes. The subscriber will immediately receive the current
-	 * snapshot and then be called on subsequent changes.
-	 *
-	 * Returns an unsubscribe function which the caller should invoke to stop
-	 * receiving updates.
-	 */
-	fun subscribe(listener: (List<Character>) -> Unit): () -> Unit {
-		listeners.add(listener)
-		// deliver current state right away
-		listener(getAll())
-		return { listeners.remove(listener) }
-	}
-
-	private fun notifyListeners() {
-		val snapshot = getAll()
-		// copy listeners to avoid concurrent-modification if a listener unsubscribes
-		val copy = listeners.toList()
-		copy.forEach { it(snapshot) }
-	}
 
 }

@@ -51,6 +51,9 @@ fun CharacterScreen(state: CharacterUiState,
                     onTakeDamage: (Int) -> Unit,
                     onHealDamage: (Int) -> Unit,
                     onRepair: (Int) -> Unit,
+                    onModifyStress: (Int) -> Unit,
+                    onModifyFatigue: (Int) -> Unit,
+                    onModifyRadiation: (Int) -> Unit,
                     onGainMilestone: () -> Unit,
                     onAddPerk: () -> Unit,
                     onRemovePerk: (Perk) -> Unit,
@@ -76,35 +79,16 @@ fun CharacterScreen(state: CharacterUiState,
         )
         HorizontalDivider(thickness = 2.dp)
 
-        // Status
-        Text("Damage Taken ${character.damageTaken}/5")
-
-        Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
-
-        var amount by remember { mutableStateOf("") }
-        OutlinedTextField(
-            value = amount,
-            onValueChange = { amount = it },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text("Amount") }
+        // Vitals
+        VitalsScreen(
+            characterState = state,
+            onTakeDamage = onTakeDamage,
+            onHealDamage = onHealDamage,
+            onRepair = onRepair,
+            onModifyStress = onModifyStress,
+            onModifyFatigue = onModifyFatigue,
+            onModifyRadiation = onModifyRadiation
         )
-        Row {
-            Button(
-                onClick = { onTakeDamage(amount.toInt()) }
-            ) {
-                Text(stringResource(Res.string.take_damage))
-            }
-            Button(
-                onClick = { onHealDamage(amount.toInt()) }
-            ) {
-                Text(stringResource(Res.string.heal))
-            }
-            Button(
-                onClick = { onRepair(amount.toInt()) }
-            ) {
-                Text(stringResource(Res.string.repair))
-            }
-        }
 
         // SPECIAL
         Row(
@@ -393,6 +377,9 @@ fun CharacterScreenPreview() {
     MaterialTheme {
         CharacterScreen(
             CharacterUiState(character),
+            {},
+            {},
+            {},
             {},
             {},
             {},

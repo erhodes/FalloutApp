@@ -46,6 +46,16 @@ class ItemRepository {
             max = 10
         )
 
+        const val ID_RAIDER_PA = 7
+        val RAIDER_POWER_ARMOR = ArmorTemplate(
+            name = "Raider Power Armor",
+            description = "A very poorly maintained suit of power armor. Beneath all the rusted metal, the frame still works.",
+            load = 2,
+            id = ID_RAIDER_PA,
+            durability = 4,
+            toughness = 1
+        )
+
         init {
             itemList[ID_BANNER] = BANNER
             itemList[ID_LEATHER_ARMOR] = LEATHER_ARMOR
@@ -84,7 +94,7 @@ class ItemRepository {
                 range = 15,
                 magazineSize = 6
             )
-
+            itemList[ID_RAIDER_PA] = RAIDER_POWER_ARMOR
         }
 
         fun getItemTemplateById(id: Int): ItemTemplate {
