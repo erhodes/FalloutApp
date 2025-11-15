@@ -7,7 +7,6 @@ import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CharacterRepository
-import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -55,6 +54,10 @@ class CharacterViewModel(
             _activeCharacterState.update{ CharacterUiState(activeCharacter) }
         }
 
+    }
+
+    fun onDeleteCharacterClicked(character: Character) {
+        repo.removeCharacter(character)
     }
 
     private fun updateBonusSkillsState(newState: GainSkillUiState) {

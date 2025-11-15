@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.repository
 
+import androidx.compose.runtime.mutableStateListOf
 import com.erhodes.falloutapp.data.CharacterDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.ArmorTemplate
@@ -27,7 +28,7 @@ class CharacterRepository(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
 
-	val characters = mutableListOf<Character>()
+	val characters = mutableStateListOf<Character>()
 
     val dataSource = CharacterDataSource()
 
@@ -44,9 +45,13 @@ class CharacterRepository(
 
 	fun add(character: Character) {
 		characters.add(character)
-
         saveCharacters()
 	}
+
+    fun removeCharacter(character: Character) {
+        characters.remove(character)
+        saveCharacters()
+    }
 
     fun increaseSkillsForCharacter(increases: List<Int>, character: Character, milestone: Boolean) {
         for (i in 0 until increases.size) {

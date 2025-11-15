@@ -30,7 +30,7 @@ import com.erhodes.falloutapp.repository.PerkRepository
 import com.erhodes.falloutapp.ui.AcquireItemScreen
 import com.erhodes.falloutapp.ui.GainSkillsScreen
 import com.erhodes.falloutapp.ui.CharacterCreationScreen
-import com.erhodes.falloutapp.ui.CharacterList
+import com.erhodes.falloutapp.ui.CharacterListScreen
 import com.erhodes.falloutapp.ui.CharacterScreen
 import com.erhodes.falloutapp.ui.PerkSelectScreen
 import falloutapp.composeapp.generated.resources.Res
@@ -106,12 +106,13 @@ fun FalloutApp(
         ) {
             composable(route = FalloutScreen.CharacterList.name) {
                 val characterList = remember { viewModel.characters }
-                CharacterList(
+                CharacterListScreen(
                     characterList,
                     onSelect = {
                         viewModel.setActiveCharacter(it)
                         navController.navigate(FalloutScreen.CharacterScreen.name)
                     },
+                    onDeleteClicked = { viewModel.onDeleteCharacterClicked(it) },
                     onNewCharacter = { navController.navigate(FalloutScreen.CharacterCreation.name) }
                 )
             }

@@ -11,6 +11,7 @@
     <string name="back_button">Back</string>
 
     <string name="done">Done</string>
+    <string name="delete">Delete</string>
 
     <string name="take_damage">Take Damage</string>
     <string name="heal">Heal</string>
