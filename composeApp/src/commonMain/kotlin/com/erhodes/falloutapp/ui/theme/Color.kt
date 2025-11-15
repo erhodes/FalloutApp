@@ -14,3 +14,5 @@ val VaultTecBlue = Color(0xFF7EA3CF)
 val VaultTecBlueAlt = Color(0xFF1f63BE)
 val VaultTecYellow = Color(0xFFEFDD6F)
 val VaultTecYellowAlt = Color (0xFFFFC200)
+
+val NewVegasRed = Color(0xFF8f1b15)
