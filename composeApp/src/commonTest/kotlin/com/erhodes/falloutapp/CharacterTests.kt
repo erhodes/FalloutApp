@@ -82,4 +82,19 @@ class CharacterTests {
         assertEquals(1, character.fatigue)
         assertEquals(1, character.getMinimumFatigue())
     }
+
+    @Test
+    fun equipArmor() {
+        val character = Character("Bob")
+        val armor = Armor(ItemRepository.RAIDER_POWER_ARMOR, 0)
+
+        assertEquals(0, character.load)
+        assertEquals(0, character.inventoryWeight)
+        character.addItemToInventory(armor)
+        assertEquals(0, character.load)
+        assertEquals(armor.load, character.inventoryWeight)
+        character.equipItem(armor)
+        assertEquals(1, character.load)
+        assertEquals(0, character.inventoryWeight)
+    }
 }

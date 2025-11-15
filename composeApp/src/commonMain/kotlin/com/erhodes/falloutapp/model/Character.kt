@@ -159,13 +159,13 @@ class Character(
         if (equippedArmor != null) {
             return
         }
-        load += (armor.load - 1)
+        load += 1
         equippedArmor = armor
         removeItemFromInventory(armor)
     }
 
     private fun unequipArmor(armor: Armor) {
-        load -= (armor.load - 1)
+        load -= 1
         equippedArmor = null
         addItemToInventory(armor)
     }
@@ -176,6 +176,10 @@ class Character(
 
     fun getArmorDurability(): Int {
         return equippedArmor?.durability ?: 0
+    }
+
+    fun getArmorToughness(): Int {
+        return equippedArmor?.toughness ?: 0
     }
 
     fun takeDamage(amount: Int) {

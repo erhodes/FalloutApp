@@ -59,4 +59,6 @@
     <string name="stress">Stress</string>
     <string name="fatigue">Fatigue</string>
     <string name="radiation">Radiation</string>
+
+    <string name="toughness">Toughness</string>
 </resources>

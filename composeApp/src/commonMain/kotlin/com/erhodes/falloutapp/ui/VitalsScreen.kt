@@ -3,6 +3,7 @@ package com.erhodes.falloutapp.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -14,6 +15,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Character
@@ -26,6 +28,7 @@ import falloutapp.composeapp.generated.resources.radiation
 import falloutapp.composeapp.generated.resources.repair
 import falloutapp.composeapp.generated.resources.stress
 import falloutapp.composeapp.generated.resources.take_damage
+import falloutapp.composeapp.generated.resources.toughness
 import falloutapp.composeapp.generated.resources.vitals
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -47,11 +50,14 @@ fun VitalsScreen(
             style = MaterialTheme.typography.titleMedium
         )
         HorizontalDivider(thickness = 2.dp)
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
             Column {
                 Text("Damage Taken ${character.damageTaken}/${Character.MAX_STRESS}")
 
                 Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
+                Text("${stringResource(Res.string.toughness)} ${character.getArmorToughness()}")
 
                 var amount by remember { mutableStateOf("") }
                 OutlinedTextField(
@@ -91,21 +97,29 @@ fun VitalsScreen(
             }
             Column {
                 Row {
-                    Text("${stringResource(Res.string.stress)} ${character.stress}/5")
+                    Text(
+                        text = "${stringResource(Res.string.stress)} ${character.stress}/5",
+                        modifier = Modifier.fillMaxWidth(0.1f)
+                    )
                     PlusMinusButtons(
                         onIncrease = { onModifyStress(1) },
                         onDecrease = { onModifyStress(-1) }
                     )
                 }
                 Row {
-                    Text("${stringResource(Res.string.fatigue)}: ${character.fatigue}")
+                    Text(
+                        text = "${stringResource(Res.string.fatigue)}: ${character.fatigue}",
+                        modifier = Modifier.fillMaxWidth(0.1f))
                     PlusMinusButtons(
                         onIncrease = { onModifyFatigue(1) },
                         onDecrease = { onModifyFatigue(-1) }
                     )
                 }
                 Row {
-                    Text("${stringResource(Res.string.radiation)}: ${character.radiation}")
+                    Text(
+                        text ="${stringResource(Res.string.radiation)}: ${character.radiation}",
+                        modifier = Modifier.fillMaxWidth(0.1f)
+                    )
                     PlusMinusButtons(
                         onIncrease = { onModifyRadiation(1) },
                         onDecrease = { onModifyRadiation(-1) }
@@ -118,7 +132,9 @@ fun VitalsScreen(
 
 @Composable
 fun PlusMinusButtons(onIncrease: () -> Unit, onDecrease: () -> Unit) {
-    Row {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
         Button(
             onClick = onIncrease
         ) {
@@ -132,7 +148,7 @@ fun PlusMinusButtons(onIncrease: () -> Unit, onDecrease: () -> Unit) {
     }
 }
 
-@Preview
+@Preview(widthDp = 600)
 @Composable
 fun VitalsScreenPreview() {
     FalloutAppTheme {
