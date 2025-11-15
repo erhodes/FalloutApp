@@ -17,7 +17,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -126,7 +125,7 @@ fun FalloutApp(
                     onMajorClicked = { creationViewModel.onMajorClicked(it) },
                     onMinorClicked = { creationViewModel.onMinorClicked(it) },
                     onComplete = {
-                        val newChar = viewModel.addCharacter(it, uiState)
+                        val newChar = creationViewModel.addCharacter(it, uiState)
                         viewModel.setActiveCharacter(newChar)
                         viewModel.resetBonusSkillsState(newChar.intelligence, false)
                         navController.navigate(FalloutScreen.BonusSkillsScreen.name)

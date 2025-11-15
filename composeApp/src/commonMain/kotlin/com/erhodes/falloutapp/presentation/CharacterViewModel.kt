@@ -1,6 +1,8 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
@@ -16,8 +18,8 @@ import kotlinx.coroutines.launch
 
 class CharacterViewModel(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-): ViewModel() {
-    private val repo: CharacterRepository = CharacterRepository()
+): ViewModel(), KoinComponent {
+    private val repo: CharacterRepository by inject()
 
     val characters = repo.characters
 
@@ -30,23 +32,6 @@ class CharacterViewModel(
     val gainSkillsUiState = _gainSkillsUiState.asStateFlow()
 
     //TODO add DI and move this logic to the creation view model
-    fun addCharacter(name: String, uiState: CharacterCreationUiState): Character {
-        val newChar =
-            Character(
-                name = name,
-                strength = uiState.strength,
-                perception = uiState.perception,
-                endurance = uiState.endurance,
-                charisma = uiState.charisma,
-                intelligence = uiState.intelligence,
-                agility = uiState.agility,
-                luck = uiState.luck,
-                skills = uiState.skills
-            )
-
-        repo.add(newChar)
-        return newChar
-    }
 
     fun setActiveCharacter(character: Character) {
         activeCharacter = character

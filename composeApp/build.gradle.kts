@@ -1,5 +1,3 @@
-import org.gradle.kotlin.dsl.invoke
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -43,6 +41,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            // Koin Android helpers (only used on Android target)
+//            implementation("io.insert-koin:koin-android:3.4.0")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -53,6 +53,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+            // Koin for Kotlin Multiplatform (core)
+            implementation("io.insert-koin:koin-core:4.1.1")
 
             implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
 
