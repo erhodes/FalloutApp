@@ -47,7 +47,7 @@ fun VitalsScreen(
     Column {
         Text(
             text = stringResource(Res.string.vitals),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleLarge
         )
         HorizontalDivider(thickness = 2.dp)
         Row(

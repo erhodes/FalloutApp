@@ -20,11 +20,8 @@ class CharacterCreationViewModel(
     private val repo: CharacterRepository by inject()
 
     var pointsRemaining = 7
-
     var majorsRemaining = 2
     var minorsRemaining = 3
-
-    val stats = arrayListOf<Int>(1,1,1,1,1,1,1)
 
     private var creationState = CharacterCreationUiState()
     private val _creationUiState = MutableStateFlow(CharacterCreationUiState())
@@ -34,13 +31,13 @@ class CharacterCreationViewModel(
         val newChar =
             Character(
                 name = name,
-                strength = uiState.strength,
-                perception = uiState.perception,
-                endurance = uiState.endurance,
-                charisma = uiState.charisma,
-                intelligence = uiState.intelligence,
-                agility = uiState.agility,
-                luck = uiState.luck,
+                strength = uiState.stats[0],
+                perception = uiState.stats[1],
+                endurance = uiState.stats[2],
+                charisma = uiState.stats[3],
+                intelligence = uiState.stats[4],
+                agility = uiState.stats[5],
+                luck = uiState.stats[6],
                 skills = uiState.skills
             )
 
@@ -50,51 +47,34 @@ class CharacterCreationViewModel(
 
     fun startNewCreation() {
         pointsRemaining = 7
-        stats.map { 1 }
+        majorsRemaining = 2
+        minorsRemaining = 3
 
-        creationState = CharacterCreationUiState()
-    }
-
-    fun onComplete() {
-
+        updateState(CharacterCreationUiState())
     }
 
     fun incrementStat(position: Int) {
-        if (stats[position] >= 3 || pointsRemaining <= 0) {
+        if (creationState.stats[position] >= 3 || pointsRemaining <= 0) {
             return
         }
         pointsRemaining--
-        stats[position]++
+        creationState.stats[position]++
         updateState(
             creationState.copy(
                 pointsRemaining = pointsRemaining,
-                strength = stats[0],
-                perception = stats[1],
-                endurance = stats[2],
-                charisma = stats[3],
-                intelligence = stats[4],
-                agility = stats[5],
-                luck = stats[6],
             )
         )
     }
 
     fun decrementStat(position: Int) {
-        if (stats[position] <= 1) {
+        if (creationState.stats[position] <= 1) {
             return
         }
         pointsRemaining++
-        stats[position]--
+        creationState.stats[position]--
         updateState(
             creationState.copy(
                 pointsRemaining = pointsRemaining,
-                strength = stats[0],
-                perception = stats[1],
-                endurance = stats[2],
-                charisma = stats[3],
-                intelligence = stats[4],
-                agility = stats[5],
-                luck = stats[6],
             )
         )
     }
@@ -127,17 +107,6 @@ class CharacterCreationViewModel(
             majorsRemaining = majorsRemaining,
             minorsRemaining = minorsRemaining
         ))
-//        val newState = CharacterCreationUiState(
-//            creationState.pointsRemaining,
-//            stats[0],
-//            stats[1],
-//            stats[2],
-//            stats[3],
-//            stats[4],
-//            stats[5],
-//            stats[6],
-//            creationState.skills
-//        )
     }
 
     fun unselectMajorSkill(ordinal: Int) {

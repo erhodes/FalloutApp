@@ -113,7 +113,10 @@ fun FalloutApp(
                         navController.navigate(FalloutScreen.CharacterScreen.name)
                     },
                     onDeleteClicked = { viewModel.onDeleteCharacterClicked(it) },
-                    onNewCharacter = { navController.navigate(FalloutScreen.CharacterCreation.name) }
+                    onNewCharacter = {
+                        creationViewModel.startNewCreation()
+                        navController.navigate(FalloutScreen.CharacterCreation.name)
+                    }
                 )
             }
             composable(route = FalloutScreen.CharacterCreation.name) {

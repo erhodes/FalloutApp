@@ -54,6 +54,19 @@ class Character(
         }
     }
 
+    fun getStatByOrdinal(ordinal: Int): Int {
+        return when (ordinal) {
+            0 -> strength
+            1 -> perception
+            2 -> endurance
+            3 -> charisma
+            4 -> intelligence
+            5 -> agility
+            6 -> luck
+            else -> 0
+        }
+    }
+
     fun getMaxSkillValue(): Int {
         return 5 + level/2
     }

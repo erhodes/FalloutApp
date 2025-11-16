@@ -11,20 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Skills
+import com.erhodes.falloutapp.model.Stats
 import com.erhodes.falloutapp.presentation.CharacterCreationUiState
-import falloutapp.composeapp.generated.resources.Res
-import falloutapp.composeapp.generated.resources.agility
-import falloutapp.composeapp.generated.resources.charisma
-import falloutapp.composeapp.generated.resources.endurance
-import falloutapp.composeapp.generated.resources.intelligence
-import falloutapp.composeapp.generated.resources.luck
-import falloutapp.composeapp.generated.resources.major
-import falloutapp.composeapp.generated.resources.minor
-import falloutapp.composeapp.generated.resources.perception
-import falloutapp.composeapp.generated.resources.skills
-import falloutapp.composeapp.generated.resources.special
-import falloutapp.composeapp.generated.resources.strength
-import falloutapp.composeapp.generated.resources.unselect
+import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -50,69 +39,19 @@ fun CharacterCreationScreen(
         Text("Points remaining ${uiState.pointsRemaining}/7")
 
         Row {
-            SpecialAllocation(
-                label = stringResource(Res.string.strength),
-                value = uiState.strength,
-                onIncrement = { onIncrement(0) },
-                onDecrement = { onDecrement(0) }
-            )
-            SpecialAllocation(
-                label = stringResource(Res.string.perception),
-                value = uiState.perception,
-                onIncrement = { onIncrement(1) },
-                onDecrement = { onDecrement(1) }
-            )
-            SpecialAllocation(
-                label = stringResource(Res.string.endurance),
-                value = uiState.endurance,
-                onIncrement = { onIncrement(2) },
-                onDecrement = { onDecrement(2) }
-            )
-            SpecialAllocation(
-                label = stringResource(Res.string.charisma),
-                value = uiState.charisma,
-                onIncrement = { onIncrement(3) },
-                onDecrement = { onDecrement(3) }
-            )
-            SpecialAllocation(
-                label = stringResource(Res.string.intelligence),
-                value = uiState.intelligence,
-                onIncrement = { onIncrement(4) },
-                onDecrement = { onDecrement(4) }
-            )
-            SpecialAllocation(
-                label = stringResource(Res.string.agility),
-                value = uiState.agility,
-                onIncrement = { onIncrement(5) },
-                onDecrement = { onDecrement(5) }
-            )
-            SpecialAllocation(
-                label = stringResource(Res.string.luck),
-                value = uiState.luck,
-                onIncrement = { onIncrement(6) },
-                onDecrement = { onDecrement(6) }
-            )
-
+            for (i in 0..6) {
+                SpecialAllocation(
+                    label = stringResource(Stats.entries[i].displayName),
+                    value = uiState.stats[i],
+                    pointsRemaining = uiState.pointsRemaining > 0,
+                    onIncrement = { onIncrement(i) },
+                    onDecrement = { onDecrement(i) }
+                )
+            }
         }
 
         Text(stringResource(Res.string.skills))
         Text("Majors remaining: ${uiState.majorsRemaining}  Minors remaining: ${uiState.minorsRemaining}")
-//        val ordinal = 0
-//        Row {
-//            Text(stringResource(Skills.entries[ordinal].description))
-//            Button(
-//                onClick = { },
-//                enabled = uiState.skills[ordinal] == 5
-//            ) {
-//                Text(stringResource(Res.string.major))
-//            }
-//            Button(
-//                onClick = {},
-//                enabled = uiState.skills[ordinal] == 4
-//            ) {
-//                Text(stringResource(Res.string.minor))
-//            }
-//        }
 
         Row {
             Column(
@@ -165,7 +104,7 @@ fun SkillAllocationPanel(ordinal: Int, value: Int, onSelectMajor: (Int) -> Unit,
 }
 
 @Composable
-fun SpecialAllocation(label: String, value: Int, onIncrement: () -> Unit, onDecrement: () -> Unit) {
+fun SpecialAllocation(label: String, value: Int, pointsRemaining: Boolean, onIncrement: () -> Unit, onDecrement: () -> Unit) {
     Column(
         modifier = Modifier.padding(end = 10.dp)
     ) {
@@ -173,7 +112,7 @@ fun SpecialAllocation(label: String, value: Int, onIncrement: () -> Unit, onDecr
         Text("$value")
         Row {
             Button(
-                enabled = value != 3,
+                enabled = (value != 3 && pointsRemaining),
                 onClick = onIncrement
             ) {
                 Text("+")

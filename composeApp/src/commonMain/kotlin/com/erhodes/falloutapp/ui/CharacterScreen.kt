@@ -11,6 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.*
 import com.erhodes.falloutapp.presentation.CharacterUiState
+import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -57,13 +58,13 @@ fun CharacterScreen(state: CharacterUiState,
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            SpecialPanel("S", character.strength)
-            SpecialPanel("P", character.perception)
-            SpecialPanel("E", character.endurance)
-            SpecialPanel("C", character.charisma)
-            SpecialPanel("I", character.intelligence)
-            SpecialPanel("A", character.agility)
-            SpecialPanel("L", character.luck)
+            Stats.entries.forEach {
+                SpecialPanel(
+                    title = stringResource(it.letter),
+                    value = character.getStatByOrdinal(it.ordinal),
+                    modifier = Modifier.padding(horizontal = 5.dp)
+                )
+            }
         }
         HorizontalDivider(thickness = 2.dp)
 
@@ -229,107 +230,25 @@ fun CharacterScreen(state: CharacterUiState,
     }
 }
 
-
-//@Composable
-//fun WeaponPanel(
-//    weapon: Weapon,
-//    ammo: Int,
-//    increaseButton: () -> Unit,
-//    decreaseButton: () -> Unit,
-//    buttonLabel: String,
-//    buttonAction: () -> Unit
-//) {
-//    Row(
-//        horizontalArrangement = Arrangement.SpaceBetween
-//    ) {
-//        Text(weapon.name)
-//
-//        Column(
-//            modifier = Modifier.weight(0.3f)
-//        ) {
-//            val spacing = 0.05f
-//            Row {
-//                Text("Successes", Modifier.weight(spacing))
-//                Text("Damage", Modifier.weight(spacing))
-//                Text("Ability", Modifier.weight(spacing))
-//            }
-//            for (i in 0 until 3) {
-//                Row {
-//                    Text("$i", Modifier.weight(spacing))
-//                    Text("${weapon.damage[i]}", Modifier.weight(spacing))
-//                    Text(weapon.ability[i], Modifier.weight(spacing))
-//                }
-//            }
-//        }
-//
-//        if (weapon.magazineSize > 0) {
-//            Text(
-//                modifier = Modifier.padding(horizontal = 10.dp),
-//                text = "Ammo $ammo/${weapon.magazineSize}"
-//            )
-//            Button(
-//                onClick = increaseButton
-//            ) {
-//                Text("+")
-//            }
-//            Button(
-//                onClick = decreaseButton
-//            ) {
-//                Text("-")
-//            }
-//        }
-//        Button(
-//            onClick = buttonAction
-//        ) {
-//            Text(buttonLabel)
-//        }
-//    }
-//}
-
-//@Composable
-//fun StackableItemPanel(
-//    stackable: StackableItem,
-//    count: Int,
-//    increaseButton: () -> Unit,
-//    decreaseButton: () -> Unit,
-//    buttonLabel: String,
-//    buttonAction: () -> Unit
-//) {
-//    Row(
-//        horizontalArrangement = Arrangement.SpaceBetween
-//    ) {
-//        Text(stackable.name)
-//        Text(
-//            modifier = Modifier.padding(horizontal = 10.dp),
-//            text = "Quantity $count"
-//        )
-//        Button(
-//            onClick = increaseButton
-//        ) {
-//            Text("+")
-//        }
-//        Button(
-//            onClick = decreaseButton
-//        ) {
-//            Text("-")
-//        }
-//        Button(
-//            onClick = buttonAction
-//        ) {
-//            Text(buttonLabel)
-//        }
-//    }
-//}
-
 @Composable
-fun SpecialPanel(title: String, value: Int) {
-    Column {
-        Text(title)
-        Text("$value")
+fun SpecialPanel(title: String, value: Int, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
+        Text(
+            text = "$value",
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
+        )
     }
 }
 
-@Preview
+@Preview(widthDp = 800)
 @Composable
 fun CharacterScreenPreview() {
     val character = Character("Tom")
@@ -337,7 +256,7 @@ fun CharacterScreenPreview() {
 //    character.addItemToInventory(armor)
 //    character.addItemToInventory(Item(ItemRepository.BANNER))
 //    character.equipItem(armor)
-    MaterialTheme {
+    FalloutAppTheme {
         CharacterScreen(
             CharacterUiState(character),
             {},

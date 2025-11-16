@@ -25,6 +25,13 @@
     <string name="intelligence">Intelligence</string>
     <string name="agility">Agility</string>
     <string name="luck">Luck</string>
+    <string name="s">S</string>
+    <string name="p">P</string>
+    <string name="e">E</string>
+    <string name="c">C</string>
+    <string name="i">I</string>
+    <string name="a">A</string>
+    <string name="l">L</string>
 
     <string name="skills">Skills</string>
     <string name="athletics">Athletics</string>
