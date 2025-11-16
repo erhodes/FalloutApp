@@ -1,8 +1,8 @@
 package com.erhodes.falloutapp
 
+import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
-import com.erhodes.falloutapp.repository.ItemRepository
 import com.erhodes.falloutapp.util.AppLogger
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -22,7 +22,7 @@ class CharacterTests {
     @Test
     fun takeDamageWithArmor() {
         val character = Character("Bob")
-        val armor = Armor(ItemRepository.LEATHER_ARMOR, 0)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER), 0)
 
         assertEquals(0, armor.damageTaken)
         assertEquals(0, character.damageTaken)
@@ -44,7 +44,7 @@ class CharacterTests {
     @Test
     fun takeDamageWithToughArmor() {
         val character = Character("Bob")
-        val armor = Armor(ItemRepository.RAIDER_POWER_ARMOR, 0)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
 
         assertEquals(0, armor.damageTaken)
         assertEquals(0, character.damageTaken)
@@ -86,7 +86,7 @@ class CharacterTests {
     @Test
     fun equipArmor() {
         val character = Character("Bob")
-        val armor = Armor(ItemRepository.RAIDER_POWER_ARMOR, 0)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
 
         assertEquals(0, character.load)
         assertEquals(0, character.inventoryWeight)

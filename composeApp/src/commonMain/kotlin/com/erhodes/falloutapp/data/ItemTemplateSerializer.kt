@@ -1,7 +1,6 @@
 package com.erhodes.falloutapp.data
 
 import com.erhodes.falloutapp.model.ItemTemplate
-import com.erhodes.falloutapp.repository.ItemRepository
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -20,7 +19,7 @@ object ItemTemplateSerializer: KSerializer<ItemTemplate> {
     }
 
     override fun deserialize(decoder: Decoder): ItemTemplate {
-        return ItemRepository.getItemTemplateById(decoder.decodeInt())
+        return ItemDataSource.getItemTemplateById(decoder.decodeInt())
     }
 
 }

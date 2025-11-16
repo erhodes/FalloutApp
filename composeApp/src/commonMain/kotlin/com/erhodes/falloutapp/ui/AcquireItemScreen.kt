@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.ItemTemplate
-import com.erhodes.falloutapp.repository.ItemRepository
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -28,11 +28,11 @@ fun AcquireItemScreen(items: Collection<ItemTemplate>, onAcquireItem: (ItemTempl
 @Composable
 @Preview
 fun AcquireItemScreenPreview() {
-    val items = arrayListOf(
-        ItemRepository.BANNER,
-        ItemRepository.LEATHER_ARMOR
+    val itemTemplates = arrayListOf(
+        ItemDataSource.getItemTemplateById(ItemDataSource.ID_BATTLE_STANDARD),
+        ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER)
     )
     MaterialTheme {
-        AcquireItemScreen(items, {})
+        AcquireItemScreen(itemTemplates, {})
     }
 }

@@ -20,13 +20,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
-import com.erhodes.falloutapp.repository.ItemRepository
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -282,7 +282,9 @@ fun StackableItemPanel(
 @Composable
 fun WeaponDisplayPreview() {
     FalloutAppTheme {
-        WeaponPanel(Weapon(ItemRepository.ASSAULT_RIFLE, 0), 0,  {}, {}, "Equip", {})
+        WeaponPanel(
+            Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0),
+            0,  {}, {}, "Equip", {})
     }
 }
 
@@ -291,7 +293,7 @@ fun WeaponDisplayPreview() {
 fun StackableItemPreview() {
     FalloutAppTheme {
         StackableItemPanel(
-            stackable = StackableItem(ItemRepository.CAPS, 1),
+            stackable = StackableItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_CAPS), 1),
             count = 1,
             increaseButton = {},
             decreaseButton = {},
@@ -305,7 +307,7 @@ fun StackableItemPreview() {
 @Composable
 fun ArmorDisplayPreview() {
     FalloutAppTheme {
-        ArmorDisplay(Armor(ItemRepository.LEATHER_ARMOR, 0), "Equip", {})
+        ArmorDisplay(Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER), 0), "Equip", {})
     }
 }
 
@@ -313,6 +315,6 @@ fun ArmorDisplayPreview() {
 @Composable
 fun ItemDisplayPreview() {
     FalloutAppTheme {
-        ItemDisplay(BasicItem(ItemRepository.BANNER), "Equip", {})
+        ItemDisplay(BasicItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_BATTLE_STANDARD)), "Equip", {})
     }
 }
