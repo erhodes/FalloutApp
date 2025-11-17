@@ -12,11 +12,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.PerkDataSource
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.SkillRequirement
 import com.erhodes.falloutapp.model.StatRequirement
+import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.requires
@@ -33,7 +33,7 @@ fun PerkPanel(perk: Perk, buttonEnabled: Boolean, buttonLabel: String, onClick: 
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.surfaceDim)
                 .fillMaxWidth()
-                .padding(horizontal = 5.dp)
+                .padding(horizontal = Dimens.paddingSmall)
         ) {
             Text(
                 text = perk.name,
@@ -47,7 +47,7 @@ fun PerkPanel(perk: Perk, buttonEnabled: Boolean, buttonLabel: String, onClick: 
                 Text(buttonLabel)
             }
         }
-        Column(modifier = Modifier.padding(horizontal = 5.dp)) {
+        Column(modifier = Modifier.padding(horizontal = Dimens.paddingSmall)) {
             if (showRequirements) {
                 var requirementsString = stringResource(Res.string.requires)
                 perk.requirements.forEach { requirement ->

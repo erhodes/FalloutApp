@@ -29,7 +29,7 @@ class Character(
     var radiation = 0
     var fatigue = 0
 
-    var load = 0
+    var loadoutWeight = 0
     val loadoutLimit = strength + 4
     var equippedArmor: Armor? = null
 
@@ -90,15 +90,29 @@ class Character(
         inventoryWeight -= item.load
     }
 
+    fun removeItem(item: Item) {
+        if (item == equippedArmor) {
+            loadoutWeight -= 1
+            equippedArmor == null
+        } else if (inventory.contains(item)) {
+            removeItemFromInventory(item)
+        } else if (loadout.contains(item)) {
+            loadout.remove(item)
+            loadoutWeight -= item.load
+        }
+    }
+
+
+
     /**
      * Equip an item from this character's inventory
      */
     fun equipItem(item: Item) {
         if (!inventory.contains(item)) return
         if (item is Armor) return equipArmor(item)
-        if (item.load + load > loadoutLimit) return
+        if (item.load + loadoutWeight > loadoutLimit) return
 
-        load += item.load
+        loadoutWeight += item.load
         loadout.add(item)
         removeItemFromInventory(item)
     }
@@ -106,7 +120,7 @@ class Character(
     fun unequipItem(item: Item) {
         if (item == equippedArmor) unequipArmor(item as Armor)
         if (!loadout.contains(item)) return
-        load -= item.load
+        loadoutWeight -= item.load
         loadout.remove(item)
         addItemToInventory(item)
     }
@@ -128,14 +142,14 @@ class Character(
         item.count += count
         val loadDif = item.load - oldLoad
 
-        if (load + loadDif > limit) {
+        if (loadoutWeight + loadDif > limit) {
             // too heavy!
             item.count -= count
             return
         }
 
         if (inLoadout) {
-            load += loadDif
+            loadoutWeight += loadDif
         } else {
             inventoryWeight += loadDif
         }
@@ -156,7 +170,7 @@ class Character(
         loadout.forEach {
             weight+=it.load
         }
-        load = weight
+        loadoutWeight = weight
     }
 
     private fun recalculateInventoryLoad() {
@@ -172,13 +186,13 @@ class Character(
         if (equippedArmor != null) {
             return
         }
-        load += 1
+        loadoutWeight += 1
         equippedArmor = armor
         removeItemFromInventory(armor)
     }
 
     private fun unequipArmor(armor: Armor) {
-        load -= 1
+        loadoutWeight -= 1
         equippedArmor = null
         addItemToInventory(armor)
     }

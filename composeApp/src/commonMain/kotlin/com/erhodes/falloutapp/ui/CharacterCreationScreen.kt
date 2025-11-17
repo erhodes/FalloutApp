@@ -58,12 +58,25 @@ fun CharacterCreationScreen(
                 modifier = Modifier.padding(end = 10.dp)
             ) {
                 for (i in 0.. 5) {
-                    SkillAllocationPanel(i, uiState.skills[i], onMajorClicked, onMinorClicked)
+                    SkillAllocationPanel(
+                        ordinal =  i,
+                        value = uiState.skills[i],
+                        majorEnabled = (uiState.majorsRemaining > 0),
+                        minorEnabled = (uiState.minorsRemaining > 0),
+                        onSelectMajor = onMajorClicked,
+                        onSelectMinor = onMinorClicked
+                    )
                 }
             }
             Column {
                 for (i in 6.. 11) {
-                    SkillAllocationPanel(i, uiState.skills[i], onMajorClicked, onMinorClicked)
+                    SkillAllocationPanel(
+                        ordinal = i,
+                        value = uiState.skills[i],
+                        majorEnabled = (uiState.majorsRemaining > 0),
+                        minorEnabled = (uiState.minorsRemaining > 0),
+                        onSelectMajor = onMajorClicked,
+                        onSelectMinor = onMinorClicked)
                 }
             }
         }
@@ -78,10 +91,11 @@ fun CharacterCreationScreen(
 }
 
 @Composable
-fun SkillAllocationPanel(ordinal: Int, value: Int, onSelectMajor: (Int) -> Unit, onSelectMinor: (Int) -> Unit) {
+fun SkillAllocationPanel(ordinal: Int, value: Int, majorEnabled: Boolean, minorEnabled: Boolean, onSelectMajor: (Int) -> Unit, onSelectMinor: (Int) -> Unit) {
     Row {
         Text(stringResource(Skills.entries[ordinal].description))
         Button(
+            enabled = majorEnabled || value == 5,
             onClick = { onSelectMajor(ordinal) }
         ) {
             if (value == 5) {
@@ -92,6 +106,7 @@ fun SkillAllocationPanel(ordinal: Int, value: Int, onSelectMajor: (Int) -> Unit,
 
         }
         Button(
+            enabled = minorEnabled || value == 4,
             onClick = { onSelectMinor(ordinal) }
         ) {
             if (value == 4) {

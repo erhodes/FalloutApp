@@ -61,6 +61,7 @@
 
     <string name="equip">Equip</string>
     <string name="unequip">Unequip</string>
+    <string name="discard">Discard</string>
 
     <string name="vitals">Vitals</string>
     <string name="stress">Stress</string>

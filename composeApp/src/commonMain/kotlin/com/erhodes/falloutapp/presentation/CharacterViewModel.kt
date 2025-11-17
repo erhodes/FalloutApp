@@ -118,23 +118,17 @@ class CharacterViewModel(
 
     fun removeItemFromActiveCharacter(item: Item) {
         repo.removeItemFromCharacter(item, activeCharacter)
-        scope.launch {
-            _activeCharacterState.update{ CharacterUiState(activeCharacter) }
-        }
+        updateActiveCharacter()
     }
 
     fun equipItemToCharacter(item: Item) {
         repo.equipItemToCharacter(item, activeCharacter)
-        scope.launch {
-            _activeCharacterState.update{ CharacterUiState(activeCharacter) }
-        }
+        updateActiveCharacter()
     }
 
     fun unequipItemFromCharacter(item: Item) {
         repo.unequipItemFromCharacter(item, activeCharacter)
-        scope.launch {
-            _activeCharacterState.update { CharacterUiState(activeCharacter) }
-        }
+        updateActiveCharacter()
     }
 
     private fun updateActiveCharacter() {

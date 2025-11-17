@@ -3,6 +3,7 @@ package com.erhodes.falloutapp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.util.AppLogger
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -88,13 +89,40 @@ class CharacterTests {
         val character = Character("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
 
-        assertEquals(0, character.load)
+        assertEquals(0, character.loadoutWeight)
         assertEquals(0, character.inventoryWeight)
         character.addItemToInventory(armor)
-        assertEquals(0, character.load)
+        assertEquals(0, character.loadoutWeight)
         assertEquals(armor.load, character.inventoryWeight)
         character.equipItem(armor)
-        assertEquals(1, character.load)
+        assertEquals(1, character.loadoutWeight)
+        assertEquals(0, character.inventoryWeight)
+    }
+
+    @Test
+    fun addAndRemoveItems() {
+        val character = Character("Bob")
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
+        val weapon = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0)
+
+        assertEquals(0, character.loadoutWeight)
+        assertEquals(0, character.inventoryWeight)
+
+        character.addItemToInventory(armor)
+        character.addItemToInventory(weapon)
+        assertEquals(0, character.loadoutWeight)
+        assertEquals(armor.load + weapon.load, character.inventoryWeight)
+
+        character.equipItem(armor)
+        assertEquals(1, character.loadoutWeight)
+        assertEquals(weapon.load, character.inventoryWeight)
+
+        character.removeItem(weapon)
+        assertEquals(1, character.loadoutWeight)
+        assertEquals(0, character.inventoryWeight)
+
+        character.removeItem(armor)
+        assertEquals(0, character.loadoutWeight)
         assertEquals(0, character.inventoryWeight)
     }
 }

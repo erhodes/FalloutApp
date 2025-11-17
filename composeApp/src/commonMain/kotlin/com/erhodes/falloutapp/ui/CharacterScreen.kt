@@ -11,6 +11,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.*
 import com.erhodes.falloutapp.presentation.CharacterUiState
+import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
@@ -29,6 +30,7 @@ fun CharacterScreen(state: CharacterUiState,
                     onRemovePerk: (Perk) -> Unit,
                     onEquipItem: (Item) -> Unit,
                     onUnequipItem: (Item) -> Unit,
+                    onDiscardItem: (Item) -> Unit,
                     onIncreaseItem: (Item) -> Unit,
                     onDecreaseItem: (Item) -> Unit,
                     onAddItem: () -> Unit
@@ -69,8 +71,13 @@ fun CharacterScreen(state: CharacterUiState,
         HorizontalDivider(thickness = 2.dp)
 
         //Skills
-        Text(stringResource(Res.string.skills), style = MaterialTheme.typography.titleLarge)
-        Row {
+        Text(text = stringResource(Res.string.skills),
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+        )
+        Row(
+            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+        ) {
             Column(
                 modifier = Modifier.padding(end = 10.dp)
             ) {
@@ -87,7 +94,9 @@ fun CharacterScreen(state: CharacterUiState,
         HorizontalDivider(thickness = 2.dp)
 
         //Perks
-        Row {
+        Row(
+            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+        ) {
             Text(
                 text = stringResource(Res.string.perks),
                 style = MaterialTheme.typography.titleLarge
@@ -108,37 +117,42 @@ fun CharacterScreen(state: CharacterUiState,
         }
         Button(
             onClick = onAddPerk,
-            enabled = character.perks.size < character.level
+            enabled = character.perks.size < character.level,
+            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
         ) {
             Text(stringResource(Res.string.add_perk))
         }
 
-        HorizontalDivider(thickness = 2.dp)
-        Text("Level ${character.level} Milestones ${character.milestones}")
-        Button(
-            onClick = onGainMilestone
-        ) {
-            Text(stringResource(Res.string.gain_milestone))
-        }
+        ProgressionPanel(
+            state = state,
+            onGainMilestone = onGainMilestone
+        )
 
         // Inventory
         HorizontalDivider(thickness = 2.dp)
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
+                .padding(horizontal = Dimens.paddingSmall)
         ) {
             Text(
                 text = "Loadout",
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = "${character.load}/${character.loadoutLimit}",
+                text = "${character.loadoutWeight}/${character.loadoutLimit}",
                 textAlign = TextAlign.End
             )
         }
         HorizontalDivider(thickness = 2.dp)
         character.equippedArmor?.let {
-            ArmorDisplay(it, stringResource(Res.string.unequip), { onUnequipItem(it) })
+            ArmorDisplay(
+                armor = it,
+                buttonLabel = stringResource(Res.string.unequip),
+                buttonAction = { onUnequipItem(it) },
+                secondaryButtonLabel = stringResource(Res.string.discard),
+                secondaryButtonAction = { onDiscardItem(it) }
+            )
         }
         character.loadout.forEach {
             // todo figure out how to reuse this code in the inventory section
@@ -152,6 +166,8 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Weapon) {
                 WeaponPanel(
@@ -161,18 +177,24 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Armor) {
                 ArmorDisplay(
                     armor = it,
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else {
                 ItemDisplay(
                     item = it,
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             }
         }
@@ -181,7 +203,11 @@ fun CharacterScreen(state: CharacterUiState,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Inventory", style = MaterialTheme.typography.titleLarge)
+            Text(
+                text = "Inventory",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+            )
             Text(
                 text = "${character.inventoryWeight}/${character.inventoryLimit}",
                 textAlign = TextAlign.End
@@ -197,6 +223,8 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Weapon) {
                 WeaponPanel(
@@ -206,18 +234,24 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Armor) {
                 ArmorDisplay(
                     armor = it,
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else {
                 ItemDisplay(
                     item = it,
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
+                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonAction = { onDiscardItem(it) }
                 )
             }
         }
@@ -259,6 +293,7 @@ fun CharacterScreenPreview() {
     FalloutAppTheme {
         CharacterScreen(
             CharacterUiState(character),
+            {},
             {},
             {},
             {},

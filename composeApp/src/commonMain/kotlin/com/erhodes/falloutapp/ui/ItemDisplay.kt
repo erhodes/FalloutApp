@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -27,6 +28,7 @@ import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -37,6 +39,8 @@ fun GenericItemDisplay(
     buttonLabel: String,
     buttonAction: () -> Unit,
     modifier: Modifier = Modifier,
+    secondaryButtonLabel: String? = null,
+    secondaryButtonAction: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
     var isExpanded by rememberSaveable { mutableStateOf(true) }
@@ -44,47 +48,67 @@ fun GenericItemDisplay(
         modifier = modifier.fillMaxWidth()
             .padding(vertical = 5.dp)
     ) {
-        Column(
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceDim)
                 .clickable{ isExpanded = !isExpanded }
+                .padding(horizontal = Dimens.paddingSmall)
         ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-            )
-            Text(
-                text = summary
-            )
+            Column{
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Text(
+                    text = summary
+                )
+            }
+            Spacer(Modifier.weight(0.5f))
+            Button(
+                onClick = buttonAction,
+            ) {
+                Text(buttonLabel)
+            }
+            if (secondaryButtonLabel != null && secondaryButtonAction != null) {
+                Button(
+                    onClick = secondaryButtonAction,
+                    modifier = Modifier.padding(start = 10.dp)
+                ) {
+                    Text(secondaryButtonLabel)
+                }
+            }
         }
 
+
         AnimatedVisibility(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = Dimens.paddingSmall),
             visible = isExpanded
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 content()
-                Button(
-                    onClick = buttonAction,
-                    modifier = Modifier.padding(start = 10.dp)
-                ) {
-                    Text(buttonLabel)
-                }
             }
         }
     }
 }
 
 @Composable
-fun ItemDisplay(item: Item, buttonLabel: String, buttonAction: () -> Unit) {
+fun ItemDisplay(
+    item: Item,
+    buttonLabel: String,
+    buttonAction: () -> Unit,
+    secondaryButtonLabel: String? = null,
+    secondaryButtonAction: (() -> Unit)? = null
+) {
     GenericItemDisplay(
         title = item.name,
         summary = "Load ${item.load}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction,
+        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonAction = secondaryButtonAction
     ) {
         Text(
             text = item.description
@@ -158,12 +182,20 @@ fun ItemTemplateDisplay(template: ItemTemplate, buttonLabel: String, buttonActio
 }
 
 @Composable
-fun ArmorDisplay(armor: Armor, buttonLabel: String, buttonAction: () -> Unit) {
+fun ArmorDisplay(
+    armor: Armor,
+    buttonLabel: String,
+    buttonAction: () -> Unit,
+    secondaryButtonLabel: String? = null,
+    secondaryButtonAction: (() -> Unit)? = null
+) {
     GenericItemDisplay(
         title = armor.name,
         summary = "Load: ${armor.load}  Durability: ${armor.damageTaken}/${armor.durability} Toughness:${armor.toughness}",
         buttonLabel = buttonLabel,
-        buttonAction = buttonAction
+        buttonAction = buttonAction,
+        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonAction = secondaryButtonAction
     ) {
         Text(armor.description)
     }
@@ -176,13 +208,17 @@ fun WeaponPanel(
     increaseButton: () -> Unit,
     decreaseButton: () -> Unit,
     buttonLabel: String,
-    buttonAction: () -> Unit
+    buttonAction: () -> Unit,
+    secondaryButtonLabel: String? = null,
+    secondaryButtonAction: (() -> Unit)? = null
 ) {
     GenericItemDisplay(
         title = weapon.name,
         summary = "Load: ${weapon.load}",
         buttonLabel = buttonLabel,
-        buttonAction = buttonAction
+        buttonAction = buttonAction,
+        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonAction = secondaryButtonAction
     ) {
         Column {
             Text(weapon.description)
@@ -248,13 +284,17 @@ fun StackableItemPanel(
     increaseButton: () -> Unit,
     decreaseButton: () -> Unit,
     buttonLabel: String,
-    buttonAction: () -> Unit
+    buttonAction: () -> Unit,
+    secondaryButtonLabel: String? = null,
+    secondaryButtonAction: (() -> Unit)? = null
 ) {
     GenericItemDisplay(
         title = stackable.name,
         summary = "Up to ${stackable.max} per load. Current Load: ${stackable.load} ",
         buttonLabel = buttonLabel,
-        buttonAction = buttonAction
+        buttonAction = buttonAction,
+        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonAction = secondaryButtonAction
     ) {
         Column {
             Text(stackable.description)
@@ -284,7 +324,9 @@ fun WeaponDisplayPreview() {
     FalloutAppTheme {
         WeaponPanel(
             Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0),
-            0,  {}, {}, "Equip", {})
+            0,  {}, {}, "Equip", {},
+            secondaryButtonLabel = "Discard",
+            secondaryButtonAction = {})
     }
 }
 

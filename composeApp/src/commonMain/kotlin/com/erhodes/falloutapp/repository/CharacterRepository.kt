@@ -108,7 +108,7 @@ class CharacterRepository(
     }
 
     fun removeItemFromCharacter(item: Item, character: Character) {
-        character.removeItemFromInventory(item)
+        character.removeItem(item)
         saveCharacters()
     }
 
