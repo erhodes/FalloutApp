@@ -9,6 +9,7 @@ import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CharacterRepository
+import com.erhodes.falloutapp.repository.PerkRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,8 @@ class CharacterViewModel(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ): ViewModel(), KoinComponent {
     private val repo: CharacterRepository by inject()
+
+    private val perkRepository: PerkRepository by inject()
 
     val characters = repo.characters
 
@@ -168,5 +171,9 @@ class CharacterViewModel(
     fun onModifyRadiationClicked(amount: Int) {
         repo.modifyRadiationForCharacter(amount, activeCharacter)
         updateActiveCharacter()
+    }
+
+    fun getAllPerks(): Collection<Perk> {
+        return perkRepository.getAllPerks()
     }
 }

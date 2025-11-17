@@ -98,12 +98,12 @@ fun CharacterScreen(state: CharacterUiState,
 
         character.perks.forEach { perk ->
             Row {
-                PerkPanel(perk)
-                Button(
+                PerkPanel(
+                    perk = perk,
+                    buttonEnabled = true,
+                    buttonLabel = stringResource(Res.string.remove_perk),
                     onClick = { onRemovePerk(perk) }
-                ) {
-                    Text(stringResource(Res.string.remove_perk))
-                }
+                )
             }
         }
         Button(

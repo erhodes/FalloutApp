@@ -17,6 +17,7 @@ object ItemDataSource {
     const val ID_PA_RAIDER = 1001
     const val ID_BATTLE_STANDARD = 3000
     const val ID_ASSAULT_RIFLE = 0
+    const val ID_RATIONS = 1996
     const val ID_CAPS = 1997
     init {
         // weapons
@@ -139,11 +140,18 @@ object ItemDataSource {
         )
 
         // Currencies
-        itemMap[1997] = StackableItemTemplate(
+        itemMap[ID_RATIONS] = StackableItemTemplate(
+            name = "Rations",
+            description = "The lifeblood of the post-nuclear economy.",
+            load = 1,
+            id = ID_RATIONS,
+            max = 10
+        )
+        itemMap[ID_CAPS] = StackableItemTemplate(
             name = "Caps",
             description = "The lifeblood of the post-nuclear economy.",
             load = 1,
-            id = 1997,
+            id = ID_CAPS,
             max = 10
         )
         itemMap[1998] = StackableItemTemplate(

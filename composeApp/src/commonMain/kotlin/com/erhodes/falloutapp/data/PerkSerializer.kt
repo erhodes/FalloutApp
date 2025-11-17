@@ -1,9 +1,6 @@
 package com.erhodes.falloutapp.data
 
-import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
-import com.erhodes.falloutapp.repository.ItemRepository
-import com.erhodes.falloutapp.repository.PerkRepository
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -19,6 +16,6 @@ object PerkSerializer: KSerializer<Perk> {
     }
 
     override fun deserialize(decoder: Decoder): Perk {
-        return PerkRepository.getPerkById(decoder.decodeInt())
+        return PerkDataSource.getPerkById(decoder.decodeInt())
     }
 }

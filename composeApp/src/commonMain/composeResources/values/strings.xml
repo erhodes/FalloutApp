@@ -68,4 +68,6 @@
     <string name="radiation">Radiation</string>
 
     <string name="toughness">Toughness</string>
+
+    <string name="requires">Requires</string>
 </resources>

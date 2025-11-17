@@ -5,8 +5,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable(with = PerkSerializer::class)
 class Perk(
-    val id: Int,
     val name: String,
-    val description: String
+    val description: String,
+    val id: Int,
+    vararg val requirements: Requirement
 ) {
 }

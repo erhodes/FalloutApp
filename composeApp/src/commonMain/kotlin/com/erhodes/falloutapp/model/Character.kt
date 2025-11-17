@@ -241,4 +241,11 @@ class Character(
         radiation += amount
         fatigue = max(fatigue, getMinimumFatigue())
     }
+
+    fun qualifiesForPerk(perk: Perk): Boolean {
+        perk.requirements.forEach { requirement ->
+            if (!requirement.qualifiedForByCharacter(this)) return false
+        }
+        return true
+    }
 }
