@@ -214,7 +214,7 @@ fun WeaponPanel(
 ) {
     GenericItemDisplay(
         title = weapon.name,
-        summary = "Load: ${weapon.load}",
+        summary = "Load: ${weapon.load} Range: ${weapon.range}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction,
         secondaryButtonLabel = secondaryButtonLabel,
@@ -320,7 +320,7 @@ fun StackableItemPanel(
 
 @Preview(widthDp = 700)
 @Composable
-fun WeaponDisplayPreview() {
+fun WeaponPanelPreview() {
     FalloutAppTheme {
         WeaponPanel(
             Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0),
