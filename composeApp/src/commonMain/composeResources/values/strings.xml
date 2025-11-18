@@ -71,4 +71,7 @@
     <string name="toughness">Toughness</string>
 
     <string name="requires">Requires</string>
+
+    <string name="search">Search</string>
+    <string name="acquire">Acquire</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.erhodes.falloutapp.data
 
 import com.erhodes.falloutapp.model.ArmorTemplate
+import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.WeaponTemplate
@@ -396,6 +397,65 @@ object ItemDataSource {
         )
 
         // Magazines
-
+        itemMap[5000] = ItemTemplate(
+            name = "Tesla Science Issue 12: Maximum Burn",
+            description = "Teaches Incinerator",
+            load = 1,
+            id = 5000
+        )
+        itemMap[5001] = ItemTemplate(
+            name = "Grognak the Barbarian: Zardak’s Revenge",
+            description = "Teaches Followup",
+            load = 1,
+            id = 5001
+        )
+        itemMap[5002] = ItemTemplate(
+            name = "Guns and Bullets",
+            description = "Teaches Cover Fire",
+            load = 1,
+            id = 5002
+        )
+        itemMap[5003] = ItemTemplate(
+            name = "Alaskan Sniper: A True American Tale",
+            description = "Teaches Hindrance",
+            load = 1,
+            id = 5003
+        )
+        itemMap[5004] = ItemTemplate(
+            name = "Flee, Mortals!",
+            description = "Teaches Sprinter",
+            load = 1,
+            id = 5004
+        )
+        itemMap[5005] = ItemTemplate(
+            name = "The Wire: The Complete History",
+            description = "Teaches Frequent Flyer",
+            load = 1,
+            id = 5005
+        )
+        itemMap[5006] = ItemTemplate(
+            name = "Dean’s Electronics",
+            description = "Teaches Hacker",
+            load = 1,
+            id = 5006
+        )
+        itemMap[5007] = ItemTemplate(
+            name = "Scout Handbook",
+            description = "Teaches Lucky Find",
+            load = 1,
+            id = 5007
+        )
+        itemMap[5008] = ItemTemplate(
+            name = "Tumblers Today",
+            description = "Teaches Locksmith",
+            load = 1,
+            id = 5008
+        )
+        itemMap[5009] = ItemTemplate(
+            name = "US Covert Operations Manual",
+            description = "Ghost",
+            load = 1,
+            id = 5008
+        )
     }
 }
