@@ -142,7 +142,7 @@ object ItemDataSource {
         // Currencies
         itemMap[ID_RATIONS] = StackableItemTemplate(
             name = "Rations",
-            description = "The lifeblood of the post-nuclear economy.",
+            description = "A day's worth of preserved, uncontaminated food.",
             load = 1,
             id = ID_RATIONS,
             max = 10
@@ -241,9 +241,161 @@ object ItemDataSource {
         )
         itemMap[3001] = ItemTemplate(
             "Computer",
-            description = "Boasting 64k of RAM, this machine is the pinnacle of Pre-War computational technology.",
+            description = "Add 1 to Analyze checks. Can also be used for simple data processing. Requires 1 power when in use.",
             load = 3,
             id = 3001
         )
+        itemMap[3002] = ItemTemplate(
+            name = "Doctor's Bag",
+            description = "Add 1 success to any Treat Injury project.",
+            load = 2,
+            id = 3002
+        )
+        itemMap[3003] = ItemTemplate(
+            name = "First Aid Kit",
+            description = "Add 1 success to any First Aid test.",
+            load = 1,
+            id = 3003
+        )
+        itemMap[3004] = ItemTemplate(
+            name = "Lockpick",
+            description = "Add 1 success to any lockpick test.",
+            load = 1,
+            id = 3004
+        )
+        itemMap[3005] = ItemTemplate(
+            name = "Hacking Tool",
+            description = "Add 1 success to any hacking test.",
+            load = 1,
+            id = 3005
+        )
+        itemMap[3006] = ItemTemplate(
+            name = "Padded Boots",
+            description = "Gain advantage on Hide checks.",
+            load = 1,
+            id = 3006
+        )
+        itemMap[3007] = ItemTemplate(
+            name = "Repair Kit",
+            description = "Add 1 success to repair tests.",
+            load = 1,
+            id = 3007
+        )
+        itemMap[3008] = ItemTemplate(
+            name = "Motion Sensor",
+            description = "Add 1 to Awareness.",
+            load = 2,
+            id = 3008
+        )
+        itemMap[3009] = ItemTemplate(
+            name = "Scope",
+            description = "Adds 2 range when using Aim.",
+            load = 1,
+            id = 3009
+        )
+
+        // Ammo
+        itemMap[4000] = StackableItemTemplate(
+            "Bullets",
+            description = "5.56mm rounds. Conveniently, all firearms in the region are chambered for these.",
+            load = 1,
+            id = 4000,
+            max = 10
+        )
+        itemMap[4001] = StackableItemTemplate(
+            "Shells",
+            description = "Shotgun shells.",
+            load = 1,
+            id = 4001,
+            max = 10
+        )
+        itemMap[4002] = StackableItemTemplate(
+            "Cells",
+            description = "Power cells. For use with energy weapons and other electronic devices",
+            load = 1,
+            id = 4002,
+            max = 10
+        )
+
+        itemMap[4003] = StackableItemTemplate(
+            "Armor Piercing 5.56 Rounds",
+            description = "Armor-piercing 5.56mm rounds. Add 2 Shred.",
+            load = 1,
+            id = 4003,
+            max = 3
+        )
+        itemMap[4004] = StackableItemTemplate(
+            "Blade Attachment",
+            description = "A small blade attachment for melee weapons. Add 1 damage.",
+            load = 1,
+            id = 4004,
+            max = 3
+        )
+        itemMap[4005] = StackableItemTemplate(
+            "Breach Shells",
+            description = "Special shotgun shells designed to punch through armor. Add 1 damage.",
+            load = 1,
+            id = 4005,
+            max = 3
+        )
+        itemMap[4006] = StackableItemTemplate(
+            "Dragon's Breath Shells",
+            description = "Incendiary shotgun shells. Add 2 Ignite.",
+            load = 1,
+            id = 4006,
+            max = 3
+        )
+        itemMap[4007] = StackableItemTemplate(
+            "Gamma Wave Cell",
+            description = "A cell charged with gamma radiation. Add 1 Knockback.",
+            load = 1,
+            id = 4007,
+            max = 3
+        )
+        itemMap[4008] = StackableItemTemplate(
+            "High Energy Cell",
+            description = "A high-energy power cell for advanced energy weapons. Add 2 Ignite.",
+            load = 1,
+            id = 4008,
+            max = 3
+        )
+        itemMap[4009] = StackableItemTemplate(
+            "High Impact 5.56 Rounds",
+            description = "Heavy 5.56mm rounds engineered for extra stopping power. Add 1 damage.",
+            load = 1,
+            id = 4009,
+            max = 3
+        )
+        itemMap[4010] = StackableItemTemplate(
+            "Incendiary 5.56 Rounds",
+            description = "Incendiary 5.56mm rounds. Add 2 Ignite.",
+            load = 1,
+            id = 4010,
+            max = 3
+        )
+        itemMap[4011] = StackableItemTemplate(
+            "Overcharged Cell",
+            description = "An overcharged power cell. Add 1 damage.",
+            load = 1,
+            id = 4011,
+            max = 3
+        )
+        itemMap[4012] = StackableItemTemplate(
+            "Slug Shells",
+            description = "Single projectile shotgun shells. Add 1 Knockback.",
+            load = 1,
+            id = 4012,
+            max = 3
+        )
+        itemMap[4013] = StackableItemTemplate(
+            "Shrieker 5.56 Rounds",
+            description = "Special rounds that emit a horrible sound while whistling through the air. Add 1 Suppress.",
+            load = 1,
+            id = 4013,
+            max = 3
+        )
+
+        // Magazines
+
     }
 }
