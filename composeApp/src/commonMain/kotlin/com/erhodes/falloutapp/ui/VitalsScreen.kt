@@ -3,10 +3,12 @@ package com.erhodes.falloutapp.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
@@ -34,82 +36,152 @@ fun VitalsScreen(
             style = MaterialTheme.typography.titleLarge
         )
         HorizontalDivider(thickness = 2.dp, modifier = Modifier.fillWidthOfParent(Dimens.paddingSmall))
+
+        val windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+        if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                PrimaryVitalsPanel(
+                    characterState = characterState,
+                    onTakeDamage = onTakeDamage,
+                    onHealDamage = onHealDamage,
+                    onRepair = onRepair
+                )
+                SecondaryVitalsPanel(
+                    characterState = characterState,
+                    onModifyStress = onModifyStress,
+                    onModifyFatigue = onModifyFatigue,
+                    onModifyRadiation = onModifyRadiation
+                )
+            }
+        } else {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                PrimaryVitalsPanel(
+                    characterState = characterState,
+                    onTakeDamage = onTakeDamage,
+                    onHealDamage = onHealDamage,
+                    onRepair = onRepair
+                )
+                SecondaryVitalsPanel(
+                    characterState = characterState,
+                    onModifyStress = onModifyStress,
+                    onModifyFatigue = onModifyFatigue,
+                    onModifyRadiation = onModifyRadiation
+                )
+            }
+
+
+        }
+
+//        Row(
+//            horizontalArrangement = Arrangement.spacedBy(10.dp)
+//        ) {
+//            PrimaryVitalsPanel(
+//                characterState = characterState,
+//                onTakeDamage = onTakeDamage,
+//                onHealDamage = onHealDamage,
+//                onRepair = onRepair
+//            )
+//            SecondaryVitalsPanel(
+//                characterState = characterState,
+//                onModifyStress = onModifyStress,
+//                onModifyFatigue = onModifyFatigue,
+//                onModifyRadiation = onModifyRadiation
+//            )
+//        }
+    }
+}
+
+@Composable
+fun PrimaryVitalsPanel(characterState: CharacterUiState,
+                       onTakeDamage: (Int) -> Unit,
+                       onHealDamage: (Int) -> Unit,
+                       onRepair: (Int) -> Unit,) {
+    val character = characterState.character
+    Column {
+        Text("Damage Taken ${character.damageTaken}/${Character.MAX_STRESS}")
+
+        Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
+        Text("${stringResource(Res.string.toughness)} ${character.getArmorToughness()}")
+
+        var amount by remember { mutableStateOf("") }
+        OutlinedTextField(
+            value = amount,
+            onValueChange = { amount = it },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            label = { Text("Amount") }
+        )
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            Column {
-                Text("Damage Taken ${character.damageTaken}/${Character.MAX_STRESS}")
-
-                Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
-                Text("${stringResource(Res.string.toughness)} ${character.getArmorToughness()}")
-
-                var amount by remember { mutableStateOf("") }
-                OutlinedTextField(
-                    value = amount,
-                    onValueChange = { amount = it },
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    label = { Text("Amount") }
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
-                ) {
-                    Button(
-                        onClick = {
-                            onTakeDamage(amount.toInt())
-                            amount = ""
-                        }
-                    ) {
-                        Text(stringResource(Res.string.take_damage))
-                    }
-                    Button(
-                        onClick = {
-                            onHealDamage(amount.toInt())
-                            amount = ""
-                        }
-                    ) {
-                        Text(stringResource(Res.string.heal))
-                    }
-                    Button(
-                        onClick = {
-                            onRepair(amount.toInt())
-                            amount = ""
-                        }
-                    ) {
-                        Text(stringResource(Res.string.repair))
-                    }
+            Button(
+                onClick = {
+                    onTakeDamage(amount.toInt())
+                    amount = ""
                 }
+            ) {
+                Text(stringResource(Res.string.take_damage))
             }
-            Column {
-                Row {
-                    Text(
-                        text = "${stringResource(Res.string.stress)} ${character.stress}/5",
-                        modifier = Modifier.fillMaxWidth(0.1f)
-                    )
-                    PlusMinusButtons(
-                        onIncrease = { onModifyStress(1) },
-                        onDecrease = { onModifyStress(-1) }
-                    )
+            Button(
+                onClick = {
+                    onHealDamage(amount.toInt())
+                    amount = ""
                 }
-                Row {
-                    Text(
-                        text = "${stringResource(Res.string.fatigue)}: ${character.fatigue}",
-                        modifier = Modifier.fillMaxWidth(0.1f))
-                    PlusMinusButtons(
-                        onIncrease = { onModifyFatigue(1) },
-                        onDecrease = { onModifyFatigue(-1) }
-                    )
-                }
-                Row {
-                    Text(
-                        text ="${stringResource(Res.string.radiation)}: ${character.radiation}",
-                        modifier = Modifier.fillMaxWidth(0.1f)
-                    )
-                    PlusMinusButtons(
-                        onIncrease = { onModifyRadiation(1) },
-                        onDecrease = { onModifyRadiation(-1) }
-                    )
-                }
+            ) {
+                Text(stringResource(Res.string.heal))
             }
+            Button(
+                onClick = {
+                    onRepair(amount.toInt())
+                    amount = ""
+                }
+            ) {
+                Text(stringResource(Res.string.repair))
+            }
+        }
+    }
+}
+
+@Composable
+fun SecondaryVitalsPanel(
+    characterState: CharacterUiState,
+    onModifyStress: (Int) -> Unit,
+    onModifyFatigue: (Int) -> Unit,
+    onModifyRadiation: (Int) -> Unit
+    ) {
+    val character = characterState.character
+    Column {
+        Row {
+            Text(
+                text = "${stringResource(Res.string.stress)} ${character.stress}/5",
+                modifier = Modifier.fillMaxWidth(0.2f)
+            )
+            PlusMinusButtons(
+                onIncrease = { onModifyStress(1) },
+                onDecrease = { onModifyStress(-1) }
+            )
+        }
+        Row {
+            Text(
+                text = "${stringResource(Res.string.fatigue)}: ${character.fatigue}",
+                modifier = Modifier.fillMaxWidth(0.2f))
+            PlusMinusButtons(
+                onIncrease = { onModifyFatigue(1) },
+                onDecrease = { onModifyFatigue(-1) }
+            )
+        }
+        Row {
+            Text(
+                text ="${stringResource(Res.string.radiation)}: ${character.radiation}",
+                modifier = Modifier.fillMaxWidth(0.2f)
+            )
+            PlusMinusButtons(
+                onIncrease = { onModifyRadiation(1) },
+                onDecrease = { onModifyRadiation(-1) }
+            )
         }
     }
 }
@@ -132,9 +204,25 @@ fun PlusMinusButtons(onIncrease: () -> Unit, onDecrease: () -> Unit) {
     }
 }
 
-@Preview(widthDp = 600)
+@Preview()
 @Composable
 fun VitalsScreenPreview() {
+    FalloutAppTheme {
+        VitalsScreen(
+            CharacterUiState(Character("Tom")),
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+        )
+    }
+}
+
+@Preview(widthDp = 900)
+@Composable
+fun VitalsScreenPreviewWide() {
     FalloutAppTheme {
         VitalsScreen(
             CharacterUiState(Character("Tom")),

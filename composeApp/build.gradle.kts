@@ -57,6 +57,7 @@ kotlin {
             implementation("io.insert-koin:koin-core:4.1.1")
 
             implementation("org.jetbrains.compose.material:material-icons-core:1.7.3")
+            implementation("org.jetbrains.compose.material3.adaptive:adaptive:1.2.0")
 
             implementation(libs.navigation.compose)
 

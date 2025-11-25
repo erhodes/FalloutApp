@@ -1,6 +1,8 @@
 package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -150,7 +152,7 @@ fun CharacterScreen(state: CharacterUiState,
                 armor = it,
                 buttonLabel = stringResource(Res.string.unequip),
                 buttonAction = { onUnequipItem(it) },
-                secondaryButtonLabel = stringResource(Res.string.discard),
+                secondaryButtonIcon = Icons.Filled.Delete,
                 secondaryButtonAction = { onDiscardItem(it) }
             )
         }
@@ -166,7 +168,7 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Weapon) {
@@ -177,7 +179,7 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Armor) {
@@ -185,7 +187,7 @@ fun CharacterScreen(state: CharacterUiState,
                     armor = it,
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else {
@@ -193,7 +195,7 @@ fun CharacterScreen(state: CharacterUiState,
                     item = it,
                     buttonLabel = stringResource(Res.string.unequip),
                     buttonAction = { onUnequipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             }
@@ -223,7 +225,7 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Weapon) {
@@ -234,7 +236,7 @@ fun CharacterScreen(state: CharacterUiState,
                     decreaseButton = { onDecreaseItem(it) },
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else if (it is Armor) {
@@ -242,7 +244,7 @@ fun CharacterScreen(state: CharacterUiState,
                     armor = it,
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             } else {
@@ -250,7 +252,7 @@ fun CharacterScreen(state: CharacterUiState,
                     item = it,
                     buttonLabel = stringResource(Res.string.equip),
                     buttonAction = { onEquipItem(it) },
-                    secondaryButtonLabel = stringResource(Res.string.discard),
+                    secondaryButtonIcon = Icons.Filled.Delete,
                     secondaryButtonAction = { onDiscardItem(it) }
                 )
             }
@@ -282,7 +284,7 @@ fun SpecialPanel(title: String, value: Int, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(widthDp = 800)
+@Preview()
 @Composable
 fun CharacterScreenPreview() {
     val character = Character("Tom")

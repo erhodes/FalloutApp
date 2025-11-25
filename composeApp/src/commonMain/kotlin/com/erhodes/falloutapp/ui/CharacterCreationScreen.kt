@@ -4,15 +4,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.window.core.layout.WindowSizeClass
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.Stats
 import com.erhodes.falloutapp.presentation.CharacterCreationUiState
+import com.erhodes.falloutapp.ui.theme.Dimens
 import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -26,8 +30,11 @@ fun CharacterCreationScreen(
     onMinorClicked: (Int) -> Unit,
     onComplete: (String) -> Unit
 ) {
-    Column {
+    Column(
+        modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+    ) {
         var text by remember { mutableStateOf("") }
+        val windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 
         OutlinedTextField(
             value = text,
@@ -35,22 +42,70 @@ fun CharacterCreationScreen(
             label = { Text("Name") }
         )
 
-        Text(stringResource(Res.string.special))
+        Text(
+            text = stringResource(Res.string.special),
+            style = MaterialTheme.typography.titleLarge
+        )
+        HorizontalDivider(thickness = 2.dp, modifier = Modifier.fillWidthOfParent(Dimens.paddingSmall))
         Text("Points remaining ${uiState.pointsRemaining}/7")
 
-        Row {
-            for (i in 0..6) {
-                SpecialAllocation(
-                    label = stringResource(Stats.entries[i].displayName),
-                    value = uiState.stats[i],
-                    pointsRemaining = uiState.pointsRemaining > 0,
-                    onIncrement = { onIncrement(i) },
-                    onDecrement = { onDecrement(i) }
-                )
+
+        if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)) {
+            Row {
+                for (i in 0..6) {
+                    SpecialAllocation(
+                        label = stringResource(Stats.entries[i].displayName),
+                        value = uiState.stats[i],
+                        pointsRemaining = uiState.pointsRemaining > 0,
+                        onIncrement = { onIncrement(i) },
+                        onDecrement = { onDecrement(i) }
+                    )
+                }
+            }
+        } else {
+            Column {
+                Row {
+                    for (i in 0..2) {
+                        SpecialAllocation(
+                            label = stringResource(Stats.entries[i].displayName),
+                            value = uiState.stats[i],
+                            pointsRemaining = uiState.pointsRemaining > 0,
+                            onIncrement = { onIncrement(i) },
+                            onDecrement = { onDecrement(i) }
+                        )
+                    }
+                }
+                Row {
+                    for (i in 3..5) {
+                        SpecialAllocation(
+                            label = stringResource(Stats.entries[i].displayName),
+                            value = uiState.stats[i],
+                            pointsRemaining = uiState.pointsRemaining > 0,
+                            onIncrement = { onIncrement(i) },
+                            onDecrement = { onDecrement(i) }
+                        )
+                    }
+                }
+                Row {
+                    for (i in 6..6) {
+                        SpecialAllocation(
+                            label = stringResource(Stats.entries[i].displayName),
+                            value = uiState.stats[i],
+                            pointsRemaining = uiState.pointsRemaining > 0,
+                            onIncrement = { onIncrement(i) },
+                            onDecrement = { onDecrement(i) }
+                        )
+                    }
+                }
             }
         }
 
-        Text(stringResource(Res.string.skills))
+
+        Text(
+            text = stringResource(Res.string.skills),
+            style = MaterialTheme.typography.titleLarge
+        )
+        HorizontalDivider(thickness = 2.dp, modifier = Modifier.fillWidthOfParent(Dimens.paddingSmall))
         Text("Majors remaining: ${uiState.majorsRemaining}  Minors remaining: ${uiState.minorsRemaining}")
 
         Row {
@@ -92,30 +147,32 @@ fun CharacterCreationScreen(
 
 @Composable
 fun SkillAllocationPanel(ordinal: Int, value: Int, majorEnabled: Boolean, minorEnabled: Boolean, onSelectMajor: (Int) -> Unit, onSelectMinor: (Int) -> Unit) {
-    Row {
+    Column {
         Text(stringResource(Skills.entries[ordinal].description))
-        Button(
-            enabled = majorEnabled || value == 5,
-            onClick = { onSelectMajor(ordinal) }
-        ) {
-            if (value == 5) {
-                Text(stringResource(Res.string.unselect))
-            } else {
-                Text(stringResource(Res.string.major))
+        Row {
+            Button(
+                enabled = majorEnabled || value == 5,
+                onClick = { onSelectMajor(ordinal) }
+            ) {
+                if (value == 5) {
+                    Text(stringResource(Res.string.unselect))
+                } else {
+                    Text(stringResource(Res.string.major))
+                }
             }
-
-        }
-        Button(
-            enabled = minorEnabled || value == 4,
-            onClick = { onSelectMinor(ordinal) }
-        ) {
-            if (value == 4) {
-                Text(stringResource(Res.string.unselect))
-            } else {
-                Text(stringResource(Res.string.minor))
+            Button(
+                enabled = minorEnabled || value == 4,
+                onClick = { onSelectMinor(ordinal) }
+            ) {
+                if (value == 4) {
+                    Text(stringResource(Res.string.unselect))
+                } else {
+                    Text(stringResource(Res.string.minor))
+                }
             }
         }
     }
+
 }
 
 @Composable

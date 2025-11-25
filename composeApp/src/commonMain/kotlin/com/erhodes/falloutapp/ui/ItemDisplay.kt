@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -19,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.ItemDataSource
@@ -39,7 +44,7 @@ fun GenericItemDisplay(
     buttonLabel: String,
     buttonAction: () -> Unit,
     modifier: Modifier = Modifier,
-    secondaryButtonLabel: String? = null,
+    secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null,
     content: @Composable () -> Unit
 ) {
@@ -70,16 +75,17 @@ fun GenericItemDisplay(
             ) {
                 Text(buttonLabel)
             }
-            if (secondaryButtonLabel != null && secondaryButtonAction != null) {
-                Button(
-                    onClick = secondaryButtonAction,
-                    modifier = Modifier.padding(start = 10.dp)
+            if (secondaryButtonIcon != null && secondaryButtonAction != null) {
+                IconButton(
+                    onClick = secondaryButtonAction
                 ) {
-                    Text(secondaryButtonLabel)
+                    Icon(
+                        imageVector = secondaryButtonIcon,
+                        contentDescription = "Delete Item"
+                    )
                 }
             }
         }
-
 
         AnimatedVisibility(
             modifier = Modifier.fillMaxWidth().padding(horizontal = Dimens.paddingSmall),
@@ -99,7 +105,7 @@ fun ItemDisplay(
     item: Item,
     buttonLabel: String,
     buttonAction: () -> Unit,
-    secondaryButtonLabel: String? = null,
+    secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
 ) {
     GenericItemDisplay(
@@ -107,7 +113,7 @@ fun ItemDisplay(
         summary = "Load ${item.load}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction,
-        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
     ) {
         Text(
@@ -186,7 +192,7 @@ fun ArmorDisplay(
     armor: Armor,
     buttonLabel: String,
     buttonAction: () -> Unit,
-    secondaryButtonLabel: String? = null,
+    secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
 ) {
     GenericItemDisplay(
@@ -194,7 +200,7 @@ fun ArmorDisplay(
         summary = "Load: ${armor.load}  Durability: ${armor.damageTaken}/${armor.durability} Toughness:${armor.toughness}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction,
-        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
     ) {
         Text(armor.description)
@@ -209,7 +215,7 @@ fun WeaponPanel(
     decreaseButton: () -> Unit,
     buttonLabel: String,
     buttonAction: () -> Unit,
-    secondaryButtonLabel: String? = null,
+    secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
 ) {
     GenericItemDisplay(
@@ -217,7 +223,7 @@ fun WeaponPanel(
         summary = "Load: ${weapon.load} Range: ${weapon.range}",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction,
-        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
     ) {
         Column {
@@ -256,6 +262,8 @@ fun WeaponPanel(
                         }
                     }
                 }
+            }
+            Row {
                 if (weapon.magazineSize > 0) {
                     Text(
                         modifier = Modifier.padding(horizontal = 10.dp),
@@ -285,15 +293,15 @@ fun StackableItemPanel(
     decreaseButton: () -> Unit,
     buttonLabel: String,
     buttonAction: () -> Unit,
-    secondaryButtonLabel: String? = null,
+    secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
 ) {
     GenericItemDisplay(
         title = stackable.name,
-        summary = "Up to ${stackable.max} per load. Current Load: ${stackable.load} ",
+        summary = "Load: ${stackable.load} Up to ${stackable.max} per load",
         buttonLabel = buttonLabel,
         buttonAction = buttonAction,
-        secondaryButtonLabel = secondaryButtonLabel,
+        secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
     ) {
         Column {
@@ -325,7 +333,7 @@ fun WeaponPanelPreview() {
         WeaponPanel(
             Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0),
             0,  {}, {}, "Equip", {},
-            secondaryButtonLabel = "Discard",
+            secondaryButtonIcon = Icons.Filled.Delete,
             secondaryButtonAction = {})
     }
 }
