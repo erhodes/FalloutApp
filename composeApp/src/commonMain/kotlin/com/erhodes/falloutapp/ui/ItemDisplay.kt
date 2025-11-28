@@ -35,13 +35,17 @@ import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
+import falloutapp.composeapp.generated.resources.Res
+import falloutapp.composeapp.generated.resources.enterprise_off_24dp
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun GenericItemDisplay(
     title: String,
     summary: String,
-    buttonLabel: String,
+    buttonIcon: DrawableResource,
     buttonAction: () -> Unit,
     modifier: Modifier = Modifier,
     secondaryButtonIcon: ImageVector? = null,
@@ -70,10 +74,13 @@ fun GenericItemDisplay(
                 )
             }
             Spacer(Modifier.weight(0.5f))
-            Button(
+            IconButton(
                 onClick = buttonAction,
             ) {
-                Text(buttonLabel)
+                Icon(
+                    painter = painterResource(buttonIcon),
+                    contentDescription = "Equip"
+                )
             }
             if (secondaryButtonIcon != null && secondaryButtonAction != null) {
                 IconButton(
@@ -103,7 +110,7 @@ fun GenericItemDisplay(
 @Composable
 fun ItemDisplay(
     item: Item,
-    buttonLabel: String,
+    buttonIcon: DrawableResource,
     buttonAction: () -> Unit,
     secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
@@ -111,7 +118,7 @@ fun ItemDisplay(
     GenericItemDisplay(
         title = item.name,
         summary = "Load ${item.load}",
-        buttonLabel = buttonLabel,
+        buttonIcon = buttonIcon,
         buttonAction = buttonAction,
         secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
@@ -120,77 +127,24 @@ fun ItemDisplay(
             text = item.description
         )
     }
-//    Column(
-//        modifier = Modifier.fillMaxWidth()
-//    ) {
-//        Text(
-//            text = item.name,
-//            style = MaterialTheme.typography.displaySmall
-//        )
-//        Text(
-//            text = "Load: ${item.load}"
-//        )
-//        Row(
-//            horizontalArrangement = Arrangement.End,
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Text(
-//                text = item.description,
-//                modifier = Modifier.weight(0.5f)
-//                    .padding(end = 10.dp)
-//            )
-//            Button(
-//                onClick = buttonAction,
-//            ) {
-//                Text(buttonLabel)
-//            }
-//        }
-//    }
 }
 
 @Composable
-fun ItemTemplateDisplay(template: ItemTemplate, buttonLabel: String, buttonAction: () -> Unit) {
+fun ItemTemplateDisplay(template: ItemTemplate, buttonIcon: DrawableResource, buttonAction: () -> Unit) {
     GenericItemDisplay(
         title = template.name,
         summary = "Load: ${template.load}",
-        buttonLabel = buttonLabel,
+        buttonIcon = buttonIcon,
         buttonAction = buttonAction
     ) {
         Text(template.description)
     }
-
-//    Column(
-//        modifier = Modifier.fillMaxWidth()
-//    ) {
-//        Text(
-//            text = template.name,
-//            style = MaterialTheme.typography.displaySmall
-//        )
-//        Text(
-//            text = "Load: ${template.load}"
-//        )
-//        Row(
-//            horizontalArrangement = Arrangement.End,
-//            modifier = Modifier.fillMaxWidth()
-//        ) {
-//            Text(
-//                text = template.description,
-//                modifier = Modifier.weight(0.5f)
-//                    .padding(end = 10.dp)
-//            )
-//            Button(
-//                onClick = buttonAction,
-//            ) {
-//                Text(buttonLabel)
-//            }
-//        }
-//    }
 }
 
 @Composable
 fun ArmorDisplay(
     armor: Armor,
-    buttonLabel: String,
+    buttonIcon: DrawableResource,
     buttonAction: () -> Unit,
     secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
@@ -198,7 +152,7 @@ fun ArmorDisplay(
     GenericItemDisplay(
         title = armor.name,
         summary = "Load: ${armor.load}  Durability: ${armor.damageTaken}/${armor.durability} Toughness:${armor.toughness}",
-        buttonLabel = buttonLabel,
+        buttonIcon = buttonIcon,
         buttonAction = buttonAction,
         secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
@@ -213,7 +167,7 @@ fun WeaponPanel(
     ammo: Int,
     increaseButton: () -> Unit,
     decreaseButton: () -> Unit,
-    buttonLabel: String,
+    buttonIcon: DrawableResource,
     buttonAction: () -> Unit,
     secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
@@ -221,7 +175,7 @@ fun WeaponPanel(
     GenericItemDisplay(
         title = weapon.name,
         summary = "Load: ${weapon.load} Range: ${weapon.range}",
-        buttonLabel = buttonLabel,
+        buttonIcon = buttonIcon,
         buttonAction = buttonAction,
         secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
@@ -291,7 +245,7 @@ fun StackableItemPanel(
     count: Int,
     increaseButton: () -> Unit,
     decreaseButton: () -> Unit,
-    buttonLabel: String,
+    buttonIcon: DrawableResource,
     buttonAction: () -> Unit,
     secondaryButtonIcon: ImageVector? = null,
     secondaryButtonAction: (() -> Unit)? = null
@@ -299,7 +253,7 @@ fun StackableItemPanel(
     GenericItemDisplay(
         title = stackable.name,
         summary = "Load: ${stackable.load} Up to ${stackable.max} per load",
-        buttonLabel = buttonLabel,
+        buttonIcon = buttonIcon,
         buttonAction = buttonAction,
         secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
@@ -332,7 +286,7 @@ fun WeaponPanelPreview() {
     FalloutAppTheme {
         WeaponPanel(
             Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0),
-            0,  {}, {}, "Equip", {},
+            0,  {}, {}, Res.drawable.enterprise_off_24dp, {},
             secondaryButtonIcon = Icons.Filled.Delete,
             secondaryButtonAction = {})
     }
@@ -347,7 +301,7 @@ fun StackableItemPreview() {
             count = 1,
             increaseButton = {},
             decreaseButton = {},
-            buttonLabel = "Equip",
+            buttonIcon = Res.drawable.enterprise_off_24dp,
             buttonAction = {}
         )
     }
@@ -357,7 +311,7 @@ fun StackableItemPreview() {
 @Composable
 fun ArmorDisplayPreview() {
     FalloutAppTheme {
-        ArmorDisplay(Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER), 0), "Equip", {})
+        ArmorDisplay(Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER), 0), Res.drawable.enterprise_off_24dp, {})
     }
 }
 
@@ -365,6 +319,10 @@ fun ArmorDisplayPreview() {
 @Composable
 fun ItemDisplayPreview() {
     FalloutAppTheme {
-        ItemDisplay(BasicItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_BATTLE_STANDARD)), "Equip", {})
+        ItemDisplay(
+            item = BasicItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_BATTLE_STANDARD)),
+            buttonIcon = Res.drawable.enterprise_off_24dp,
+            buttonAction = {}
+        )
     }
 }

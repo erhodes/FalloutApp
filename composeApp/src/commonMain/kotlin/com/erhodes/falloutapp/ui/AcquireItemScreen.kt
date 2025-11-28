@@ -15,7 +15,9 @@ import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.ItemTemplate
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.acquire
+import falloutapp.composeapp.generated.resources.backpack_24dp
 import falloutapp.composeapp.generated.resources.search
+import falloutapp.composeapp.generated.resources.work_24dp
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -41,7 +43,7 @@ fun AcquireItemScreen(items: Collection<ItemTemplate>, onAcquireItem: (ItemTempl
         filtered.forEach { template ->
             ItemTemplateDisplay(
                 template = template,
-                buttonLabel = stringResource(Res.string.acquire),
+                buttonIcon = Res.drawable.backpack_24dp,
                 buttonAction = { onAcquireItem(template) }
                 )
         }

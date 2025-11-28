@@ -17,6 +17,7 @@ import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -150,55 +151,22 @@ fun CharacterScreen(state: CharacterUiState,
         character.equippedArmor?.let {
             ArmorDisplay(
                 armor = it,
-                buttonLabel = stringResource(Res.string.unequip),
+                buttonIcon = Res.drawable.backpack_24dp,
                 buttonAction = { onUnequipItem(it) },
                 secondaryButtonIcon = Icons.Filled.Delete,
                 secondaryButtonAction = { onDiscardItem(it) }
             )
         }
-        character.loadout.forEach {
-            // todo figure out how to reuse this code in the inventory section
-            //  the problem here is that I need to pass in a new value to trigger recomposition
-            //  if I just pass in the item, compose will see the same item and do nothing
-            if (it is StackableItem) {
-                StackableItemPanel(
-                    it,
-                    it.count,
-                    increaseButton = { onIncreaseItem(it) },
-                    decreaseButton = { onDecreaseItem(it) },
-                    buttonLabel = stringResource(Res.string.unequip),
-                    buttonAction = { onUnequipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            } else if (it is Weapon) {
-                WeaponPanel(
-                    it,
-                    it.ammo,
-                    increaseButton = { onIncreaseItem(it) },
-                    decreaseButton = { onDecreaseItem(it) },
-                    buttonLabel = stringResource(Res.string.unequip),
-                    buttonAction = { onUnequipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            } else if (it is Armor) {
-                ArmorDisplay(
-                    armor = it,
-                    buttonLabel = stringResource(Res.string.unequip),
-                    buttonAction = { onUnequipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            } else {
-                ItemDisplay(
-                    item = it,
-                    buttonLabel = stringResource(Res.string.unequip),
-                    buttonAction = { onUnequipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            }
+        character.loadout.forEach { item ->
+            ItemPanel(
+                characterUiState = state,
+                item = item,
+                onIncreaseItem = { onIncreaseItem(it) },
+                onDecreaseItem = { onDecreaseItem(it) },
+                primaryButtonIcon = Res.drawable.backpack_24dp,
+                primaryButtonAction = { onUnequipItem(it) },
+                onDiscardItem = { onDiscardItem(it) }
+            )
         }
 
         Row(
@@ -216,46 +184,16 @@ fun CharacterScreen(state: CharacterUiState,
             )
         }
         HorizontalDivider(thickness = 2.dp)
-        character.inventory.forEach {
-            if (it is StackableItem) {
-                StackableItemPanel(
-                    it,
-                    it.count,
-                    increaseButton = { onIncreaseItem(it) },
-                    decreaseButton = { onDecreaseItem(it) },
-                    buttonLabel = stringResource(Res.string.equip),
-                    buttonAction = { onEquipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            } else if (it is Weapon) {
-                WeaponPanel(
-                    it,
-                    it.ammo,
-                    increaseButton = { onIncreaseItem(it) },
-                    decreaseButton = { onDecreaseItem(it) },
-                    buttonLabel = stringResource(Res.string.equip),
-                    buttonAction = { onEquipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            } else if (it is Armor) {
-                ArmorDisplay(
-                    armor = it,
-                    buttonLabel = stringResource(Res.string.equip),
-                    buttonAction = { onEquipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            } else {
-                ItemDisplay(
-                    item = it,
-                    buttonLabel = stringResource(Res.string.equip),
-                    buttonAction = { onEquipItem(it) },
-                    secondaryButtonIcon = Icons.Filled.Delete,
-                    secondaryButtonAction = { onDiscardItem(it) }
-                )
-            }
+        character.inventory.forEach { item ->
+            ItemPanel(
+                characterUiState = state,
+                item = item,
+                onIncreaseItem = { onIncreaseItem(it) },
+                onDecreaseItem = { onDecreaseItem(it) },
+                primaryButtonIcon = Res.drawable.work_24dp,
+                primaryButtonAction = { onEquipItem(it) },
+                onDiscardItem = { onDiscardItem(it) }
+            )
         }
 
         Button(
@@ -263,6 +201,59 @@ fun CharacterScreen(state: CharacterUiState,
         ) {
             Text("Add Item")
         }
+    }
+}
+
+@Composable
+fun ItemPanel(
+    characterUiState: CharacterUiState,
+    item: Item,
+    primaryButtonIcon: DrawableResource,
+    primaryButtonAction: (Item) -> Unit,
+    onDiscardItem: (Item) -> Unit,
+    onIncreaseItem: (Item) -> Unit,
+    onDecreaseItem: (Item) -> Unit
+    ) {
+    // needed to force recomposition
+    val character = characterUiState.character
+    if (item is StackableItem) {
+        StackableItemPanel(
+            item,
+            item.count,
+            increaseButton = { onIncreaseItem(item) },
+            decreaseButton = { onDecreaseItem(item) },
+            buttonIcon = primaryButtonIcon,
+            buttonAction = { primaryButtonAction(item) },
+            secondaryButtonIcon = Icons.Filled.Delete,
+            secondaryButtonAction = { onDiscardItem(item) }
+        )
+    } else if (item is Weapon) {
+        WeaponPanel(
+            item,
+            item.ammo,
+            increaseButton = { onIncreaseItem(item) },
+            decreaseButton = { onDecreaseItem(item) },
+            buttonIcon = primaryButtonIcon,
+            buttonAction = { primaryButtonAction(item) },
+            secondaryButtonIcon = Icons.Filled.Delete,
+            secondaryButtonAction = { onDiscardItem(item) }
+        )
+    } else if (item is Armor) {
+        ArmorDisplay(
+            armor = item,
+            buttonIcon = primaryButtonIcon,
+            buttonAction = { primaryButtonAction(item) },
+            secondaryButtonIcon = Icons.Filled.Delete,
+            secondaryButtonAction = { onDiscardItem(item) }
+        )
+    } else {
+        ItemDisplay(
+            item = item,
+            buttonIcon = primaryButtonIcon,
+            buttonAction = { primaryButtonAction(item) },
+            secondaryButtonIcon = Icons.Filled.Delete,
+            secondaryButtonAction = { onDiscardItem(item) }
+        )
     }
 }
 
