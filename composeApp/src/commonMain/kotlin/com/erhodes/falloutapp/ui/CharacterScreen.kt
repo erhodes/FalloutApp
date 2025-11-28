@@ -1,6 +1,8 @@
 package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
@@ -8,7 +10,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+ 
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.*
@@ -61,7 +65,8 @@ fun CharacterScreen(state: CharacterUiState,
 
         // SPECIAL
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center
         ) {
             Stats.entries.forEach {
                 SpecialPanel(
@@ -259,19 +264,27 @@ fun ItemPanel(
 
 @Composable
 fun SpecialPanel(title: String, value: Int, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
+    Surface(
+        modifier = modifier.padding(4.dp),
+        tonalElevation = 2.dp,
+        shape = RoundedCornerShape(8.dp)
     ) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center
-        )
-        Text(
-            text = "$value",
-            style = MaterialTheme.typography.titleLarge,
-            textAlign = TextAlign.Center
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = "$value",
+                style = MaterialTheme.typography.displayMedium,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
