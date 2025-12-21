@@ -15,7 +15,7 @@ private val DarkColorScheme = darkColorScheme(
 private val LightColorScheme = lightColorScheme(
     primary = VaultTecBlueAlt,
     secondary = VaultTecYellowAlt,
-    tertiary = Pink40,
+    tertiary = VaultTecBlue,
     errorContainer = NewVegasRed
 
     /* Other default colors to override

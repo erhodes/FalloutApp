@@ -57,6 +57,9 @@
     <string name="add_perk">Add Perk</string>
     <string name="remove_perk">Remove Perk</string>
 
+    <string name="loadout">Loadout</string>
+    <string name="inventory">Inventory</string>
+
     <string name="gain_milestone">Gain Milestone</string>
 
     <string name="equip">Equip</string>

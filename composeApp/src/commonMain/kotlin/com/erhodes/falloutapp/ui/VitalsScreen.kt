@@ -28,70 +28,49 @@ fun VitalsScreen(
     onModifyRadiation: (Int) -> Unit
 ) {
     val character = characterState.character
-    Column(
-        modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
-    ) {
-        Text(
-            text = stringResource(Res.string.vitals),
-            style = MaterialTheme.typography.titleLarge
-        )
-        HorizontalDivider(thickness = 2.dp, modifier = Modifier.fillWidthOfParent(Dimens.paddingSmall))
-
-        val windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
-        if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                PrimaryVitalsPanel(
-                    characterState = characterState,
-                    onTakeDamage = onTakeDamage,
-                    onHealDamage = onHealDamage,
-                    onRepair = onRepair
-                )
-                SecondaryVitalsPanel(
-                    characterState = characterState,
-                    onModifyStress = onModifyStress,
-                    onModifyFatigue = onModifyFatigue,
-                    onModifyRadiation = onModifyRadiation
-                )
+    Column {
+        Header(stringResource(Res.string.vitals))
+        Column(
+            modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
+        ) {
+//        Header(stringResource(Res.string.vitals), modifier = Modifier.fillWidthOfParent(Dimens.paddingSmall))
+            val windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
+            if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    PrimaryVitalsPanel(
+                        characterState = characterState,
+                        onTakeDamage = onTakeDamage,
+                        onHealDamage = onHealDamage,
+                        onRepair = onRepair
+                    )
+                    SecondaryVitalsPanel(
+                        characterState = characterState,
+                        onModifyStress = onModifyStress,
+                        onModifyFatigue = onModifyFatigue,
+                        onModifyRadiation = onModifyRadiation
+                    )
+                }
+            } else {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    PrimaryVitalsPanel(
+                        characterState = characterState,
+                        onTakeDamage = onTakeDamage,
+                        onHealDamage = onHealDamage,
+                        onRepair = onRepair
+                    )
+                    SecondaryVitalsPanel(
+                        characterState = characterState,
+                        onModifyStress = onModifyStress,
+                        onModifyFatigue = onModifyFatigue,
+                        onModifyRadiation = onModifyRadiation
+                    )
+                }
             }
-        } else {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                PrimaryVitalsPanel(
-                    characterState = characterState,
-                    onTakeDamage = onTakeDamage,
-                    onHealDamage = onHealDamage,
-                    onRepair = onRepair
-                )
-                SecondaryVitalsPanel(
-                    characterState = characterState,
-                    onModifyStress = onModifyStress,
-                    onModifyFatigue = onModifyFatigue,
-                    onModifyRadiation = onModifyRadiation
-                )
-            }
-
-
         }
-
-//        Row(
-//            horizontalArrangement = Arrangement.spacedBy(10.dp)
-//        ) {
-//            PrimaryVitalsPanel(
-//                characterState = characterState,
-//                onTakeDamage = onTakeDamage,
-//                onHealDamage = onHealDamage,
-//                onRepair = onRepair
-//            )
-//            SecondaryVitalsPanel(
-//                characterState = characterState,
-//                onModifyStress = onModifyStress,
-//                onModifyFatigue = onModifyFatigue,
-//                onModifyRadiation = onModifyRadiation
-//            )
-//        }
     }
 }
 

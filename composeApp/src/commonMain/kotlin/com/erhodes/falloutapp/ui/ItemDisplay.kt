@@ -23,6 +23,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -55,7 +57,7 @@ fun GenericItemDisplay(
     var isExpanded by rememberSaveable { mutableStateOf(true) }
     Column(
         modifier = modifier.fillMaxWidth()
-            .padding(vertical = 5.dp)
+            .padding(vertical = Dimens.paddingSmall)
     ) {
         Row(
             modifier = Modifier
@@ -68,6 +70,7 @@ fun GenericItemDisplay(
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(top = Dimens.paddingSmall)
                 )
                 Text(
                     text = summary
@@ -94,8 +97,40 @@ fun GenericItemDisplay(
             }
         }
 
+        val color = MaterialTheme.colorScheme.surfaceDim
         AnimatedVisibility(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = Dimens.paddingSmall),
+            modifier = Modifier
+                .drawBehind {
+                    val strokeWidth = 2.dp.toPx()
+                    val halfStroke = strokeWidth / 2
+
+                    // Left border
+                    drawLine(
+                        color = color,
+                        start = Offset(halfStroke, 0f),
+                        end = Offset(halfStroke, size.height),
+                        strokeWidth = strokeWidth
+                    )
+
+                    // Bottom border
+                    drawLine(
+                        color = color,
+                        start = Offset(0f, size.height - halfStroke),
+                        end = Offset(size.width, size.height - halfStroke),
+                        strokeWidth = strokeWidth
+                    )
+
+                    // Right border
+                    drawLine(
+                        color = color,
+                        start = Offset(size.width - halfStroke, 0f),
+                        end = Offset(size.width - halfStroke, size.height),
+                        strokeWidth = strokeWidth
+                    )
+                }
+                .fillMaxWidth()
+                .padding(horizontal = Dimens.paddingSmall),
+
             visible = isExpanded
         ) {
             Row(

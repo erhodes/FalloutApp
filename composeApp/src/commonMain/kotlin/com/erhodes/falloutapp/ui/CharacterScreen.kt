@@ -2,27 +2,23 @@ package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
- 
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.*
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
-import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.*
-import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CharacterScreen(state: CharacterUiState,
@@ -52,17 +48,6 @@ fun CharacterScreen(state: CharacterUiState,
             modifier = Modifier.padding(bottom = 10.dp)
         )
 
-        // Vitals
-        VitalsScreen(
-            characterState = state,
-            onTakeDamage = onTakeDamage,
-            onHealDamage = onHealDamage,
-            onRepair = onRepair,
-            onModifyStress = onModifyStress,
-            onModifyFatigue = onModifyFatigue,
-            onModifyRadiation = onModifyRadiation
-        )
-
         // SPECIAL
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -76,15 +61,11 @@ fun CharacterScreen(state: CharacterUiState,
                 )
             }
         }
-        HorizontalDivider(thickness = 2.dp)
 
         //Skills
-        Text(text = stringResource(Res.string.skills),
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
-        )
+        Header(stringResource(Res.string.skills))
         Row(
-            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+            modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
         ) {
             Column(
                 modifier = Modifier.padding(end = 10.dp)
@@ -99,19 +80,12 @@ fun CharacterScreen(state: CharacterUiState,
                 }
             }
         }
-        HorizontalDivider(thickness = 2.dp)
 
         //Perks
-        Row(
-            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
-        ) {
-            Text(
-                text = stringResource(Res.string.perks),
-                style = MaterialTheme.typography.titleLarge
-            )
-
-            Text("${character.perks.size}/${character.level}")
-        }
+        Header(
+            text = stringResource(Res.string.perks),
+            secondaryText = "${character.perks.size}/${character.level}"
+        )
 
         character.perks.forEach { perk ->
             Row {
@@ -119,7 +93,8 @@ fun CharacterScreen(state: CharacterUiState,
                     perk = perk,
                     buttonEnabled = true,
                     buttonLabel = stringResource(Res.string.remove_perk),
-                    onClick = { onRemovePerk(perk) }
+                    onClick = { onRemovePerk(perk) },
+                    modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
                 )
             }
         }
@@ -131,78 +106,79 @@ fun CharacterScreen(state: CharacterUiState,
             Text(stringResource(Res.string.add_perk))
         }
 
+
+        // Vitals
+        VitalsScreen(
+            characterState = state,
+            onTakeDamage = onTakeDamage,
+            onHealDamage = onHealDamage,
+            onRepair = onRepair,
+            onModifyStress = onModifyStress,
+            onModifyFatigue = onModifyFatigue,
+            onModifyRadiation = onModifyRadiation
+        )
+
         ProgressionPanel(
             state = state,
             onGainMilestone = onGainMilestone
         )
 
-        // Inventory
-        HorizontalDivider(thickness = 2.dp)
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = Dimens.paddingSmall)
+        // Loadout
+        Header(
+            text = stringResource(Res.string.loadout),
+            secondaryText = "${character.loadoutWeight}/${character.loadoutLimit}"
+        )
+        Column (
+            Modifier
+                .padding(horizontal = Dimens.paddingMedium)
         ) {
-            Text(
-                text = "Loadout",
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = "${character.loadoutWeight}/${character.loadoutLimit}",
-                textAlign = TextAlign.End
-            )
-        }
-        HorizontalDivider(thickness = 2.dp)
-        character.equippedArmor?.let {
-            ArmorDisplay(
-                armor = it,
-                buttonIcon = Res.drawable.backpack_24dp,
-                buttonAction = { onUnequipItem(it) },
-                secondaryButtonIcon = Icons.Filled.Delete,
-                secondaryButtonAction = { onDiscardItem(it) }
-            )
-        }
-        character.loadout.forEach { item ->
-            ItemPanel(
-                characterUiState = state,
-                item = item,
-                onIncreaseItem = { onIncreaseItem(it) },
-                onDecreaseItem = { onDecreaseItem(it) },
-                primaryButtonIcon = Res.drawable.backpack_24dp,
-                primaryButtonAction = { onUnequipItem(it) },
-                onDiscardItem = { onDiscardItem(it) }
-            )
+            character.equippedArmor?.let {
+                ArmorDisplay(
+                    armor = it,
+                    buttonIcon = Res.drawable.backpack_24dp,
+                    buttonAction = { onUnequipItem(it) },
+                    secondaryButtonIcon = Icons.Filled.Delete,
+                    secondaryButtonAction = { onDiscardItem(it) }
+                )
+            }
+            character.loadout.forEach { item ->
+                ItemPanel(
+                    characterUiState = state,
+                    item = item,
+                    onIncreaseItem = { onIncreaseItem(it) },
+                    onDecreaseItem = { onDecreaseItem(it) },
+                    primaryButtonIcon = Res.drawable.backpack_24dp,
+                    primaryButtonAction = { onUnequipItem(it) },
+                    onDiscardItem = { onDiscardItem(it) }
+                )
+            }
         }
 
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+        // Inventory
+        Header(
+            text = stringResource(Res.string.inventory),
+            secondaryText = "${character.inventoryWeight}/${character.inventoryLimit}"
+        )
+        Column (
+            modifier = Modifier
+                .padding(horizontal = Dimens.paddingMedium)
         ) {
-            Text(
-                text = "Inventory",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
-            )
-            Text(
-                text = "${character.inventoryWeight}/${character.inventoryLimit}",
-                textAlign = TextAlign.End
-            )
-        }
-        HorizontalDivider(thickness = 2.dp)
-        character.inventory.forEach { item ->
-            ItemPanel(
-                characterUiState = state,
-                item = item,
-                onIncreaseItem = { onIncreaseItem(it) },
-                onDecreaseItem = { onDecreaseItem(it) },
-                primaryButtonIcon = Res.drawable.work_24dp,
-                primaryButtonAction = { onEquipItem(it) },
-                onDiscardItem = { onDiscardItem(it) }
-            )
+            character.inventory.forEach { item ->
+                ItemPanel(
+                    characterUiState = state,
+                    item = item,
+                    onIncreaseItem = { onIncreaseItem(it) },
+                    onDecreaseItem = { onDecreaseItem(it) },
+                    primaryButtonIcon = Res.drawable.work_24dp,
+                    primaryButtonAction = { onEquipItem(it) },
+                    onDiscardItem = { onDiscardItem(it) }
+                )
+            }
         }
 
         Button(
-            onClick = onAddItem
+            onClick = onAddItem,
+            modifier = Modifier.padding(start = Dimens.paddingMedium, bottom = Dimens.paddingMedium)
         ) {
             Text("Add Item")
         }
@@ -220,45 +196,50 @@ fun ItemPanel(
     onDecreaseItem: (Item) -> Unit
     ) {
     // needed to force recomposition
-    val character = characterUiState.character
-    if (item is StackableItem) {
-        StackableItemPanel(
-            item,
-            item.count,
-            increaseButton = { onIncreaseItem(item) },
-            decreaseButton = { onDecreaseItem(item) },
-            buttonIcon = primaryButtonIcon,
-            buttonAction = { primaryButtonAction(item) },
-            secondaryButtonIcon = Icons.Filled.Delete,
-            secondaryButtonAction = { onDiscardItem(item) }
-        )
-    } else if (item is Weapon) {
-        WeaponPanel(
-            item,
-            item.ammo,
-            increaseButton = { onIncreaseItem(item) },
-            decreaseButton = { onDecreaseItem(item) },
-            buttonIcon = primaryButtonIcon,
-            buttonAction = { primaryButtonAction(item) },
-            secondaryButtonIcon = Icons.Filled.Delete,
-            secondaryButtonAction = { onDiscardItem(item) }
-        )
-    } else if (item is Armor) {
-        ArmorDisplay(
-            armor = item,
-            buttonIcon = primaryButtonIcon,
-            buttonAction = { primaryButtonAction(item) },
-            secondaryButtonIcon = Icons.Filled.Delete,
-            secondaryButtonAction = { onDiscardItem(item) }
-        )
-    } else {
-        ItemDisplay(
-            item = item,
-            buttonIcon = primaryButtonIcon,
-            buttonAction = { primaryButtonAction(item) },
-            secondaryButtonIcon = Icons.Filled.Delete,
-            secondaryButtonAction = { onDiscardItem(item) }
-        )
+    @Suppress("UnusedVariable", "unused") val character = characterUiState.character
+    when (item) {
+        is StackableItem -> {
+            StackableItemPanel(
+                item,
+                item.count,
+                increaseButton = { onIncreaseItem(item) },
+                decreaseButton = { onDecreaseItem(item) },
+                buttonIcon = primaryButtonIcon,
+                buttonAction = { primaryButtonAction(item) },
+                secondaryButtonIcon = Icons.Filled.Delete,
+                secondaryButtonAction = { onDiscardItem(item) }
+            )
+        }
+        is Weapon -> {
+            WeaponPanel(
+                item,
+                item.ammo,
+                increaseButton = { onIncreaseItem(item) },
+                decreaseButton = { onDecreaseItem(item) },
+                buttonIcon = primaryButtonIcon,
+                buttonAction = { primaryButtonAction(item) },
+                secondaryButtonIcon = Icons.Filled.Delete,
+                secondaryButtonAction = { onDiscardItem(item) }
+            )
+        }
+        is Armor -> {
+            ArmorDisplay(
+                armor = item,
+                buttonIcon = primaryButtonIcon,
+                buttonAction = { primaryButtonAction(item) },
+                secondaryButtonIcon = Icons.Filled.Delete,
+                secondaryButtonAction = { onDiscardItem(item) }
+            )
+        }
+        else -> {
+            ItemDisplay(
+                item = item,
+                buttonIcon = primaryButtonIcon,
+                buttonAction = { primaryButtonAction(item) },
+                secondaryButtonIcon = Icons.Filled.Delete,
+                secondaryButtonAction = { onDiscardItem(item) }
+            )
+        }
     }
 }
 
@@ -272,7 +253,7 @@ fun SpecialPanel(title: String, value: Int, modifier: Modifier = Modifier) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(6.dp)
         ) {
             Text(
                 text = title,
@@ -288,32 +269,32 @@ fun SpecialPanel(title: String, value: Int, modifier: Modifier = Modifier) {
     }
 }
 
-@Preview()
-@Composable
-fun CharacterScreenPreview() {
-    val character = Character("Tom")
-//    val armor =Item(ItemRepository.LEATHER_ARMOR)
-//    character.addItemToInventory(armor)
-//    character.addItemToInventory(Item(ItemRepository.BANNER))
-//    character.equipItem(armor)
-    FalloutAppTheme {
-        CharacterScreen(
-            CharacterUiState(character),
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {}
-        )
-    }
-}
+//@Preview
+//@Composable
+//fun CharacterScreenPreview() {
+//    val character = Character("Tom")
+////    val armor =Item(ItemRepository.LEATHER_ARMOR)
+////    character.addItemToInventory(armor)
+////    character.addItemToInventory(Item(ItemRepository.BANNER))
+////    character.equipItem(armor)
+//    FalloutAppTheme {
+//        CharacterScreen(
+//            CharacterUiState(character),
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {},
+//            {}
+//        )
+//    }
+//}

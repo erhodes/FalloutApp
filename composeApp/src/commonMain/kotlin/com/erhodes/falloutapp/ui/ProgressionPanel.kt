@@ -21,21 +21,24 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun ProgressionPanel(state: CharacterUiState, onGainMilestone: () -> Unit, modifier: Modifier = Modifier) {
     val character = state.character
-    Column(
-        modifier = modifier.padding(horizontal = Dimens.paddingSmall)
-    ) {
-        Text(
-            text = "Level ${character.level}",
-            style = MaterialTheme.typography.titleLarge
-        )
-        HorizontalDivider(thickness = 2.dp, modifier = Modifier.fillWidthOfParent(Dimens.paddingSmall))
-        Text("Milestones ${character.milestones}/3   Max Perks:${character.level}  Max Skill:${character.getMaxSkillValue()}")
-        Button(
-            onClick = onGainMilestone
+    Column {
+        Header(text = "Progression")
+        Column(
+            modifier = modifier.padding(horizontal = Dimens.paddingMedium)
         ) {
-            Text(stringResource(Res.string.gain_milestone))
+            Text(
+                text = "Level ${character.level}",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text("Milestones ${character.milestones}/3   Max Perks:${character.level}  Max Skill:${character.getMaxSkillValue()}")
+            Button(
+                onClick = onGainMilestone
+            ) {
+                Text(stringResource(Res.string.gain_milestone))
+            }
         }
     }
+
 }
 
 @Preview
