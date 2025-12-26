@@ -115,7 +115,7 @@ object ItemDataSource {
             "An improvised proximity explosive.",
             load = 2,
             id = 7,
-            damage = listOf(1, 2, 3),
+            damage = listOf(2, 3, 4),
             ability = listOf("", "Suppress 2", "Suppress 3"),
             passive = "Blast 1, Trap 1, Consumable",
             range = 1,
@@ -217,11 +217,22 @@ object ItemDataSource {
             "An military issue proximity explosive.",
             load = 2,
             id = 17,
-            damage = listOf(2, 3, 4),
+            damage = listOf(3, 4, 5),
             ability = listOf("", "Suppress 2", "Suppress 3"),
             passive = "Blast 1, Trap 2, Consumable",
             range = 1,
             magazineSize = 0
+        )
+        itemMap[18] = WeaponTemplate(
+            name = "Minigun",
+            description = "A Rockwell CZ53 Personal Minigun. A multi-barrelled chaingun firing over 60,000 RPM.",
+            load = 2,
+            id = 15,
+            damage = listOf(3, 4, 5),
+            ability = listOf("", "Suppress 2", "Suppress 3"),
+            passive = "Heavy, Burst, Burst Only",
+            range = 10,
+            magazineSize = 3
         )
 
         // Armors

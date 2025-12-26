@@ -252,24 +252,25 @@ fun WeaponPanel(
                     }
                 }
             }
-            Row {
-                if (weapon.magazineSize > 0) {
-                    Text(
-                        modifier = Modifier.padding(horizontal = 10.dp),
-                        text = "Ammo $ammo/${weapon.magazineSize}"
-                    )
-                    Button(
-                        onClick = increaseButton
-                    ) {
-                        Text("+")
-                    }
-                    Button(
-                        onClick = decreaseButton
-                    ) {
-                        Text("-")
-                    }
-                }
-            }
+            // Trying without ammo loading being a thing
+//            Row {
+//                if (weapon.magazineSize > 0) {
+//                    Text(
+//                        modifier = Modifier.padding(horizontal = 10.dp),
+//                        text = "Ammo $ammo/${weapon.magazineSize}"
+//                    )
+//                    Button(
+//                        onClick = increaseButton
+//                    ) {
+//                        Text("+")
+//                    }
+//                    Button(
+//                        onClick = decreaseButton
+//                    ) {
+//                        Text("-")
+//                    }
+//                }
+//            }
         }
     }
 }
