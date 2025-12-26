@@ -33,7 +33,6 @@ fun VitalsScreen(
         Column(
             modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
         ) {
-//        Header(stringResource(Res.string.vitals), modifier = Modifier.fillWidthOfParent(Dimens.paddingSmall))
             val windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
             if (windowSizeClass.isWidthAtLeastBreakpoint(WindowSizeClass.WIDTH_DP_MEDIUM_LOWER_BOUND)) {
                 Row(

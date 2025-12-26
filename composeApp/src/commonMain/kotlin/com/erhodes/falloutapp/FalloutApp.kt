@@ -164,7 +164,7 @@ fun FalloutApp(
                         if (uiState.milestone) {
                             navController.popBackStack()
                         } else {
-                            navController.navigate(FalloutScreen.CharacterList.name)
+                            navController.popBackStack(route = FalloutScreen.CharacterList.name, false)
                         }
                     }
                 )

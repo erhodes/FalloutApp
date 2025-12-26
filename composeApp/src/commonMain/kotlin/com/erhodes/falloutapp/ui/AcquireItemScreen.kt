@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.toLowerCase
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.ItemTemplate
 import falloutapp.composeapp.generated.resources.Res
@@ -29,7 +30,7 @@ fun AcquireItemScreen(items: Collection<ItemTemplate>, onAcquireItem: (ItemTempl
         var text by remember { mutableStateOf("") }
 
         val filtered = items.filter { item ->
-            item.name.startsWith(text)
+            item.name.contains(text.lowercase())
         }
 
         OutlinedTextField(

@@ -28,7 +28,7 @@ object ItemDataSource {
             load = 2,
             id = 0,
             damage = listOf(1, 2, 3),
-            ability = listOf("", "Suppress 2", "Suppress 3"),
+            ability = listOf("", "Suppress 1", "Suppress 2"),
             passive = "Burst",
             range = 15,
             magazineSize = 6
@@ -122,6 +122,108 @@ object ItemDataSource {
             magazineSize = 0
         )
 
+
+        // weapons
+        itemMap[9] = WeaponTemplate(
+            name = "Assault Rifle MK2",
+            description = "An AK-112, a military assault rifle that saw widespread use in the early 21st century.",
+            load = 2,
+            id = 9,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Suppress 2", "Suppress 3"),
+            passive = "Burst",
+            range = 15,
+            magazineSize = 6
+        )
+        itemMap[10] = WeaponTemplate(
+            name = "Plasma Grenade",
+            description = "Creates a blast of superheated plasma on contact.",
+            load = 1,
+            id = 10,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Suppress 2", "Suppress 3"),
+            passive = "Blast 1, Consumable",
+            range = 8,
+            magazineSize = 0
+        )
+        itemMap[11] = WeaponTemplate(
+            name = "Sniper Rifle",
+            description = "Good for killing far-away people.",
+            load = 2,
+            id = 11,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Shred 3", "Shred 5"),
+            passive = "Accurate",
+            range = 20,
+            magazineSize = 3
+        )
+        itemMap[12] = WeaponTemplate(
+            name = "Laser Pistol MK 2",
+            description = "Am AEP7 Laser Pistol. The sidearm of choice for Pre-War military officers.",
+            load = 1,
+            id = 12,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Ignite 3", "Ignite 5"),
+            passive = "",
+            range = 10,
+            magazineSize = 3
+        )
+        itemMap[13] = WeaponTemplate(
+            name = "Laser Rifle MK2",
+            description = "An AER9 Laser Rifle. The most widely produced energy weapon in the world.",
+            load = 2,
+            id = 13,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Ignite 3", "Ignite 5"),
+            passive = "Burst",
+            range = 15,
+            magazineSize = 6
+        )
+        itemMap[14] = WeaponTemplate(
+            name = "Pistol MK2",
+            description = "A well maintained pistol",
+            load = 1,
+            id = 14,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Maim 1", "Maim 2"),
+            passive = "",
+            range = 15,
+            magazineSize = 3
+        )
+        itemMap[15] = WeaponTemplate(
+            name = "Combat Shotgun",
+            description = "A Winchester City-Killer 12 gauge shotgun, bullpup variant.",
+            load = 2,
+            id = 15,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Knockback 2", "Knockback 3"),
+            passive = "Storm",
+            range = 10,
+            magazineSize = 3
+        )
+        itemMap[16] = WeaponTemplate(
+            name = "Super Sledge",
+            "A sledgehammer outfitted with a kinetic storage device.",
+            load = 2,
+            id = 16,
+            damage = listOf(2, 3, 4),
+            ability = listOf("Knockback 2", "Knockback 3", "Knockback 4"),
+            passive = "Windup",
+            range = 1,
+            magazineSize = 0
+        )
+        itemMap[17] = WeaponTemplate(
+            name = "Frag Mine",
+            "An military issue proximity explosive.",
+            load = 2,
+            id = 17,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Suppress 2", "Suppress 3"),
+            passive = "Blast 1, Trap 2, Consumable",
+            range = 1,
+            magazineSize = 0
+        )
+
         // Armors
         itemMap[1000] = ArmorTemplate(
             "Leather",
@@ -138,6 +240,22 @@ object ItemDataSource {
             id = 1001,
             durability = 4,
             toughness = 1
+        )
+        itemMap[1002] = ArmorTemplate(
+            name = "Combat Armor",
+            description = "The standard body armor for Pre-War rank and file infantry",
+            load = 2,
+            id = 1002,
+            durability = 4,
+            toughness = 1
+        )
+        itemMap[1003] = ArmorTemplate(
+            name = "T-45 Power Armor",
+            description = "Manufactured by West-Tek, this was the first model of power armor to see deployment. It has seen better days, but its fusion core still provides power.",
+            load = 5,
+            id = 1001,
+            durability = 5,
+            toughness = 2
         )
 
         // Currencies

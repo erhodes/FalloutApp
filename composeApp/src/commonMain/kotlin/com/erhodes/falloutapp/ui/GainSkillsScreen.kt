@@ -2,13 +2,16 @@ package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.presentation.GainSkillUiState
+import com.erhodes.falloutapp.ui.theme.Dimens
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.done
 import org.jetbrains.compose.resources.stringResource
@@ -16,7 +19,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun GainSkillsScreen(uiState: GainSkillUiState, onIncreaseClicked: (Int) -> Unit, onDecreaseClicked: (Int) -> Unit, onFinalizeClicked: () -> Unit) {
-    Column {
+    Column(
+        modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
+    ) {
         Text("You may increase ${uiState.bonuses} more skills")
         for (i in 0 .. 11) {
             val skillLevel = uiState.character.skills[i] + uiState.appliedBonuses[i]
