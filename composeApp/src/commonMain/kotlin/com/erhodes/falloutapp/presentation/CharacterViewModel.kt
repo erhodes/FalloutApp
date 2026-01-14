@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+
 class CharacterViewModel(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ): ViewModel(), KoinComponent {
@@ -26,7 +27,11 @@ class CharacterViewModel(
 
     val characters = repo.characters
 
+    private val _loginName = MutableStateFlow("")
+    val loginName = _loginName.asStateFlow()
+
     private var activeCharacter = Character("empty")
+
     private val _activeCharacterState = MutableStateFlow(CharacterUiState(activeCharacter))
     val activeCharacterState = _activeCharacterState.asStateFlow()
 
@@ -169,5 +174,13 @@ class CharacterViewModel(
 
     fun getAllPerks(): Collection<Perk> {
         return perkRepository.getAllPerks()
+    }
+
+    fun onLoginNameChanged(name: String) {
+        _loginName.value = name
+    }
+
+    fun onLoginClicked() {
+        // currently just persists the name in state; hook auth here later
     }
 }

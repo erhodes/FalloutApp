@@ -21,6 +21,7 @@ import androidx.navigation.compose.rememberNavController
 import com.erhodes.falloutapp.presentation.CharacterCreationViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.ItemViewModel
+import com.erhodes.falloutapp.presentation.UserViewModel
 import com.erhodes.falloutapp.ui.*
 import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
@@ -62,6 +63,7 @@ fun FalloutApp(
     viewModel: CharacterViewModel = viewModel { CharacterViewModel() },
     itemViewModel: ItemViewModel = viewModel { ItemViewModel() },
     creationViewModel: CharacterCreationViewModel = viewModel { CharacterCreationViewModel() },
+    userViewModel: UserViewModel = viewModel { UserViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     // Get current back stack entry
@@ -98,7 +100,8 @@ fun FalloutApp(
                     onNewCharacter = {
                         creationViewModel.startNewCreation()
                         navController.navigate(FalloutScreen.CharacterCreation.name)
-                    }
+                    },
+                    onLogin = { userViewModel.login(it) }
                 )
             }
             composable(route = FalloutScreen.CharacterCreation.name) {

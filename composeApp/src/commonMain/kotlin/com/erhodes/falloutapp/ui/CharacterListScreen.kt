@@ -4,10 +4,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+
 import com.erhodes.falloutapp.Greeting
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -17,10 +23,14 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CharacterListScreen(characters: List<Character>, onSelect: (Character) -> Unit, onNewCharacter: () -> Unit, onDeleteClicked: (Character) -> Unit) {
+fun CharacterListScreen(characters: List<Character>, onSelect: (Character) -> Unit, onNewCharacter: () -> Unit, onDeleteClicked: (Character) -> Unit, onLogin: (String) -> Unit) {
     Column(
         modifier = Modifier.padding(horizontal = 10.dp)
     ) {
+        UserLogin(
+            onLogin = onLogin
+        )
+
         val greeting = Greeting().greet()
         Text(
             greeting
@@ -40,6 +50,29 @@ fun CharacterListScreen(characters: List<Character>, onSelect: (Character) -> Un
             onClick = onNewCharacter
         ) {
             Text("New")
+        }
+    }
+}
+
+@Composable
+fun UserLogin(onLogin: (String) -> Unit, modifier: Modifier = Modifier) {
+    var name by remember { mutableStateOf("") }
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = "Login",
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        OutlinedTextField(
+            value = name,
+            onValueChange = { name = it },
+            label = { Text("Login name") },
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = { onLogin(name) }) {
+            Text("Login")
         }
     }
 }
@@ -77,6 +110,7 @@ fun CharacterListScreenPreview() {
         val character2 = Character("Jerry")
         CharacterListScreen(
             characters = listOf(character1, character2),
+            {},
             {},
             {},
             {}

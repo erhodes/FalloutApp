@@ -16,6 +16,12 @@ kotlin {
         }
     }
 
+    jvm("desktop") {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
+    }
+
 //    listOf(
 //        iosArm64(),
 //        iosSimulatorArm64()
@@ -67,6 +73,16 @@ kotlin {
         webMain.dependencies {
             implementation(libs.kstore.storage)
         }
+        val desktopMain by getting {
+            dependencies {
+                implementation(compose.desktop.currentOs)
+                implementation(libs.kstore.file)
+                implementation(libs.ktor.server.core)
+                implementation(libs.ktor.server.netty)
+                implementation(libs.ktor.server.content.negotiation)
+                implementation(libs.ktor.serialization.kotlinx.json)
+            }
+        }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -104,3 +120,8 @@ dependencies {
     debugImplementation(compose.uiTooling)
 }
 
+compose.desktop {
+    application {
+        mainClass = "com.erhodes.falloutapp.MainKt"
+    }
+}
