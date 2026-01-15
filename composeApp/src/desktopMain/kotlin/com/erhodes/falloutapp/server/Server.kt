@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.server
 
+import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -23,6 +24,11 @@ fun Application.falloutModule() {
         }
         get("/characters") {
             call.respond("Work in progress")
+        }
+        route("/users") {
+            post {
+                AppLogger.d("Eric","new user $call")
+            }
         }
     }
 }

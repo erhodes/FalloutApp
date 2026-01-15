@@ -68,7 +68,11 @@ kotlin {
             implementation(libs.navigation.compose)
 
             implementation(libs.kstore)
-            implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+            implementation(libs.kotlinx.serialization.json)
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         webMain.dependencies {
             implementation(libs.kstore.storage)
