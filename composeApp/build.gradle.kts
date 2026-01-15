@@ -47,6 +47,8 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(libs.kstore.file)
+            implementation(libs.ktor.client.android)
             // Koin Android helpers (only used on Android target)
 //            implementation("io.insert-koin:koin-android:3.4.0")
         }
@@ -76,6 +78,9 @@ kotlin {
         }
         webMain.dependencies {
             implementation(libs.kstore.storage)
+        }
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.wasm)
         }
         val desktopMain by getting {
             dependencies {

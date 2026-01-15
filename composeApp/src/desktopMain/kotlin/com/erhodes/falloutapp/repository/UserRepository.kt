@@ -6,5 +6,7 @@ import com.erhodes.falloutapp.model.User
 class UserRepository {
     val users = mutableStateListOf<User>()
 
+    fun addUser(name: String) {
 
+    }
 }
