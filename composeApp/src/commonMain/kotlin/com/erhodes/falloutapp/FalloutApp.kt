@@ -33,7 +33,8 @@ enum class FalloutScreen(val title: StringResource) {
     CharacterScreen(title = Res.string.character_screen),
     AddItemScreen(title = Res.string.acquire_item),
     BonusSkillsScreen(title = Res.string.bonus_skills),
-    PerkSelectScreen(title = Res.string.select_perk)
+    PerkSelectScreen(title = Res.string.select_perk),
+    Login(title = Res.string.login)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,9 +70,8 @@ fun FalloutApp(
     // Get current back stack entry
     val backStackEntry by navController.currentBackStackEntryAsState()
     // Get the name of the current screen
-    val currentScreen = FalloutScreen.valueOf(
-        backStackEntry?.destination?.route ?: FalloutScreen.CharacterScreen.name
-    )
+    val currentScreen = FalloutScreen.entries.firstOrNull { it.name == backStackEntry?.destination?.route } ?: FalloutScreen.CharacterScreen
+
     Scaffold(
         topBar = {
             FalloutAppBar(
@@ -101,7 +101,7 @@ fun FalloutApp(
                         creationViewModel.startNewCreation()
                         navController.navigate(FalloutScreen.CharacterCreation.name)
                     },
-                    onLogin = { loginStateViewModel.login(it) }
+                    onLogin = { navController.navigate(FalloutScreen.Login.name) }
                 )
             }
             composable(route = FalloutScreen.CharacterCreation.name) {
@@ -179,6 +179,16 @@ fun FalloutApp(
                     onSelect = {
                         viewModel.onPerkSelected(it)
                         navController.popBackStack()
+                    }
+                )
+            }
+            composable(route = FalloutScreen.Login.name) {
+                LoginScreen(
+                    onLogin = { name, address ->
+                        loginStateViewModel.login(name, address)
+                    },
+                    onSync = {
+                        loginStateViewModel.sync()
                     }
                 )
             }

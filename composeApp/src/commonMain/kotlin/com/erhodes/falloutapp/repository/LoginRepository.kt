@@ -31,8 +31,8 @@ class LoginRepository(
         }
     }
 
-    suspend fun login(username: String) {
+    suspend fun login(username: String, address: String) {
         val uuid = userIdReady.await()
-        dataSource.submitLoginRequest(User(uuid, username))
+        dataSource.submitLoginRequest(User(uuid, username), address)
     }
 }

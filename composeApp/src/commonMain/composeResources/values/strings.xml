@@ -80,4 +80,5 @@
 
     <!-- Server specific strings -->
     <string name="user_list">User List</string>
+    <string name="login">Login</string>
 </resources>

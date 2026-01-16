@@ -23,13 +23,15 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CharacterListScreen(characters: List<Character>, onSelect: (Character) -> Unit, onNewCharacter: () -> Unit, onDeleteClicked: (Character) -> Unit, onLogin: (String) -> Unit) {
+fun CharacterListScreen(characters: List<Character>, onSelect: (Character) -> Unit, onNewCharacter: () -> Unit, onDeleteClicked: (Character) -> Unit, onLogin: () -> Unit) {
     Column(
         modifier = Modifier.padding(horizontal = 10.dp)
     ) {
-        UserLogin(
-            onLogin = onLogin
-        )
+        Button(
+            onClick = onLogin
+        ) {
+            Text("Login")
+        }
 
         val greeting = Greeting().greet()
         Text(
@@ -50,29 +52,6 @@ fun CharacterListScreen(characters: List<Character>, onSelect: (Character) -> Un
             onClick = onNewCharacter
         ) {
             Text("New")
-        }
-    }
-}
-
-@Composable
-fun UserLogin(onLogin: (String) -> Unit, modifier: Modifier = Modifier) {
-    var name by remember { mutableStateOf("") }
-
-    Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = "Login",
-            style = MaterialTheme.typography.titleMedium
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Login name") },
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { onLogin(name) }) {
-            Text("Login")
         }
     }
 }

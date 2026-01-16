@@ -15,11 +15,15 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
     private val _loginName = MutableStateFlow("")
     val loginName = _loginName.asStateFlow()
 
-    fun login(name: String) {
+    fun login(name: String, address: String) {
         _loginName.value = name
 
         viewModelScope.launch {
-            repo.login(name)
+            repo.login(name, address)
         }
+    }
+
+    fun sync() {
+
     }
 }

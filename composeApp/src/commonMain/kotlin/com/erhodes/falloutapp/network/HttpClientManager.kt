@@ -6,7 +6,7 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-fun createHttpClient() = HttpClient {
+fun createHttpClient(hostAddress: String) = HttpClient {
     install(ContentNegotiation) {
         json(Json {
             encodeDefaults = true
@@ -16,7 +16,7 @@ fun createHttpClient() = HttpClient {
         })
     }
     defaultRequest {
-        host = "10.0.0.214"
+        host = hostAddress
         port = 8080
     }
 }
