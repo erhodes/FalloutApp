@@ -9,3 +9,10 @@ actual val store: KStore<String> by lazy {
         default = ""
     )
 }
+
+actual val localIdStore: KStore<String> by lazy {
+    storeOf(
+        key = "saved",
+        default = ""
+    )
+}

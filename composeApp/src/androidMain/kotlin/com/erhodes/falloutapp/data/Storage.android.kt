@@ -18,3 +18,10 @@ actual val store: KStore<String> by lazy {
         default = ""
     )
 }
+actual val localIdStore: KStore<String> by lazy {
+    val filesDir = appContext.filesDir.absolutePath
+    storeOf(
+        file = Path("$filesDir/localId.json"),
+        default = ""
+    )
+}
