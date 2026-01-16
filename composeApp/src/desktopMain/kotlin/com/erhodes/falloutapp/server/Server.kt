@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.server
 
+import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
@@ -33,6 +34,13 @@ fun Application.falloutModule(userRepository: UserRepository) {
                 val string = call.receive<User>()
                 AppLogger.d("Eric", "new user $string")
                 userRepository.addUser(string)
+                call.respond("success")
+            }
+        }
+        route("/characters") {
+            post {
+                val characters = call.receive<List<Character>>()
+                AppLogger.d("Eric", "received characters: $characters")
                 call.respond("success")
             }
         }

@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.repository
 
 import com.erhodes.falloutapp.data.UserDataSource
 import com.erhodes.falloutapp.data.localIdStore
+import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CompletableDeferred
@@ -27,6 +28,8 @@ class LoginRepository(
     private val _loggedIn = MutableStateFlow(false)
     val loggedIn = _loggedIn.asStateFlow()
 
+    private var serverAddress: String = ""
+
     init {
         scope.launch {
             var uuid = localIdStore.get() ?: ""
@@ -41,6 +44,14 @@ class LoginRepository(
 
     suspend fun login(username: String, address: String) {
         val uuid = userIdReady.await()
-        _loggedIn.value = dataSource.submitLoginRequest(User(uuid, username), address)
+        val success = dataSource.submitLoginRequest(User(uuid, username), address)
+        if (success) {
+            serverAddress = address
+        }
+        _loggedIn.value = success
+    }
+
+    suspend fun syncCharacters(characters: List<Character>): Boolean {
+        return dataSource.syncCharacters(characters, serverAddress)
     }
 }

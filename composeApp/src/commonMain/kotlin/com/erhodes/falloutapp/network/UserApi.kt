@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.network
 
+import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.client.HttpClient
@@ -14,6 +15,16 @@ class UserApi(private val httpClient: HttpClient) {
         val httpResponse = httpClient.post("/users") {
             contentType(ContentType.Application.Json)
             setBody(user)
+        }
+        AppLogger.d("Eric"," got response $httpResponse")
+        return httpResponse.status.value in 200..299
+    }
+
+    suspend fun syncCharacters(characters: List<Character>): Boolean {
+        AppLogger.d("Eric","sending characters ${characters.size}")
+        val httpResponse = httpClient.post("/characters") {
+            contentType(ContentType.Application.Json)
+            setBody(characters)
         }
         AppLogger.d("Eric"," got response $httpResponse")
         return httpResponse.status.value in 200..299
