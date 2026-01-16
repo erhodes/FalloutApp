@@ -1,9 +1,11 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.erhodes.falloutapp.repository.LoginRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -16,6 +18,8 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
     fun login(name: String) {
         _loginName.value = name
 
-        repo.login(name)
+        viewModelScope.launch {
+            repo.login(name)
+        }
     }
 }

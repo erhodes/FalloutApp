@@ -16,8 +16,24 @@ class UserRepository {
         )
     }
 
-    fun addUser(name: String) {
-        val newUser = User((_users.value.size + 1).toString(), name)
-        _users.update { it + newUser }
+    fun addUser(user: User) {
+        val existingUser = findUserById(user.uuid)
+        if (existingUser == null) {
+            _users.update { it + user }
+        } else {
+            _users.update { userList ->
+                userList.map {
+                    if (it.uuid == user.uuid) {
+                        user
+                    } else {
+                        it
+                    }
+                }
+            }
+        }
+    }
+
+    private fun findUserById(uuid: String): User? {
+        return _users.value.find { it.uuid == uuid }
     }
 }

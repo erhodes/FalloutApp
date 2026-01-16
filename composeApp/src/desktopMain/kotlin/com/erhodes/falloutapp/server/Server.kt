@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.server
 
+import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.serialization.kotlinx.json.*
@@ -29,7 +30,7 @@ fun Application.falloutModule(userRepository: UserRepository) {
         }
         route("/users") {
             post {
-                val string = call.receive<String>()
+                val string = call.receive<User>()
                 AppLogger.d("Eric", "new user $string")
                 userRepository.addUser(string)
                 call.respond("success")

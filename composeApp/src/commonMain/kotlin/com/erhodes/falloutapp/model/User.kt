@@ -1,4 +1,6 @@
 package com.erhodes.falloutapp.model
 
-class User(val id: String, val name: String) {
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class User(val uuid: String, val name: String)
