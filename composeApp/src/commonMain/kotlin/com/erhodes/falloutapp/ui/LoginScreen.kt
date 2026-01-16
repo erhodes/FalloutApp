@@ -21,7 +21,7 @@ import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun LoginScreen(onLogin: (String, String) -> Unit, onSync: () -> Unit, modifier: Modifier = Modifier) {
+fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: () -> Unit, modifier: Modifier = Modifier) {
     var name by remember { mutableStateOf("") }
     var address by remember { mutableStateOf("10.0.0.214") }
 
@@ -33,6 +33,11 @@ fun LoginScreen(onLogin: (String, String) -> Unit, onSync: () -> Unit, modifier:
             text = "Login",
             style = MaterialTheme.typography.titleMedium
         )
+        if (loggedIn) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text("Logged In successfully!")
+        }
+
         Spacer(modifier = Modifier.height(8.dp))
         OutlinedTextField(
             value = name,
@@ -63,6 +68,6 @@ fun LoginScreen(onLogin: (String, String) -> Unit, onSync: () -> Unit, modifier:
 @Composable
 fun LoginScreenPreview() {
     FalloutAppTheme {
-        LoginScreen(onLogin = {a, b ->}, onSync = {})
+        LoginScreen(true, onLogin = {a, b ->}, onSync = {})
     }
 }

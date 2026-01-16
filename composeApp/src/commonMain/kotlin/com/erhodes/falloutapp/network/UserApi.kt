@@ -9,12 +9,13 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
 class UserApi(private val httpClient: HttpClient) {
-    suspend fun login(user: User) {
+    suspend fun login(user: User): Boolean {
         AppLogger.d("Eric","sending login $user")
-        val response = httpClient.post("/users") {
+        val httpResponse = httpClient.post("/users") {
             contentType(ContentType.Application.Json)
             setBody(user)
         }
-        AppLogger.d("Eric"," got response ${response}")
+        AppLogger.d("Eric"," got response $httpResponse")
+        return httpResponse.status.value in 200..299
     }
 }

@@ -10,13 +10,11 @@ import kotlinx.coroutines.launch
 // This class is going to have some server calls in it. They might make more sense elsewhere.
 class UserDataSource(private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)) {
 
-    fun submitLoginRequest(user: User, address: String) {
+    suspend fun submitLoginRequest(user: User, address: String): Boolean {
         val client = createHttpClient(address)
 
         val userApi = UserApi(client)
 
-        scope.launch {
-            userApi.login(user)
-        }
+        return userApi.login(user)
     }
 }

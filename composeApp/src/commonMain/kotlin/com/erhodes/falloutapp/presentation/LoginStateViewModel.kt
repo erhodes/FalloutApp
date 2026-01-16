@@ -12,12 +12,9 @@ import org.koin.core.component.inject
 class LoginStateViewModel : ViewModel(), KoinComponent {
     private val repo: LoginRepository by inject()
 
-    private val _loginName = MutableStateFlow("")
-    val loginName = _loginName.asStateFlow()
+    val loginState = repo.loggedIn
 
     fun login(name: String, address: String) {
-        _loginName.value = name
-
         viewModelScope.launch {
             repo.login(name, address)
         }

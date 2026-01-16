@@ -183,7 +183,9 @@ fun FalloutApp(
                 )
             }
             composable(route = FalloutScreen.Login.name) {
+                val loginState = loginStateViewModel.loginState.collectAsState()
                 LoginScreen(
+                    loggedIn = loginState.value,
                     onLogin = { name, address ->
                         loginStateViewModel.login(name, address)
                     },

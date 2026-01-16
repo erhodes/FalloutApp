@@ -7,10 +7,16 @@ import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+/**
+ * The idea with this class is that it tracks the current status of the server connection.
+ * It also handles requests to the server through the [UserDataSource].
+ */
 @OptIn(ExperimentalUuidApi::class)
 class LoginRepository(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
@@ -18,6 +24,8 @@ class LoginRepository(
     val dataSource = UserDataSource()
 
     private val userIdReady = CompletableDeferred<String>()
+    private val _loggedIn = MutableStateFlow(false)
+    val loggedIn = _loggedIn.asStateFlow()
 
     init {
         scope.launch {
@@ -33,6 +41,6 @@ class LoginRepository(
 
     suspend fun login(username: String, address: String) {
         val uuid = userIdReady.await()
-        dataSource.submitLoginRequest(User(uuid, username), address)
+        _loggedIn.value = dataSource.submitLoginRequest(User(uuid, username), address)
     }
 }
