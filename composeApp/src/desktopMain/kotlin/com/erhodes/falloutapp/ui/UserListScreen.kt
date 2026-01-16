@@ -1,0 +1,34 @@
+package com.erhodes.falloutapp.ui
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import com.erhodes.falloutapp.model.User
+
+@Composable
+fun UserListScreen(users: List<User>) {
+    Column {
+        Text("User List")
+        users.forEach {
+            UserDetail(it)
+        }
+    }
+}
+
+@Composable
+fun UserDetail(user: User) {
+    Text(user.name)
+}
+
+@Preview
+@Composable
+fun UserListScreenPreview() {
+    val users = listOf(
+        User("1", "Alice"),
+        User("2", "Bob")
+    )
+    UserListScreen(users = users)
+}

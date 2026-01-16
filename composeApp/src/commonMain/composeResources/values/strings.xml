@@ -77,4 +77,7 @@
 
     <string name="search">Search</string>
     <string name="acquire">Acquire</string>
+
+    <!-- Server specific strings -->
+    <string name="user_list">User List</string>
 </resources>

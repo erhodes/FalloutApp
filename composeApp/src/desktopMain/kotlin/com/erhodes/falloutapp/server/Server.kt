@@ -31,7 +31,7 @@ fun Application.falloutModule(userRepository: UserRepository) {
             post {
                 val string = call.receive<String>()
                 AppLogger.d("Eric", "new user $string")
-                userRepository.addUser(call.toString())
+                userRepository.addUser(string)
                 call.respond("success")
             }
         }

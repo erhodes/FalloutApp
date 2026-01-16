@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class UserViewModel : ViewModel(), KoinComponent {
+class LoginStateViewModel : ViewModel(), KoinComponent {
     private val repo: LoginRepository by inject()
 
     private val _loginName = MutableStateFlow("")

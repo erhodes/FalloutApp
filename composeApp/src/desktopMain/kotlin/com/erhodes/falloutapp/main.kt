@@ -15,8 +15,8 @@ fun main() = application {
 
     Window(
         onCloseRequest = ::exitApplication,
-        title = "FalloutApp"
+        title = "Fallout Server"
     ) {
-        App()
+        ServerApp()
     }
 }
