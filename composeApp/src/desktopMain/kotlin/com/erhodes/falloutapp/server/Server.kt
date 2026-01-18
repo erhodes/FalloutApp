@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.server
 
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.User
+import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.serialization.kotlinx.json.*
@@ -17,7 +18,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class HealthStatus(val status: String = "ok")
 
-fun Application.falloutModule(userRepository: UserRepository) {
+fun Application.falloutModule(userRepository: UserRepository, characterRepository: CharacterRepository) {
     install(ContentNegotiation) {
         json()
     }
@@ -41,14 +42,15 @@ fun Application.falloutModule(userRepository: UserRepository) {
             post {
                 val characters = call.receive<List<Character>>()
                 AppLogger.d("Eric", "received characters: $characters")
+                characterRepository.addCharacters(characters)
                 call.respond("success")
             }
         }
     }
 }
 
-fun startEmbeddedServer(userRepository: UserRepository, port: Int = 8080): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
+fun startEmbeddedServer(userRepository: UserRepository, characterRepository: CharacterRepository, port: Int = 8080): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
     return embeddedServer(Netty, port = port, host = "0.0.0.0") {
-        falloutModule(userRepository)
+        falloutModule(userRepository, characterRepository)
     }.start(wait = false)
 }

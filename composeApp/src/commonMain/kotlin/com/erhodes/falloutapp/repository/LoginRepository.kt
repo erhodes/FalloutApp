@@ -24,7 +24,12 @@ class LoginRepository(
 ) {
     val dataSource = UserDataSource()
 
-    private val userIdReady = CompletableDeferred<String>()
+    var userId: String = ""
+        private set
+
+    // the issue with using the CompletableDeferred is it means getting the id is a suspend, which isn't great.
+    // But without it theres the possibility of a race condition so I'm leaving it here as a reminder
+    //    private val userIdReady = CompletableDeferred<String>()
     private val _loggedIn = MutableStateFlow(false)
     val loggedIn = _loggedIn.asStateFlow()
 
@@ -37,14 +42,15 @@ class LoginRepository(
                 uuid = Uuid.random().toString()
                 localIdStore.set(uuid)
             }
-            AppLogger.d("Eric", "UUID: $uuid")
-            userIdReady.complete(uuid)
+            userId = uuid
+            AppLogger.d("Eric", "UUID: $userId")
+//            userIdReady.complete(uuid)
         }
     }
 
     suspend fun login(username: String, address: String) {
-        val uuid = userIdReady.await()
-        val success = dataSource.submitLoginRequest(User(uuid, username), address)
+//        val uuid = userIdReady.await()
+        val success = dataSource.submitLoginRequest(User(userId, username), address)
         if (success) {
             serverAddress = address
         }

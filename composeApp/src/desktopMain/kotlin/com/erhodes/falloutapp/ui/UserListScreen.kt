@@ -2,18 +2,28 @@ package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.User
+import com.erhodes.falloutapp.model.Character
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun UserListScreen(users: List<User>) {
+fun UserListScreen(users: List<User>, characters: List<Character>) {
     Column {
         Text("User List")
         users.forEach {
             UserDetail(it)
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text("Characters")
+        characters.forEach {
+            Text("${it.name}, owned by ${it.ownerId}")
         }
     }
 }
@@ -37,5 +47,8 @@ fun UserListScreenPreview() {
         User("1", "Alice"),
         User("2", "Bob")
     )
-    UserListScreen(users = users)
+    val characters = listOf(
+        Character(name = "Alice", ownerId = "1")
+    )
+    UserListScreen(users = users, characters)
 }

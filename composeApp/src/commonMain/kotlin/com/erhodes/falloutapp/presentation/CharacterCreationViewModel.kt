@@ -3,6 +3,7 @@ package com.erhodes.falloutapp.presentation
 import androidx.lifecycle.ViewModel
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.repository.CharacterRepository
+import com.erhodes.falloutapp.repository.LoginRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,6 +19,7 @@ class CharacterCreationViewModel(
 ): ViewModel(), KoinComponent {
 
     private val repo: CharacterRepository by inject()
+    private val loginRepository: LoginRepository by inject()
 
     var pointsRemaining = 7
     var majorsRemaining = 2
@@ -31,6 +33,7 @@ class CharacterCreationViewModel(
         val newChar =
             Character(
                 name = name,
+                ownerId = loginRepository.userId,
                 strength = uiState.stats[0],
                 perception = uiState.stats[1],
                 endurance = uiState.stats[2],

@@ -7,6 +7,7 @@ import kotlin.math.max
 @Serializable
 class Character(
     val name: String,
+    val ownerId: String = "",
     val strength: Int = 1,
     val perception: Int = 1,
     val endurance: Int = 1,

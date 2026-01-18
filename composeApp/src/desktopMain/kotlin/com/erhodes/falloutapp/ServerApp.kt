@@ -11,12 +11,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.UserViewModel
 import com.erhodes.falloutapp.ui.UserListScreen
 import falloutapp.composeapp.generated.resources.Res
@@ -32,6 +34,7 @@ enum class ServerScreen(val title: StringResource) {
 @Composable
 fun ServerApp(
     userViewModel: UserViewModel = viewModel { UserViewModel() },
+    characterViewModel: CharacterViewModel = viewModel { CharacterViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -50,8 +53,10 @@ fun ServerApp(
         ) {
             composable(route = ServerScreen.UserListScreen.name) {
                 val users by userViewModel.users.collectAsState()
+                val characterList = remember { characterViewModel.characters }
                 UserListScreen(
-                    users = users
+                    users = users,
+                    characters = characterList
                 )
             }
         }

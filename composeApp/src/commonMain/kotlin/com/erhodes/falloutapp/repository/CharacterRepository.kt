@@ -48,6 +48,11 @@ class CharacterRepository(
         saveCharacters()
 	}
 
+    fun addCharacters(characters: List<Character>) {
+        this.characters.addAll(characters)
+        saveCharacters()
+    }
+
     fun removeCharacter(character: Character) {
         characters.remove(character)
         saveCharacters()
