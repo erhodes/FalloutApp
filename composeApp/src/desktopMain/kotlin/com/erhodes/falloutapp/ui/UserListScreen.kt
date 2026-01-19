@@ -11,20 +11,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.presentation.UserCharacterGroup
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun UserListScreen(users: List<User>, characters: List<Character>) {
+fun UserListScreen(users: List<User>, groups: List<UserCharacterGroup>) {
     Column {
         Text("User List")
         users.forEach {
             UserDetail(it)
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Text("Characters")
-        characters.forEach {
-            Text("${it.name}, owned by ${it.ownerId}")
+
+        groups.forEach {
+            Text("User: ${it.userName}")
+            it.characters.forEach { char ->
+                Text("Character: ${char.name}")
+            }
         }
+
+//        Text("Characters")
+//        characters.forEach {
+//            Text("${it.name}, owned by ${it.ownerId}")
+//        }
     }
 }
 
@@ -50,5 +59,5 @@ fun UserListScreenPreview() {
     val characters = listOf(
         Character(name = "Alice", ownerId = "1")
     )
-    UserListScreen(users = users, characters)
+    UserListScreen(users = users, arrayListOf(UserCharacterGroup("Alice", characters)))
 }

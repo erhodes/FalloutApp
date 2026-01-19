@@ -53,10 +53,10 @@ fun ServerApp(
         ) {
             composable(route = ServerScreen.UserListScreen.name) {
                 val users by userViewModel.users.collectAsState()
-                val characterList = remember { characterViewModel.characters }
+                val groups by userViewModel.userCharacterGroups.collectAsState()
                 UserListScreen(
                     users = users,
-                    characters = characterList
+                    groups = groups
                 )
             }
         }

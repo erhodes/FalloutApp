@@ -90,6 +90,7 @@ kotlin {
                 implementation(libs.ktor.server.netty)
                 implementation(libs.ktor.server.content.negotiation)
                 implementation(libs.ktor.serialization.kotlinx.json)
+                implementation(libs.kotlinx.coroutines.swing)
             }
         }
         commonTest.dependencies {
