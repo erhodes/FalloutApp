@@ -61,7 +61,7 @@ fun FalloutAppBar(
 
 @Composable
 fun FalloutApp(
-    viewModel: CharacterViewModel = viewModel { CharacterViewModel() },
+    characterViewModel: CharacterViewModel = viewModel { CharacterViewModel() },
     itemViewModel: ItemViewModel = viewModel { ItemViewModel() },
     creationViewModel: CharacterCreationViewModel = viewModel { CharacterCreationViewModel() },
     loginStateViewModel: LoginStateViewModel = viewModel { LoginStateViewModel() },
@@ -89,14 +89,20 @@ fun FalloutApp(
                 .padding(innerPadding)
         ) {
             composable(route = FalloutScreen.CharacterList.name) {
-                val characterList = remember { viewModel.characters }
+                val characterList = remember { characterViewModel.characters }
+                val remoteCharacterList = remember { characterViewModel.remoteCharacters }
                 CharacterListScreen(
-                    characterList,
+                    characters = characterList,
+                    remoteCharacters = remoteCharacterList,
                     onSelect = {
-                        viewModel.setActiveCharacter(it)
+                        characterViewModel.setActiveCharacter(it)
                         navController.navigate(FalloutScreen.CharacterScreen.name)
                     },
-                    onDeleteClicked = { viewModel.onDeleteCharacterClicked(it) },
+                    onSelectRemote = {
+                        characterViewModel.setActiveCharacter(it)
+                        navController.navigate(FalloutScreen.CharacterScreen.name)
+                    },
+                    onDeleteClicked = { characterViewModel.onDeleteCharacterClicked(it) },
                     onNewCharacter = {
                         creationViewModel.startNewCreation()
                         navController.navigate(FalloutScreen.CharacterCreation.name)
@@ -114,34 +120,34 @@ fun FalloutApp(
                     onMinorClicked = { creationViewModel.onMinorClicked(it) },
                     onComplete = {
                         val newChar = creationViewModel.addCharacter(it, uiState)
-                        viewModel.setActiveCharacter(newChar)
-                        viewModel.resetBonusSkillsState(newChar.intelligence, false)
+                        characterViewModel.setActiveCharacter(newChar)
+                        characterViewModel.resetBonusSkillsState(newChar.intelligence, false)
                         navController.navigate(FalloutScreen.BonusSkillsScreen.name)
                     }
                 )
             }
             composable(route = FalloutScreen.CharacterScreen.name) {
-                val uiState by viewModel.activeCharacterState.collectAsState()
+                val uiState by characterViewModel.activeCharacterState.collectAsState()
 
                 CharacterScreen(
                     state = uiState,
-                    onTakeDamage = { viewModel.onDamageCharacterClicked(it) },
-                    onHealDamage = { viewModel.onHealCharacterClicked(it) },
-                    onRepair = { viewModel.onRepairArmorClicked(it) },
-                    onModifyStress = { viewModel.onModifyStressClicked(it) },
-                    onModifyFatigue = { viewModel.onModifyFatigueClicked(it) },
-                    onModifyRadiation = { viewModel.onModifyRadiationClicked(it) },
+                    onTakeDamage = { characterViewModel.onDamageCharacterClicked(it) },
+                    onHealDamage = { characterViewModel.onHealCharacterClicked(it) },
+                    onRepair = { characterViewModel.onRepairArmorClicked(it) },
+                    onModifyStress = { characterViewModel.onModifyStressClicked(it) },
+                    onModifyFatigue = { characterViewModel.onModifyFatigueClicked(it) },
+                    onModifyRadiation = { characterViewModel.onModifyRadiationClicked(it) },
                     onGainMilestone = {
-                        viewModel.resetBonusSkillsState(1, true)
+                        characterViewModel.resetBonusSkillsState(1, true)
                         navController.navigate(FalloutScreen.BonusSkillsScreen.name)
                     },
                     onAddPerk = { navController.navigate(FalloutScreen.PerkSelectScreen.name) },
-                    onRemovePerk = { viewModel.onRemovePerk(it) },
-                    onEquipItem = { viewModel.equipItemToCharacter(it) },
-                    onUnequipItem = { viewModel.unequipItemFromCharacter(it) },
-                    onDiscardItem = { viewModel.removeItemFromActiveCharacter(it) },
-                    onIncreaseItem = { viewModel.increaseStackCountForActiveCharacter(it, 1) },
-                    onDecreaseItem = { viewModel.decreaseStackCountForActiveCharacter(it, 1) },
+                    onRemovePerk = { characterViewModel.onRemovePerk(it) },
+                    onEquipItem = { characterViewModel.equipItemToCharacter(it) },
+                    onUnequipItem = { characterViewModel.unequipItemFromCharacter(it) },
+                    onDiscardItem = { characterViewModel.removeItemFromActiveCharacter(it) },
+                    onIncreaseItem = { characterViewModel.increaseStackCountForActiveCharacter(it, 1) },
+                    onDecreaseItem = { characterViewModel.decreaseStackCountForActiveCharacter(it, 1) },
                     onAddItem = {
                         navController.navigate(FalloutScreen.AddItemScreen.name)
                     }
@@ -151,19 +157,19 @@ fun FalloutApp(
                 AcquireItemScreen(
                     items = itemViewModel.getAvailableItems(),
                     onAcquireItem = {
-                        viewModel.addNewItemToActiveCharacter(it)
+                        characterViewModel.addNewItemToActiveCharacter(it)
                         navController.popBackStack()
                     }
                 )
             }
             composable(route = FalloutScreen.BonusSkillsScreen.name) {
-                val uiState by viewModel.gainSkillsUiState.collectAsState()
+                val uiState by characterViewModel.gainSkillsUiState.collectAsState()
                 GainSkillsScreen(
                     uiState = uiState,
-                    onIncreaseClicked = { viewModel.onIncreaseSkillClicked(it) },
-                    onDecreaseClicked = { viewModel.onDecreaseSkillClicked(it) },
+                    onIncreaseClicked = { characterViewModel.onIncreaseSkillClicked(it) },
+                    onDecreaseClicked = { characterViewModel.onDecreaseSkillClicked(it) },
                     onFinalizeClicked = {
-                        viewModel.onIncreaseSkillsFinalized()
+                        characterViewModel.onIncreaseSkillsFinalized()
                         if (uiState.milestone) {
                             navController.popBackStack()
                         } else {
@@ -174,10 +180,10 @@ fun FalloutApp(
             }
             composable(route = FalloutScreen.PerkSelectScreen.name) {
                 PerkSelectScreen(
-                    state = viewModel.activeCharacterState.value,
-                    perks = viewModel.getAllPerks(),
+                    state = characterViewModel.activeCharacterState.value,
+                    perks = characterViewModel.getAllPerks(),
                     onSelect = {
-                        viewModel.onPerkSelected(it)
+                        characterViewModel.onPerkSelected(it)
                         navController.popBackStack()
                     }
                 )

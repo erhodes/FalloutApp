@@ -43,7 +43,7 @@ fun Application.falloutModule(userRepository: UserRepository, characterRepositor
                 val characters = call.receive<List<Character>>()
                 AppLogger.d("Eric", "received characters: $characters")
                 characterRepository.addCharacters(characters)
-                call.respond("success")
+                call.respond(characterRepository.characters)
             }
         }
     }

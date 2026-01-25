@@ -20,9 +20,10 @@ import kotlin.uuid.Uuid
  */
 @OptIn(ExperimentalUuidApi::class)
 class LoginRepository(
+    private val characterRepository: CharacterRepository,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
-    val dataSource = UserDataSource()
+    val dataSource = UserDataSource(characterRepository)
 
     var userId: String = ""
         private set
@@ -30,6 +31,7 @@ class LoginRepository(
     // the issue with using the CompletableDeferred is it means getting the id is a suspend, which isn't great.
     // But without it theres the possibility of a race condition so I'm leaving it here as a reminder
     //    private val userIdReady = CompletableDeferred<String>()
+
     private val _loggedIn = MutableStateFlow(false)
     val loggedIn = _loggedIn.asStateFlow()
 
@@ -57,7 +59,12 @@ class LoginRepository(
         _loggedIn.value = success
     }
 
-    suspend fun syncCharacters(characters: List<Character>): Boolean {
-        return dataSource.syncCharacters(characters, serverAddress)
+    suspend fun syncCharacters(characters: List<Character>) {
+        val remoteCharacters = dataSource.syncCharacters(characters, serverAddress)
+        // any characters we own should be excluded as they are not remote
+        val filteredList = remoteCharacters.filter { it.ownerId != userId }
+        if (filteredList.isNotEmpty()) {
+            characterRepository.setRemoteCharacters(filteredList)
+        }
     }
 }

@@ -9,6 +9,7 @@ import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CharacterRepository
+import com.erhodes.falloutapp.repository.LoginRepository
 import com.erhodes.falloutapp.repository.PerkRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,11 +25,10 @@ class CharacterViewModel(
     private val repo: CharacterRepository by inject()
 
     private val perkRepository: PerkRepository by inject()
+    private val loginRepository: LoginRepository by inject()
 
     val characters = repo.characters
-
-    private val _loginName = MutableStateFlow("")
-    val loginName = _loginName.asStateFlow()
+    val remoteCharacters = repo.remoteCharacters
 
     private var activeCharacter = Character("empty")
 
@@ -44,7 +44,7 @@ class CharacterViewModel(
     fun setActiveCharacter(character: Character) {
         activeCharacter = character
         scope.launch {
-            _activeCharacterState.update{ CharacterUiState(activeCharacter) }
+            _activeCharacterState.update{ CharacterUiState(activeCharacter, activeCharacter.ownerId == loginRepository.userId) }
         }
 
     }
@@ -174,13 +174,5 @@ class CharacterViewModel(
 
     fun getAllPerks(): Collection<Perk> {
         return perkRepository.getAllPerks()
-    }
-
-    fun onLoginNameChanged(name: String) {
-        _loginName.value = name
-    }
-
-    fun onLoginClicked() {
-        // currently just persists the name in state; hook auth here later
     }
 }

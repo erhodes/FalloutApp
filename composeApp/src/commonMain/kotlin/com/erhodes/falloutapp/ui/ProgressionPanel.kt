@@ -31,10 +31,12 @@ fun ProgressionPanel(state: CharacterUiState, onGainMilestone: () -> Unit, modif
                 style = MaterialTheme.typography.titleLarge
             )
             Text("Milestones ${character.milestones}/3   Max Perks:${character.level}  Max Skill:${character.getMaxSkillValue()}")
-            Button(
-                onClick = onGainMilestone
-            ) {
-                Text(stringResource(Res.string.gain_milestone))
+            if (state.editable) {
+                Button(
+                    onClick = onGainMilestone
+                ) {
+                    Text(stringResource(Res.string.gain_milestone))
+                }
             }
         }
     }

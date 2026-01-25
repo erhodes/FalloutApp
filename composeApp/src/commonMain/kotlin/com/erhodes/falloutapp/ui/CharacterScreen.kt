@@ -13,12 +13,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.*
 import com.erhodes.falloutapp.presentation.CharacterUiState
+import com.erhodes.falloutapp.repository.ItemRepository
 import com.erhodes.falloutapp.ui.theme.Dimens
+import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CharacterScreen(state: CharacterUiState,
@@ -39,6 +43,7 @@ fun CharacterScreen(state: CharacterUiState,
                     onAddItem: () -> Unit
 ) {
     val character = state.character
+    val editable = state.editable
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -98,14 +103,15 @@ fun CharacterScreen(state: CharacterUiState,
                 )
             }
         }
-        Button(
-            onClick = onAddPerk,
-            enabled = character.perks.size < character.level,
-            modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
-        ) {
-            Text(stringResource(Res.string.add_perk))
+        if (editable) {
+            Button(
+                onClick = onAddPerk,
+                enabled = character.perks.size < character.level,
+                modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+            ) {
+                Text(stringResource(Res.string.add_perk))
+            }
         }
-
 
         // Vitals
         VitalsScreen(
@@ -176,11 +182,13 @@ fun CharacterScreen(state: CharacterUiState,
             }
         }
 
-        Button(
-            onClick = onAddItem,
-            modifier = Modifier.padding(start = Dimens.paddingMedium, bottom = Dimens.paddingMedium)
-        ) {
-            Text("Add Item")
+        if (editable) {
+            Button(
+                onClick = onAddItem,
+                modifier = Modifier.padding(start = Dimens.paddingMedium, bottom = Dimens.paddingMedium)
+            ) {
+                Text("Add Item")
+            }
         }
     }
 }
@@ -269,32 +277,33 @@ fun SpecialPanel(title: String, value: Int, modifier: Modifier = Modifier) {
     }
 }
 
-//@Preview
-//@Composable
-//fun CharacterScreenPreview() {
-//    val character = Character("Tom")
-////    val armor =Item(ItemRepository.LEATHER_ARMOR)
-////    character.addItemToInventory(armor)
-////    character.addItemToInventory(Item(ItemRepository.BANNER))
-////    character.equipItem(armor)
-//    FalloutAppTheme {
-//        CharacterScreen(
-//            CharacterUiState(character),
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {},
-//            {}
-//        )
-//    }
-//}
+@Preview
+@Composable
+fun CharacterScreenPreview() {
+    val character = Character("Tom")
+    val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER), 0)
+    val banner = BasicItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_BATTLE_STANDARD))
+    character.addItemToInventory(armor)
+    character.addItemToInventory(banner)
+    character.equipItem(armor)
+    FalloutAppTheme {
+        CharacterScreen(
+            CharacterUiState(character),
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+        )
+    }
+}

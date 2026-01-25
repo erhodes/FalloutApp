@@ -79,45 +79,48 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
                        onHealDamage: (Int) -> Unit,
                        onRepair: (Int) -> Unit,) {
     val character = characterState.character
+    val editable = characterState.editable
     Column {
         Text("Damage Taken ${character.damageTaken}/${Character.MAX_STRESS}")
 
         Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
         Text("${stringResource(Res.string.toughness)} ${character.getArmorToughness()}")
 
-        var amount by remember { mutableStateOf("") }
-        OutlinedTextField(
-            value = amount,
-            onValueChange = { amount = it },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            label = { Text("Amount") }
-        )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Button(
-                onClick = {
-                    onTakeDamage(amount.toInt())
-                    amount = ""
-                }
+        if (editable) {
+            var amount by remember { mutableStateOf("") }
+            OutlinedTextField(
+                value = amount,
+                onValueChange = { amount = it },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text("Amount") }
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text(stringResource(Res.string.take_damage))
-            }
-            Button(
-                onClick = {
-                    onHealDamage(amount.toInt())
-                    amount = ""
+                Button(
+                    onClick = {
+                        onTakeDamage(amount.toInt())
+                        amount = ""
+                    }
+                ) {
+                    Text(stringResource(Res.string.take_damage))
                 }
-            ) {
-                Text(stringResource(Res.string.heal))
-            }
-            Button(
-                onClick = {
-                    onRepair(amount.toInt())
-                    amount = ""
+                Button(
+                    onClick = {
+                        onHealDamage(amount.toInt())
+                        amount = ""
+                    }
+                ) {
+                    Text(stringResource(Res.string.heal))
                 }
-            ) {
-                Text(stringResource(Res.string.repair))
+                Button(
+                    onClick = {
+                        onRepair(amount.toInt())
+                        amount = ""
+                    }
+                ) {
+                    Text(stringResource(Res.string.repair))
+                }
             }
         }
     }
@@ -131,35 +134,42 @@ fun SecondaryVitalsPanel(
     onModifyRadiation: (Int) -> Unit
     ) {
     val character = characterState.character
+    val editable = characterState.editable
     Column {
         Row {
             Text(
                 text = "${stringResource(Res.string.stress)} ${character.stress}/5",
                 modifier = Modifier.fillMaxWidth(0.2f)
             )
-            PlusMinusButtons(
-                onIncrease = { onModifyStress(1) },
-                onDecrease = { onModifyStress(-1) }
-            )
+            if (editable) {
+                PlusMinusButtons(
+                    onIncrease = { onModifyStress(1) },
+                    onDecrease = { onModifyStress(-1) }
+                )
+            }
         }
         Row {
             Text(
                 text = "${stringResource(Res.string.fatigue)}: ${character.fatigue}",
                 modifier = Modifier.fillMaxWidth(0.2f))
-            PlusMinusButtons(
-                onIncrease = { onModifyFatigue(1) },
-                onDecrease = { onModifyFatigue(-1) }
-            )
+            if (editable) {
+                PlusMinusButtons(
+                    onIncrease = { onModifyFatigue(1) },
+                    onDecrease = { onModifyFatigue(-1) }
+                )
+            }
         }
         Row {
             Text(
                 text ="${stringResource(Res.string.radiation)}: ${character.radiation}",
                 modifier = Modifier.fillMaxWidth(0.2f)
             )
-            PlusMinusButtons(
-                onIncrease = { onModifyRadiation(1) },
-                onDecrease = { onModifyRadiation(-1) }
-            )
+            if (editable) {
+                PlusMinusButtons(
+                    onIncrease = { onModifyRadiation(1) },
+                    onDecrease = { onModifyRadiation(-1) }
+                )
+            }
         }
     }
 }
@@ -188,6 +198,22 @@ fun VitalsScreenPreview() {
     FalloutAppTheme {
         VitalsScreen(
             CharacterUiState(Character("Tom")),
+            {},
+            {},
+            {},
+            {},
+            {},
+            {}
+        )
+    }
+}
+
+@Preview()
+@Composable
+fun VitalsScreenPreviewNonEditable() {
+    FalloutAppTheme {
+        VitalsScreen(
+            CharacterUiState(Character("Tom"), false),
             {},
             {},
             {},

@@ -30,17 +30,14 @@ class CharacterRepository(
 
 	val characters = mutableStateListOf<Character>()
 
+    val remoteCharacters = mutableStateListOf<Character>()
+
     val dataSource = CharacterDataSource()
 
 	init {
-		// Seed with a couple of sample characters to make UI previews easier.
-//		characters.add(Character("Vault Dweller"))
-//		characters.add(Character("Wanderer"))
-
         scope.launch {
             characters.addAll(dataSource.loadCharacters())
         }
-
 	}
 
 	fun add(character: Character) {
@@ -56,6 +53,12 @@ class CharacterRepository(
     fun removeCharacter(character: Character) {
         characters.remove(character)
         saveCharacters()
+    }
+
+    fun setRemoteCharacters(characters: List<Character>) {
+        remoteCharacters.clear()
+        remoteCharacters.addAll(characters)
+        // no local storage for remote characters at the moment
     }
 
     fun increaseSkillsForCharacter(increases: List<Int>, character: Character, milestone: Boolean) {
