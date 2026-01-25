@@ -30,7 +30,7 @@ fun AcquireItemScreen(items: Collection<ItemTemplate>, onAcquireItem: (ItemTempl
         var text by remember { mutableStateOf("") }
 
         val filtered = items.filter { item ->
-            item.name.contains(text.lowercase())
+            item.name.lowercase().contains(text.lowercase())
         }
 
         OutlinedTextField(
