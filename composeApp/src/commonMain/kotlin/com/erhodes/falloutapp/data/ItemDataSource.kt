@@ -582,7 +582,7 @@ object ItemDataSource {
         )
         itemMap[5009] = ItemTemplate(
             name = "US Covert Operations Manual",
-            description = "Ghost",
+            description = "Teaches Ghost",
             load = 1,
             id = 5008
         )

@@ -44,7 +44,8 @@ class CharacterViewModel(
     fun setActiveCharacter(character: Character) {
         activeCharacter = character
         scope.launch {
-            _activeCharacterState.update{ CharacterUiState(activeCharacter, activeCharacter.ownerId == loginRepository.userId) }
+            //todo the ownerId = uuid thing didn't work well on web for some reason. Fix that in the future.
+            _activeCharacterState.update{ CharacterUiState(activeCharacter, true) }
         }
 
     }

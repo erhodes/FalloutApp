@@ -217,6 +217,15 @@ fun WeaponPanel(
     ) {
         Column {
             Text(weapon.description)
+            if (weapon.passive.isNotEmpty()) {
+                Row {
+                    Text(
+                        text = "Passive: ",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(weapon.passive)
+                }
+            }
             Row {
                 Column(
                     modifier = Modifier.width(300.dp)
