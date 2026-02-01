@@ -40,7 +40,7 @@ class Character(
 //    val wheels = Car(3, CarTemplate(2, false))
 
     var inventoryWeight = 0
-    var inventoryLimit = strength + 10
+    var inventoryLimit = strength + 15
 
     val loadout = ArrayList<Item>()
     val inventory = ArrayList<Item>()

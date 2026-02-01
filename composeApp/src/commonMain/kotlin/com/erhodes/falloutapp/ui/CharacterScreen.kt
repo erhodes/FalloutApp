@@ -38,8 +38,8 @@ fun CharacterScreen(state: CharacterUiState,
                     onEquipItem: (Item) -> Unit,
                     onUnequipItem: (Item) -> Unit,
                     onDiscardItem: (Item) -> Unit,
-                    onIncreaseItem: (Item) -> Unit,
-                    onDecreaseItem: (Item) -> Unit,
+                    onIncreaseItem: (Item, Int) -> Unit,
+                    onDecreaseItem: (Item, Int) -> Unit,
                     onAddItem: () -> Unit
 ) {
     val character = state.character
@@ -151,8 +151,8 @@ fun CharacterScreen(state: CharacterUiState,
                 ItemPanel(
                     characterUiState = state,
                     item = item,
-                    onIncreaseItem = { onIncreaseItem(it) },
-                    onDecreaseItem = { onDecreaseItem(it) },
+                    onIncreaseItem = { i, count -> onIncreaseItem(i, count) },
+                    onDecreaseItem = { i, count -> onDecreaseItem(i, count) },
                     primaryButtonIcon = Res.drawable.backpack_24dp,
                     primaryButtonAction = { onUnequipItem(it) },
                     onDiscardItem = { onDiscardItem(it) }
@@ -173,8 +173,8 @@ fun CharacterScreen(state: CharacterUiState,
                 ItemPanel(
                     characterUiState = state,
                     item = item,
-                    onIncreaseItem = { onIncreaseItem(it) },
-                    onDecreaseItem = { onDecreaseItem(it) },
+                    onIncreaseItem = { i, count -> onIncreaseItem(i, count) },
+                    onDecreaseItem = { i, count -> onDecreaseItem(i, count) },
                     primaryButtonIcon = Res.drawable.work_24dp,
                     primaryButtonAction = { onEquipItem(it) },
                     onDiscardItem = { onDiscardItem(it) }
@@ -200,8 +200,8 @@ fun ItemPanel(
     primaryButtonIcon: DrawableResource,
     primaryButtonAction: (Item) -> Unit,
     onDiscardItem: (Item) -> Unit,
-    onIncreaseItem: (Item) -> Unit,
-    onDecreaseItem: (Item) -> Unit
+    onIncreaseItem: (Item, Int) -> Unit,
+    onDecreaseItem: (Item, Int) -> Unit
     ) {
     // needed to force recomposition
     @Suppress("UnusedVariable", "unused") val character = characterUiState.character
@@ -210,8 +210,8 @@ fun ItemPanel(
             StackableItemPanel(
                 item,
                 item.count,
-                increaseButton = { onIncreaseItem(item) },
-                decreaseButton = { onDecreaseItem(item) },
+                increaseButton = { onIncreaseItem(item, it) },
+                decreaseButton = { onDecreaseItem(item, it) },
                 buttonIcon = primaryButtonIcon,
                 buttonAction = { primaryButtonAction(item) },
                 secondaryButtonIcon = Icons.Filled.Delete,
@@ -220,10 +220,7 @@ fun ItemPanel(
         }
         is Weapon -> {
             WeaponPanel(
-                item,
-                item.ammo,
-                increaseButton = { onIncreaseItem(item) },
-                decreaseButton = { onDecreaseItem(item) },
+                weapon = item,
                 buttonIcon = primaryButtonIcon,
                 buttonAction = { primaryButtonAction(item) },
                 secondaryButtonIcon = Icons.Filled.Delete,
@@ -301,8 +298,8 @@ fun CharacterScreenPreview() {
             {},
             {},
             {},
-            {},
-            {},
+            { x, y -> },
+            { x, y ->},
             {}
         )
     }

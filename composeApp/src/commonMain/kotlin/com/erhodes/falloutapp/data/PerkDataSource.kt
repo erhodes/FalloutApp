@@ -75,7 +75,7 @@ object PerkDataSource {
         )
         perkMap[9] = Perk(
             name = "Zephyr",
-            description = "Increase the range of Storm weapons by 1.",
+            description = "Increase the range of Storm weapons by 2.",
             id = 9,
             StatRequirement(Stats.AGILITY, 2),
             SkillRequirement(Skills.GUNS, 5)

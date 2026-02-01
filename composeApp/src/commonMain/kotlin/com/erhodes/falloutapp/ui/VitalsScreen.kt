@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -88,18 +89,36 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
 
         if (editable) {
             var amount by remember { mutableStateOf("") }
-            OutlinedTextField(
-                value = amount,
-                onValueChange = { amount = it },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                label = { Text("Amount") }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Button(onClick = {
+                    val current = amount.toIntOrNull()
+                    amount = if (current == null) "1" else (current + 1).toString()
+                }) {
+                    Text("+")
+                }
+                OutlinedTextField(
+                    value = amount,
+                    onValueChange = { amount = it },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    label = { Text("Amount") },
+                    modifier = Modifier.width(100.dp)
+                )
+                Button(onClick = {
+                    val current = amount.toIntOrNull()
+                    amount = if (current == null) "1" else (current - 1).toString()
+                }) {
+                    Text("-")
+                }
+            }
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Button(
                     onClick = {
-                        onTakeDamage(amount.toInt())
+                        onTakeDamage(amount.toIntOrNull() ?: 0)
                         amount = ""
                     }
                 ) {
@@ -107,7 +126,7 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
                 }
                 Button(
                     onClick = {
-                        onHealDamage(amount.toInt())
+                        onHealDamage(amount.toIntOrNull() ?: 0)
                         amount = ""
                     }
                 ) {
@@ -115,7 +134,7 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
                 }
                 Button(
                     onClick = {
-                        onRepair(amount.toInt())
+                        onRepair(amount.toIntOrNull() ?: 0)
                         amount = ""
                     }
                 ) {

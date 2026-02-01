@@ -174,6 +174,6 @@ class CharacterViewModel(
     }
 
     fun getAllPerks(): Collection<Perk> {
-        return perkRepository.getAllPerks()
+        return perkRepository.getAllPerks().sortedBy { it.name }
     }
 }

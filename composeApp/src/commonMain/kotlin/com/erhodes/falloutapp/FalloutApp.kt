@@ -146,8 +146,8 @@ fun FalloutApp(
                     onEquipItem = { characterViewModel.equipItemToCharacter(it) },
                     onUnequipItem = { characterViewModel.unequipItemFromCharacter(it) },
                     onDiscardItem = { characterViewModel.removeItemFromActiveCharacter(it) },
-                    onIncreaseItem = { characterViewModel.increaseStackCountForActiveCharacter(it, 1) },
-                    onDecreaseItem = { characterViewModel.decreaseStackCountForActiveCharacter(it, 1) },
+                    onIncreaseItem = { item, count -> characterViewModel.increaseStackCountForActiveCharacter(item, count) },
+                    onDecreaseItem = { item, count -> characterViewModel.decreaseStackCountForActiveCharacter(item, count) },
                     onAddItem = {
                         navController.navigate(FalloutScreen.AddItemScreen.name)
                     }
