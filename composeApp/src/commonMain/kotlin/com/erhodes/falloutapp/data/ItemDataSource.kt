@@ -410,7 +410,7 @@ object ItemDataSource {
             name = "Jet",
             description = "Gain an additional AP every turn for 1 minute. You cannot use Push. Suffer 2 Fatigue.",
             load = 1,
-            tier = 1,
+            tier = 2,
             id = 2003
         )
         itemMap[2004] = ItemTemplate(
