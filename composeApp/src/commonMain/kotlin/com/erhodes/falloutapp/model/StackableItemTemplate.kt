@@ -4,7 +4,8 @@ class StackableItemTemplate(
     name: String,
     description: String,
     load: Int,
+    tier: Int,
     id: Int,
     override val max: Int
-) : ItemTemplate(name, description, load, id), StackableTemplate {
+) : ItemTemplate(name, description, load, tier, id), StackableTemplate {
 }

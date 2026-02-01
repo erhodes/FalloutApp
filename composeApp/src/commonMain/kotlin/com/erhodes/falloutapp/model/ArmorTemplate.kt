@@ -7,9 +7,10 @@ class ArmorTemplate(
     name: String,
     description: String,
     load: Int,
+    tier: Int,
     id: Int,
     val durability: Int,
     val toughness: Int
-    ): ItemTemplate(name,  description, load, id) {
+    ): ItemTemplate(name,  description, load, tier, id) {
 
 }

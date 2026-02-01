@@ -8,6 +8,7 @@ open class ItemTemplate(
     val name: String,
     val description: String,
     val load: Int,
+    val tier: Int,
     val id: Int
 ) {
 }
