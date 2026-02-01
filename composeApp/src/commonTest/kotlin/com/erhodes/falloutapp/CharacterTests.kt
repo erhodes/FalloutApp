@@ -3,6 +3,7 @@ package com.erhodes.falloutapp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.util.AppLogger
 import kotlin.test.Test
@@ -124,5 +125,29 @@ class CharacterTests {
         character.removeItem(armor)
         assertEquals(0, character.loadoutWeight)
         assertEquals(0, character.inventoryWeight)
+    }
+
+    @Test
+    fun stackCounts() {
+        val character = Character("Bob")
+        val caps = StackableItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_CAPS), 1)
+
+        assertEquals(1, caps.count)
+        character.addItemToInventory(caps)
+
+        character.decreaseStackCountForItem(caps, 1)
+        assertEquals(0, caps.count)
+
+        character.decreaseStackCountForItem(caps, 1)
+        assertEquals(0, caps.count)
+
+        // now for the weights
+        assertEquals(0, character.inventoryWeight)
+
+        character.increaseStackCountForItem(caps, 30)
+        assertEquals(1, character.inventoryWeight)
+
+        character.increaseStackCountForItem(caps, 50)
+        assertEquals(2, character.inventoryWeight)
     }
 }

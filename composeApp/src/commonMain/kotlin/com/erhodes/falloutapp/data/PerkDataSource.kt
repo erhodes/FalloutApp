@@ -170,5 +170,12 @@ object PerkDataSource {
             StatRequirement(Stats.CHARISMA, 2),
             SkillRequirement(Skills.SPEECH, 5)
         )
+        perkMap[24] = Perk(
+            name = "Wrecking Ball",
+            description = "Deal +0/0/1 damage when charging with a Windup weapon.",
+            id = 24,
+            StatRequirement(Stats.STRENGTH, 2),
+            SkillRequirement(Skills.MELEE, 5)
+        )
     }
 }

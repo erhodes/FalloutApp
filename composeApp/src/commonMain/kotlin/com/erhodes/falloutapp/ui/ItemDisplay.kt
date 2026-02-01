@@ -316,6 +316,7 @@ fun StackableItemPanel(
                     Text("+")
                 }
                 Button(
+                    enabled = count > 0,
                     onClick = decreaseButton
                 ) {
                     Text("-")

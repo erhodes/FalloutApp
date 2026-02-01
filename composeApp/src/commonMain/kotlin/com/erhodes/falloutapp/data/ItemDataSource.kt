@@ -112,7 +112,7 @@ object ItemDataSource {
         )
         itemMap[8] = WeaponTemplate(
             name = "Mine",
-            "An improvised proximity explosive.",
+            description = "An improvised proximity explosive.",
             load = 2,
             id = 7,
             damage = listOf(2, 3, 4),
@@ -121,6 +121,29 @@ object ItemDataSource {
             range = 1,
             magazineSize = 0
         )
+        itemMap[19] = WeaponTemplate(
+            name = "Blade",
+            description = "A short, bladed weapon. Maybe a dagger or a knife.",
+            load = 1,
+            id = 19,
+            damage = listOf(1, 2, 3),
+            ability = listOf("", "", ""),
+            passive = "Nimble 1",
+            range = 1,
+            magazineSize = 0
+        )
+        itemMap[20] = WeaponTemplate(
+            name = "Throwing Knives",
+            description = "A simple knife, balanced for throwing.",
+            load = 1,
+            id = 20,
+            damage = listOf(1, 2, 3),
+            ability = listOf("", "", ""),
+            passive = "Recoverable",
+            range = 8,
+            magazineSize = 0
+        )
+
 
 
         // weapons
@@ -234,10 +257,32 @@ object ItemDataSource {
             range = 10,
             magazineSize = 3
         )
+        itemMap[21] = WeaponTemplate(
+            name = "Blade MK2",
+            description = "A real nasty looking blade.",
+            load = 1,
+            id = 21,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "", ""),
+            passive = "Nimble 1",
+            range = 1,
+            magazineSize = 0
+        )
+        itemMap[22] = WeaponTemplate(
+            name = "Throwing Knives MK2",
+            description = "A carbon fiber knife, balanced for throwing.",
+            load = 1,
+            id = 22,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "", ""),
+            passive = "Recoverable",
+            range = 8,
+            magazineSize = 0
+        )
 
         // Armors
         itemMap[1000] = ArmorTemplate(
-            "Leather",
+            "Leather Armor",
             "Layers of boiled leather provide adequate protection.",
             2,
             id = 1000,
@@ -270,6 +315,13 @@ object ItemDataSource {
         )
 
         // Currencies
+        itemMap[1995] = StackableItemTemplate(
+            name = "Irradiated Rations",
+            description = "A day's worth of preserved, lightly contaminated food. Inflicts 2 Rads if eaten.",
+            load = 1,
+            id = 1995,
+            max = 10
+        )
         itemMap[ID_RATIONS] = StackableItemTemplate(
             name = "Rations",
             description = "A day's worth of preserved, uncontaminated food.",
@@ -282,7 +334,7 @@ object ItemDataSource {
             description = "The lifeblood of the post-nuclear economy.",
             load = 1,
             id = ID_CAPS,
-            max = 10
+            max = 50
         )
         itemMap[1998] = StackableItemTemplate(
             name = "Medical Supplies",

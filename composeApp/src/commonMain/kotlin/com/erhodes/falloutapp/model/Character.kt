@@ -157,12 +157,14 @@ class Character(
     }
 
     fun decreaseStackCountForItem(item: Item, count: Int) {
-        if (inventory.contains(item)) {
-            (item as StackableItem).count-=count
-            recalculateInventoryLoad()
-        } else if (loadout.contains(item)) {
-            (item as StackableItem).count-=count
-            recalculateLoadoutLoad()
+        if (item is StackableItem && item.count - count >= 0) {
+            if (inventory.contains(item)) {
+                item.count-=count
+                recalculateInventoryLoad()
+            } else if (loadout.contains(item)) {
+                item.count-=count
+                recalculateLoadoutLoad()
+            }
         }
     }
 
