@@ -32,7 +32,7 @@ object ItemDataSource {
             ability = listOf("", "Suppress 1", "Suppress 2"),
             passive = "Burst",
             range = 15,
-            magazineSize = 6
+            magazineSize = 0
         )
         itemMap[1] = WeaponTemplate(
             name = "Frag Grenade",
@@ -56,7 +56,7 @@ object ItemDataSource {
             ability = listOf("", "Shred 2", "Shred 4"),
             passive = "Accurate",
             range = 20,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[3] = WeaponTemplate(
             name = "Laser Pistol",
@@ -68,7 +68,7 @@ object ItemDataSource {
             ability = listOf("", "Ignite 2", "Ignite 4"),
             passive = "",
             range = 10,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[4] = WeaponTemplate(
             name = "Laser Rifle",
@@ -80,7 +80,7 @@ object ItemDataSource {
             ability = listOf("", "Ignite 2", "Ignite 4"),
             passive = "Burst",
             range = 15,
-            magazineSize = 6
+            magazineSize = 0
         )
         itemMap[5] = WeaponTemplate(
             name = "Pistol",
@@ -92,7 +92,7 @@ object ItemDataSource {
             ability = listOf("", "Maim 1", "Maim 2"),
             passive = "",
             range = 15,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[6] = WeaponTemplate(
             name = "Shotgun",
@@ -104,7 +104,7 @@ object ItemDataSource {
             ability = listOf("", "Knockback 1", "Knockback 2"),
             passive = "Storm",
             range = 10,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[7] = WeaponTemplate(
             name = "Sledgehammer",
@@ -152,7 +152,7 @@ object ItemDataSource {
             ability = listOf("", "", ""),
             passive = "Recoverable",
             range = 8,
-            magazineSize = 0
+            magazineSize = 2
         )
 
 
@@ -168,7 +168,7 @@ object ItemDataSource {
             ability = listOf("", "Suppress 2", "Suppress 3"),
             passive = "Burst",
             range = 15,
-            magazineSize = 6
+            magazineSize = 0
         )
         itemMap[10] = WeaponTemplate(
             name = "Plasma Grenade",
@@ -192,7 +192,7 @@ object ItemDataSource {
             ability = listOf("", "Shred 3", "Shred 5"),
             passive = "Accurate",
             range = 20,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[12] = WeaponTemplate(
             name = "Laser Pistol MK 2",
@@ -204,7 +204,7 @@ object ItemDataSource {
             ability = listOf("", "Ignite 3", "Ignite 5"),
             passive = "",
             range = 10,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[13] = WeaponTemplate(
             name = "Laser Rifle MK2",
@@ -216,7 +216,7 @@ object ItemDataSource {
             ability = listOf("", "Ignite 3", "Ignite 5"),
             passive = "Burst",
             range = 15,
-            magazineSize = 6
+            magazineSize = 0
         )
         itemMap[14] = WeaponTemplate(
             name = "Pistol MK2",
@@ -228,7 +228,7 @@ object ItemDataSource {
             ability = listOf("", "Maim 1", "Maim 2"),
             passive = "",
             range = 15,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[15] = WeaponTemplate(
             name = "Combat Shotgun",
@@ -240,7 +240,7 @@ object ItemDataSource {
             ability = listOf("", "Knockback 2", "Knockback 3"),
             passive = "Storm",
             range = 10,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[16] = WeaponTemplate(
             name = "Super Sledge",
@@ -276,7 +276,7 @@ object ItemDataSource {
             ability = listOf("", "Suppress 2", "Suppress 3"),
             passive = "Heavy, Burst, Burst Only",
             range = 10,
-            magazineSize = 3
+            magazineSize = 0
         )
         itemMap[21] = WeaponTemplate(
             name = "Blade MK2",
@@ -300,6 +300,18 @@ object ItemDataSource {
             ability = listOf("", "", ""),
             passive = "Recoverable",
             range = 8,
+            magazineSize = 2
+        )
+        itemMap[23] = WeaponTemplate(
+            name = "Shishkebab",
+            description = "A sword with a small propane flamethrower attached.",
+            load = 2,
+            tier = 2,
+            id = 23,
+            damage = listOf(2, 3, 4),
+            ability = listOf("", "Ignite 3", "Ignite 4"),
+            passive = "Windup",
+            range = 0,
             magazineSize = 0
         )
 
