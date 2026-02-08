@@ -15,7 +15,7 @@ class ItemViewModel: ViewModel(), KoinComponent {
     var currentTier by mutableStateOf(0)
         private set
 
-    fun setCurrentTier(tier: Int) {
+    fun selectCurrentTier(tier: Int) {
         currentTier = tier
     }
 

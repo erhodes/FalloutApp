@@ -157,7 +157,7 @@ fun FalloutApp(
                 AcquireItemScreen(
                     items = itemViewModel.getAvailableItems(),
                     selectedTier = itemViewModel.currentTier,
-                    onTierChanged = { itemViewModel.setCurrentTier(it) },
+                    onTierChanged = { itemViewModel.selectCurrentTier(it) },
                     onAcquireItem = {
                         characterViewModel.addNewItemToActiveCharacter(it)
                         navController.popBackStack()

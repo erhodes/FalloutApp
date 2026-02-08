@@ -1,6 +1,7 @@
 package com.erhodes.falloutapp
 
 import com.erhodes.falloutapp.data.ItemDataSource
+import com.erhodes.falloutapp.data.PerkDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.StackableItem
@@ -149,5 +150,14 @@ class CharacterTests {
 
         character.increaseStackCountForItem(caps, 50)
         assertEquals(2, character.inventoryWeight)
+    }
+
+    @Test
+    fun applyPerk() {
+        val character = Character("Bob")
+
+        assertEquals(6, character.speed)
+        character.gainPerk(PerkDataSource.getPerkById(12))
+        assertEquals(8, character.speed)
     }
 }

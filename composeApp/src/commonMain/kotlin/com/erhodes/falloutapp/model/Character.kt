@@ -34,6 +34,7 @@ class Character(
     val loadoutLimit = strength + 4
     var equippedArmor: Armor? = null
 
+    var speed: Int = 6
 
 //    val transport = Ship(2, VehicleTemplate(1))
 //
@@ -75,10 +76,12 @@ class Character(
     fun gainPerk(perk: Perk) {
         if (perks.size > level) return
         perks.add(perk)
+        perk.effect?.apply(this)
     }
 
     fun removePerk(perk: Perk) {
         perks.remove(perk)
+        perk.effect?.remove(this)
     }
 
     fun addItemToInventory(item: Item) {

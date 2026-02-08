@@ -82,6 +82,7 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
     val character = characterState.character
     val editable = characterState.editable
     Column {
+        Text("Speed: ${character.speed}")
         Text("Damage Taken ${character.damageTaken}/${Character.MAX_STRESS}")
 
         Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
