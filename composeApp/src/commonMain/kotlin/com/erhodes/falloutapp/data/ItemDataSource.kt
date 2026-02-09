@@ -18,6 +18,8 @@ object ItemDataSource {
     const val ID_PA_RAIDER = 1001
     const val ID_BATTLE_STANDARD = 3000
     const val ID_ASSAULT_RIFLE = 0
+    const val ID_FRAG_GRENADE = 1
+    const val ID_THROWING_KNIVES = 20
     const val ID_RATIONS = 1996
     const val ID_CAPS = 1997
     init {
@@ -44,7 +46,7 @@ object ItemDataSource {
             ability = listOf("", "Suppress 2", "Suppress 3"),
             passive = "Blast 1, Consumable",
             range = 8,
-            magazineSize = 0
+            magazineSize = 1
         )
         itemMap[2] = WeaponTemplate(
             name = "Hunting Rifle",
@@ -152,7 +154,7 @@ object ItemDataSource {
             ability = listOf("", "", ""),
             passive = "Recoverable",
             range = 8,
-            magazineSize = 2
+            magazineSize = 3
         )
 
 
@@ -300,7 +302,7 @@ object ItemDataSource {
             ability = listOf("", "", ""),
             passive = "Recoverable",
             range = 8,
-            magazineSize = 2
+            magazineSize = 3
         )
         itemMap[23] = WeaponTemplate(
             name = "Shishkebab",

@@ -89,15 +89,14 @@ class CharacterRepository(
         saveCharacters()
     }
 
-    fun addAmmoToWeapon(weapon: Weapon, count: Int) {
-        if (weapon.ammo + count > weapon.magazineSize) return
-        weapon.ammo += count
+    fun addAmmoToWeapon(weapon: Weapon, count: Int, character: Character) {
+        character.increaseStackCountForItem(weapon, count)
         saveCharacters()
     }
 
-    fun removeAmmoFromWeapon(weapon: Weapon, count: Int) {
+    fun removeAmmoFromWeapon(weapon: Weapon, count: Int, character: Character) {
         if (weapon.ammo - count < 0) return
-        weapon.ammo -= count
+        character.decreaseStackCountForItem(weapon, count)
         saveCharacters()
     }
 

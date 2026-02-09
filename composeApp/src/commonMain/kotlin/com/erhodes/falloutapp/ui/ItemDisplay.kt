@@ -204,6 +204,9 @@ fun ArmorDisplay(
 @Composable
 fun WeaponPanel(
     weapon: Weapon,
+    ammo: Int,
+    increaseButton: (Int) -> Unit,
+    decreaseButton: (Int) -> Unit,
     buttonIcon: DrawableResource,
     buttonAction: () -> Unit,
     secondaryButtonIcon: ImageVector? = null,
@@ -263,25 +266,34 @@ fun WeaponPanel(
                     }
                 }
             }
-            // Trying without ammo loading being a thing
-//            Row {
-//                if (weapon.magazineSize > 0) {
-//                    Text(
-//                        modifier = Modifier.padding(horizontal = 10.dp),
-//                        text = "Ammo $ammo/${weapon.magazineSize}"
-//                    )
-//                    Button(
-//                        onClick = increaseButton
-//                    ) {
-//                        Text("+")
-//                    }
-//                    Button(
-//                        onClick = decreaseButton
-//                    ) {
-//                        Text("-")
-//                    }
-//                }
-//            }
+            if (weapon.magazineSize > 0) {
+                Row {
+                    var textValue by remember { mutableStateOf("1") }
+                    val amount = textValue.toIntOrNull() ?: 1
+                    Text(
+                        modifier = Modifier.padding(horizontal = 10.dp),
+                        text = "Quantity $ammo. Up to ${weapon.magazineSize} per Load"
+                    )
+                    Button(
+                        onClick = { increaseButton(amount) }
+                    ) {
+                        Text("+")
+                    }
+                    OutlinedTextField(
+                        value = textValue,
+                        onValueChange = { textValue = it },
+                        modifier = Modifier.width(70.dp),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        singleLine = true
+                    )
+                    Button(
+                        enabled = ammo > 0,
+                        onClick = { decreaseButton(amount) }
+                    ) {
+                        Text("-")
+                    }
+                }
+            }
         }
     }
 }
@@ -346,10 +358,14 @@ fun WeaponPanelPreview() {
     FalloutAppTheme {
         WeaponPanel(
             weapon = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0),
+            ammo = 0,
+            increaseButton = {},
+            decreaseButton = {},
             buttonIcon = Res.drawable.enterprise_off_24dp,
             buttonAction = {},
             secondaryButtonIcon = Icons.Filled.Delete,
-            secondaryButtonAction = {})
+            secondaryButtonAction = {}
+        )
     }
 }
 

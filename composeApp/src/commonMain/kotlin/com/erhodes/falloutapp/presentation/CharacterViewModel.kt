@@ -106,12 +106,12 @@ class CharacterViewModel(
     }
 
     fun addAmmoToWeapon(weapon: Weapon, count: Int) {
-        repo.addAmmoToWeapon(weapon, count)
+        repo.addAmmoToWeapon(weapon, count, activeCharacter)
         updateActiveCharacter()
     }
 
     fun removeAmmoFromWeapon(weapon: Weapon, count: Int) {
-        repo.removeAmmoFromWeapon(weapon, count)
+        repo.removeAmmoFromWeapon(weapon, count, activeCharacter)
         updateActiveCharacter()
     }
 

@@ -208,8 +208,8 @@ fun ItemPanel(
     when (item) {
         is StackableItem -> {
             StackableItemPanel(
-                item,
-                item.count,
+                stackable = item,
+                count = item.count,
                 increaseButton = { onIncreaseItem(item, it) },
                 decreaseButton = { onDecreaseItem(item, it) },
                 buttonIcon = primaryButtonIcon,
@@ -221,6 +221,9 @@ fun ItemPanel(
         is Weapon -> {
             WeaponPanel(
                 weapon = item,
+                ammo = item.ammo,
+                increaseButton = { onIncreaseItem(item, it) },
+                decreaseButton = { onDecreaseItem(item, it) },
                 buttonIcon = primaryButtonIcon,
                 buttonAction = { primaryButtonAction(item) },
                 secondaryButtonIcon = Icons.Filled.Delete,

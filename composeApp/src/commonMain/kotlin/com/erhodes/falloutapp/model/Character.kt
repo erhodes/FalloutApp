@@ -131,6 +131,34 @@ class Character(
 
     fun increaseStackCountForItem(item: Item, count: Int) {
         // if there was an ItemContainer class I could move the logic there, instead of managing these two arrays like this
+        if (item is Weapon) {
+            //todo obviously this is super hacky and needs to be refactored
+            var inLoadout = false
+            var limit: Int
+            if (inventory.contains(item)) {
+                limit = inventoryLimit
+            } else if (loadout.contains(item)) {
+                inLoadout = true
+                limit = loadoutLimit
+            } else {
+                return
+            }
+            val oldLoad = item.load
+            item.ammo += count
+            val loadDif = item.load - oldLoad
+
+            if (loadoutWeight + loadDif > limit) {
+                // too heavy!
+                item.ammo -= count
+                return
+            }
+
+            if (inLoadout) {
+                loadoutWeight += loadDif
+            } else {
+                inventoryWeight += loadDif
+            }
+        }
         if (item !is StackableItem) return
         var inLoadout = false
         var limit: Int
@@ -160,6 +188,16 @@ class Character(
     }
 
     fun decreaseStackCountForItem(item: Item, count: Int) {
+        //todo refactor this
+        if (item is Weapon && item.ammo - count >= 0) {
+            if (inventory.contains(item)) {
+                item.ammo-=count
+                recalculateInventoryLoad()
+            } else if (loadout.contains(item)) {
+                item.ammo-=count
+                recalculateLoadoutLoad()
+            }
+        }
         if (item is StackableItem && item.count - count >= 0) {
             if (inventory.contains(item)) {
                 item.count-=count

@@ -6,6 +6,5 @@ class StackableItemTemplate(
     load: Int,
     tier: Int,
     id: Int,
-    override val max: Int
-) : ItemTemplate(name, description, load, tier, id), StackableTemplate {
-}
+    val max: Int
+) : ItemTemplate(name, description, load, tier, id)

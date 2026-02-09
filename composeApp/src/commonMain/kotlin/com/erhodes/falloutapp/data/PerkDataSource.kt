@@ -119,7 +119,7 @@ object PerkDataSource {
         )
         perkMap[15] = Perk(
             name = "Locksmith",
-            description = "When lockpicking, you may 1/3/5 guesses.",
+            description = "When lockpicking, you have 1/3/5 guesses.",
             id = 15,
             effect = null,
             requirements = arrayOf(SkillRequirement(Skills.SABOTAGE, 5))
@@ -167,11 +167,11 @@ object PerkDataSource {
             requirements = arrayOf(StatRequirement(Stats.LUCK, 2))
         )
         perkMap[22] = Perk(
-            name = "Scavenger",
-            description = "Add 1/1/2 to Scavenge rolls.",
+            name = "Day Tripper",
+            description = "Chems in your system last twice as long as normal.",
             id = 22,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.PERCEPTION, 2))
+            requirements = arrayOf(StatRequirement(Stats.ENDURANCE, 2), SkillRequirement(Skills.SURVIVAL, 5))
         )
         perkMap[23] = Perk(
             name = "Inspirational",

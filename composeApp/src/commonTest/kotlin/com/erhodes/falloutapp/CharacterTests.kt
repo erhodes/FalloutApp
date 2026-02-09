@@ -153,6 +153,37 @@ class CharacterTests {
     }
 
     @Test
+    fun weaponStackCounts() {
+        val character = Character("Bob")
+        val grenades = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_FRAG_GRENADE), 1)
+        val knives = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_THROWING_KNIVES), 0)
+
+        assertEquals(1, grenades.ammo)
+        assertEquals(0, knives.ammo)
+
+        character.addItemToInventory(grenades)
+        character.addItemToInventory(knives)
+
+        assertEquals(1, character.inventoryWeight)
+
+        character.increaseStackCountForItem(grenades, 1)
+        assertEquals(2, grenades.ammo)
+        assertEquals(2, character.inventoryWeight)
+
+        character.increaseStackCountForItem(knives, 1)
+        assertEquals(1, knives.ammo)
+        assertEquals(3, character.inventoryWeight)
+
+        character.increaseStackCountForItem(knives, 1)
+        assertEquals(2, knives.ammo)
+        assertEquals(3, character.inventoryWeight)
+
+        character.increaseStackCountForItem(knives, 2)
+        assertEquals(4, knives.ammo)
+        assertEquals(4, character.inventoryWeight)
+    }
+
+    @Test
     fun applyPerk() {
         val character = Character("Bob")
 
