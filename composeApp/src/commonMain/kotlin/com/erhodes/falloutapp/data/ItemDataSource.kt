@@ -463,7 +463,7 @@ object ItemDataSource {
             id = 2008
         )
         itemMap[2009] = ItemTemplate(
-            name = "Rax-X",
+            name = "Rad-X",
             description = "Lower Radiation damage by 10. Lasts one hour.",
             load = 1,
             tier = 1,
@@ -540,6 +540,89 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 3009
+        )
+        itemMap[3010] = ItemTemplate(
+            name = "Ablative Plating",
+            description = "Adds 2 Toughness against a single attack",
+            load = 1,
+            tier = 1,
+            id = 3010
+        )
+        itemMap[3011] = ItemTemplate(
+            name = "Caltrops",
+            description = "Create difficult terrain in a Burst 1 area within range 8.",
+            load = 1,
+            tier = 1,
+            id = 3011
+        )
+        itemMap[3012] = StackableItemTemplate(
+            name = "Concussion Grenade",
+            description = "Range 8. Burst 1, Knockback 1",
+            load = 1,
+            tier = 1,
+            id = 3012,
+            max = 1
+        )
+        itemMap[3013] = StackableItemTemplate(
+            name = "Flashbang",
+            description = "Range 8. Burst 1, lowers enemy effective Perception by 2 until the end of your next turn.",
+            load = 1,
+            tier = 1,
+            id = 3013,
+            max = 1
+        )
+        itemMap[3014] = ItemTemplate(
+            name = "Holo Projector",
+            description = "Program this amazing Lightmaster Holo Projector to display any image you can imagine! It will then do so for one whole minute before burning out its lenses forever.",
+            load = 2,
+            tier = 1,
+            id = 3014
+        )
+        itemMap[3015] = StackableItemTemplate(
+            name = "Molotov Cocktail",
+            description = "Burst 1, create an area of hazardous terrain. Anyone starting in, or passing through, takes 1 damage and 1 Burn",
+            load = 1,
+            tier = 1,
+            id = 3015,
+            max = 1
+        )
+        itemMap[3016] = StackableItemTemplate(
+            name = "Perfume",
+            description = "For 1 day, gain advantage on any Charisma check made to influence a person who is close enough to smell you. Most people in the Wasteland do not smell good; you can be the exception!",
+            load = 1,
+            tier = 1,
+            id = 3016,
+            max = 3
+        )
+        itemMap[3017] = ItemTemplate(
+            name = "Repeller",
+            description = "Reaction: Knockback 1 all adjacent creatures.",
+            load = 1,
+            tier = 1,
+            id = 3017
+        )
+        itemMap[3018] = ItemTemplate(
+            name = "Screecher",
+            description = "A voice modulator that distorts the user’s voice in terrifying ways. Roll Charisma + Speech against all enemies within 10. Inflict Suppress 2/3/4 against them. The modulator burns out after a single use.",
+            load = 1,
+            tier = 1,
+            id = 3018
+        )
+        itemMap[3019] = StackableItemTemplate(
+            name = "Smoke Grenade",
+            description = "Create a Burst 1 cloud of obscuring smoke anywhere within 8.",
+            load = 1,
+            tier = 1,
+            id = 3019,
+            max = 1
+        )
+        itemMap[3020] = StackableItemTemplate(
+            name = "Vortex Grenade",
+            description = "Select a square within 8. All creatures within 3 of that square are pushed 1 towards it.",
+            load = 1,
+            tier = 1,
+            id = 3020,
+            max = 1
         )
 
         // Ammo
@@ -656,6 +739,14 @@ object ItemDataSource {
             id = 4013,
             max = 3
         )
+        itemMap[4014] = StackableItemTemplate(
+            name = "Fire Punch Attachment",
+            description = "A cannister of pyrophoric liquid that shatters when struck. Adds 2 Ignite to a melee weapon attack.",
+            load = 1,
+            tier = 1,
+            id = 4014,
+            max = 3
+        )
 
         // Magazines
         itemMap[5000] = ItemTemplate(
@@ -727,6 +818,13 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 5009
+        )
+        itemMap[5010] = ItemTemplate(
+            name = "US Army Power Armor Operating Manual",
+            description = "Teaches Power Armor Training",
+            load = 1,
+            tier = 1,
+            id = 5010
         )
     }
 }
