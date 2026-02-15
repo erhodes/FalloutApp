@@ -46,7 +46,7 @@ object ItemDataSource {
             ability = listOf("", "Suppress 2", "Suppress 3"),
             passive = "Blast 1, Consumable",
             range = 8,
-            magazineSize = 1
+            magazineSize = 2
         )
         itemMap[2] = WeaponTemplate(
             name = "Hunting Rifle",
@@ -182,7 +182,7 @@ object ItemDataSource {
             ability = listOf("", "Suppress 2", "Suppress 3"),
             passive = "Blast 1, Consumable",
             range = 8,
-            magazineSize = 0
+            magazineSize = 2
         )
         itemMap[11] = WeaponTemplate(
             name = "Sniper Rifle",
@@ -561,7 +561,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 3012,
-            max = 1
+            max = 2
         )
         itemMap[3013] = StackableItemTemplate(
             name = "Flashbang",
@@ -569,7 +569,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 3013,
-            max = 1
+            max = 2
         )
         itemMap[3014] = ItemTemplate(
             name = "Holo Projector",
@@ -584,7 +584,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 3015,
-            max = 1
+            max = 2
         )
         itemMap[3016] = StackableItemTemplate(
             name = "Perfume",
@@ -614,7 +614,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 3019,
-            max = 1
+            max = 2
         )
         itemMap[3020] = StackableItemTemplate(
             name = "Vortex Grenade",
@@ -622,7 +622,14 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 3020,
-            max = 1
+            max = 2
+        )
+        itemMap[3021] = ItemTemplate(
+            name = "Pip-Boy 2000",
+            description = "A wearable computer that grants advantage on all Analyze checks, as well as letting you store data and record audio. The VATS module applies 1 Vulnerable for each Insight when Analyzing a creature.",
+            load = 1,
+            tier = 2,
+            id = 3021
         )
 
         // Ammo
@@ -759,70 +766,70 @@ object ItemDataSource {
         itemMap[5001] = ItemTemplate(
             name = "Grognak the Barbarian: Zardak’s Revenge",
             description = "Teaches Followup",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5001
         )
         itemMap[5002] = ItemTemplate(
             name = "Guns and Bullets",
             description = "Teaches Cover Fire",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5002
         )
         itemMap[5003] = ItemTemplate(
             name = "Alaskan Sniper: A True American Tale",
             description = "Teaches Hindrance",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5003
         )
         itemMap[5004] = ItemTemplate(
             name = "Flee, Mortals!",
             description = "Teaches Sprinter",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5004
         )
         itemMap[5005] = ItemTemplate(
             name = "The Wire: The Complete History",
             description = "Teaches Frequent Flyer",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5005
         )
         itemMap[5006] = ItemTemplate(
             name = "Dean’s Electronics",
             description = "Teaches Hacker",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5006
         )
         itemMap[5007] = ItemTemplate(
             name = "Scout Handbook",
             description = "Teaches Lucky Find",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5007
         )
         itemMap[5008] = ItemTemplate(
             name = "Tumblers Today",
             description = "Teaches Locksmith",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5008
         )
         itemMap[5009] = ItemTemplate(
             name = "US Covert Operations Manual",
             description = "Teaches Ghost",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5009
         )
         itemMap[5010] = ItemTemplate(
             name = "US Army Power Armor Operating Manual",
             description = "Teaches Power Armor Training",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5010
         )
