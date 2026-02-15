@@ -268,7 +268,26 @@ fun WeaponPanel(
                         ) {
                             Text("$i", Modifier.weight(spacing))
                             Text("${weapon.damage[i]}", Modifier.weight(spacing))
-                            Text(weapon.ability[i], Modifier.weight(spacing))
+//                            Text(weapon.ability[i], Modifier.weight(spacing))
+                            var showAbilityPopup by remember { mutableStateOf(false) }
+                            Text(
+                                text = weapon.ability[i].title,
+                                modifier = Modifier.clickable { showAbilityPopup = true },
+                                color = MaterialTheme.colorScheme.primary,
+                                textDecoration = TextDecoration.Underline
+                            )
+                            if (showAbilityPopup) {
+                                AlertDialog(
+                                    onDismissRequest = { showAbilityPopup = false },
+                                    title = { Text(weapon.ability[i].title) },
+                                    text = { Text(weapon.ability[i].description) },
+                                    confirmButton = {
+                                        TextButton(onClick = { showAbilityPopup = false }) {
+                                            Text("OK")
+                                        }
+                                    }
+                                )
+                            }
                         }
                     }
                 }

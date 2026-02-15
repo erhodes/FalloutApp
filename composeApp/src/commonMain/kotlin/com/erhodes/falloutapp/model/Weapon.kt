@@ -12,7 +12,8 @@ open class Weapon(override val template: ItemTemplate, var ammo: Int): Item {
 
     @Transient
     val passive: List<Ability> = (template as WeaponTemplate).passive
-    val ability: List<String> = (template as WeaponTemplate).ability
+    @Transient
+    val ability: List<Ability> = (template as WeaponTemplate).ability
     val magazineSize: Int = (template as WeaponTemplate).magazineSize
     val range: Int = (template as WeaponTemplate).range
 

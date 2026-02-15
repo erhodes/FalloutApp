@@ -9,7 +9,7 @@ open class WeaponTemplate(
     tier: Int,
     id: Int,
     val damage: List<Int>,
-    val ability: List<String>,
+    val ability: List<Ability>,
     val passive: List<Ability>,
     val magazineSize: Int,
     val range: Int
