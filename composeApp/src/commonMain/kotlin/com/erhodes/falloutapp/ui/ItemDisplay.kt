@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +34,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Armor
@@ -40,12 +43,16 @@ import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.model.ability.Ability
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
+import falloutapp.composeapp.generated.resources.abilities
 import falloutapp.composeapp.generated.resources.enterprise_off_24dp
+import falloutapp.composeapp.generated.resources.passives
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -197,7 +204,13 @@ fun ArmorDisplay(
         secondaryButtonIcon = secondaryButtonIcon,
         secondaryButtonAction = secondaryButtonAction
     ) {
-        Text(armor.description)
+        Column {
+            Text(armor.description)
+            if (armor.abilities.isNotEmpty()) {
+                PassiveAbilityList(stringResource(Res.string.abilities), armor.abilities)
+            }
+        }
+
     }
 }
 
@@ -223,13 +236,7 @@ fun WeaponPanel(
         Column {
             Text(weapon.description)
             if (weapon.passive.isNotEmpty()) {
-                Row {
-                    Text(
-                        text = "Passive: ",
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(weapon.passive)
-                }
+                PassiveAbilityList(stringResource(Res.string.passives), weapon.passive)
             }
             Row {
                 Column(
@@ -347,6 +354,37 @@ fun StackableItemPanel(
                 ) {
                     Text("-")
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun PassiveAbilityList(title: String, abilities: List<Ability>) {
+    Row {
+        Text(
+            text = "$title: ",
+            fontWeight = FontWeight.Bold
+        )
+        abilities.forEach { ability ->
+            var showAbilityPopup by remember { mutableStateOf(false) }
+            Text(
+                text = ability.title + if (abilities.last() != ability) ", " else "",
+                modifier = Modifier.clickable { showAbilityPopup = true },
+                color = MaterialTheme.colorScheme.primary,
+                textDecoration = TextDecoration.Underline
+            )
+            if (showAbilityPopup) {
+                AlertDialog(
+                    onDismissRequest = { showAbilityPopup = false },
+                    title = { Text(ability.title) },
+                    text = { Text(ability.description) },
+                    confirmButton = {
+                        TextButton(onClick = { showAbilityPopup = false }) {
+                            Text("OK")
+                        }
+                    }
+                )
             }
         }
     }

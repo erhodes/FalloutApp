@@ -1,10 +1,24 @@
 package com.erhodes.falloutapp.data
 
 import com.erhodes.falloutapp.model.ArmorTemplate
-import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.WeaponTemplate
+import com.erhodes.falloutapp.model.ability.Accurate
+import com.erhodes.falloutapp.model.ability.Blast
+import com.erhodes.falloutapp.model.ability.Burst
+import com.erhodes.falloutapp.model.ability.BurstOnly
+import com.erhodes.falloutapp.model.ability.Complicated
+import com.erhodes.falloutapp.model.ability.Consumable
+import com.erhodes.falloutapp.model.ability.Heavy
+import com.erhodes.falloutapp.model.ability.Loud
+import com.erhodes.falloutapp.model.ability.Nimble
+import com.erhodes.falloutapp.model.ability.Powered
+import com.erhodes.falloutapp.model.ability.RadResistant
+import com.erhodes.falloutapp.model.ability.Recoverable
+import com.erhodes.falloutapp.model.ability.Storm
+import com.erhodes.falloutapp.model.ability.Trap
+import com.erhodes.falloutapp.model.ability.WindUp
 
 object ItemDataSource {
 
@@ -32,7 +46,7 @@ object ItemDataSource {
             id = 0,
             damage = listOf(1, 2, 3),
             ability = listOf("", "Suppress 1", "Suppress 2"),
-            passive = "Burst",
+            passive = listOf(Burst()),
             range = 15,
             magazineSize = 0
         )
@@ -44,7 +58,7 @@ object ItemDataSource {
             id = 1,
             damage = listOf(1, 2, 3),
             ability = listOf("", "Suppress 2", "Suppress 3"),
-            passive = "Blast 1, Consumable",
+            passive = listOf(Blast(1), Consumable()),
             range = 8,
             magazineSize = 2
         )
@@ -56,7 +70,7 @@ object ItemDataSource {
             id = 2,
             damage = listOf(1, 2, 3),
             ability = listOf("", "Shred 2", "Shred 4"),
-            passive = "Accurate",
+            passive = listOf(Accurate()),
             range = 20,
             magazineSize = 0
         )
@@ -68,7 +82,7 @@ object ItemDataSource {
             id = 3,
             damage = listOf(1, 2, 3),
             ability = listOf("", "Ignite 2", "Ignite 4"),
-            passive = "",
+            passive = listOf(),
             range = 10,
             magazineSize = 0
         )
@@ -80,7 +94,7 @@ object ItemDataSource {
             id = 4,
             damage = listOf(1, 2, 3),
             ability = listOf("", "Ignite 2", "Ignite 4"),
-            passive = "Burst",
+            passive = listOf(Burst()),
             range = 15,
             magazineSize = 0
         )
@@ -92,7 +106,7 @@ object ItemDataSource {
             id = 5,
             damage = listOf(1, 2, 3),
             ability = listOf("", "Maim 1", "Maim 2"),
-            passive = "",
+            passive = listOf(),
             range = 15,
             magazineSize = 0
         )
@@ -104,7 +118,7 @@ object ItemDataSource {
             id = 6,
             damage = listOf(1, 2, 3),
             ability = listOf("", "Knockback 1", "Knockback 2"),
-            passive = "Storm",
+            passive = listOf(Storm()),
             range = 10,
             magazineSize = 0
         )
@@ -116,7 +130,7 @@ object ItemDataSource {
             id = 7,
             damage = listOf(1, 2, 3),
             ability = listOf("Knockback 1", "Knockback 2", "Knockback 3"),
-            passive = "Windup",
+            passive = listOf(WindUp()),
             range = 1,
             magazineSize = 0
         )
@@ -128,7 +142,7 @@ object ItemDataSource {
             id = 8,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Suppress 2", "Suppress 3"),
-            passive = "Blast 1, Trap 1, Consumable",
+            passive = listOf(Blast(1), Trap(3), Consumable()),
             range = 1,
             magazineSize = 0
         )
@@ -140,7 +154,7 @@ object ItemDataSource {
             id = 19,
             damage = listOf(1, 2, 3),
             ability = listOf("", "", ""),
-            passive = "Nimble 1",
+            passive = listOf(Nimble(1)),
             range = 1,
             magazineSize = 0
         )
@@ -152,7 +166,7 @@ object ItemDataSource {
             id = 20,
             damage = listOf(1, 2, 3),
             ability = listOf("", "", ""),
-            passive = "Recoverable",
+            passive = listOf(Recoverable()),
             range = 8,
             magazineSize = 3
         )
@@ -168,7 +182,7 @@ object ItemDataSource {
             id = 9,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Suppress 2", "Suppress 3"),
-            passive = "Burst",
+            passive = listOf(Burst()),
             range = 15,
             magazineSize = 0
         )
@@ -180,7 +194,7 @@ object ItemDataSource {
             id = 10,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Suppress 2", "Suppress 3"),
-            passive = "Blast 1, Consumable",
+            passive = listOf(Blast(1), Consumable()),
             range = 8,
             magazineSize = 2
         )
@@ -192,7 +206,7 @@ object ItemDataSource {
             id = 11,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Shred 3", "Shred 5"),
-            passive = "Accurate",
+            passive = listOf(Accurate()),
             range = 20,
             magazineSize = 0
         )
@@ -204,7 +218,7 @@ object ItemDataSource {
             id = 12,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Ignite 3", "Ignite 5"),
-            passive = "",
+            passive = listOf(),
             range = 10,
             magazineSize = 0
         )
@@ -216,7 +230,7 @@ object ItemDataSource {
             id = 13,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Ignite 3", "Ignite 5"),
-            passive = "Burst",
+            passive = listOf(Burst()),
             range = 15,
             magazineSize = 0
         )
@@ -228,7 +242,7 @@ object ItemDataSource {
             id = 14,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Maim 1", "Maim 2"),
-            passive = "",
+            passive = listOf(),
             range = 15,
             magazineSize = 0
         )
@@ -240,7 +254,7 @@ object ItemDataSource {
             id = 15,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Knockback 2", "Knockback 3"),
-            passive = "Storm",
+            passive = listOf(Storm()),
             range = 10,
             magazineSize = 0
         )
@@ -252,7 +266,7 @@ object ItemDataSource {
             id = 16,
             damage = listOf(2, 3, 4),
             ability = listOf("Knockback 2", "Knockback 3", "Knockback 4"),
-            passive = "Windup",
+            passive = listOf(WindUp()),
             range = 1,
             magazineSize = 0
         )
@@ -264,7 +278,7 @@ object ItemDataSource {
             id = 17,
             damage = listOf(3, 4, 5),
             ability = listOf("", "Suppress 2", "Suppress 3"),
-            passive = "Blast 1, Trap 2, Consumable",
+            passive = listOf(Blast(1), Trap(3), Consumable()),
             range = 1,
             magazineSize = 0
         )
@@ -276,7 +290,7 @@ object ItemDataSource {
             id = 18,
             damage = listOf(3, 4, 5),
             ability = listOf("", "Suppress 2", "Suppress 3"),
-            passive = "Heavy, Burst, Burst Only",
+            passive = listOf(Heavy(), Burst(), BurstOnly()),
             range = 10,
             magazineSize = 0
         )
@@ -288,7 +302,7 @@ object ItemDataSource {
             id = 21,
             damage = listOf(2, 3, 4),
             ability = listOf("", "", ""),
-            passive = "Nimble 1",
+            passive = listOf(Nimble(1)),
             range = 1,
             magazineSize = 0
         )
@@ -300,7 +314,7 @@ object ItemDataSource {
             id = 22,
             damage = listOf(2, 3, 4),
             ability = listOf("", "", ""),
-            passive = "Recoverable",
+            passive = listOf(Recoverable()),
             range = 8,
             magazineSize = 3
         )
@@ -312,7 +326,7 @@ object ItemDataSource {
             id = 23,
             damage = listOf(2, 3, 4),
             ability = listOf("", "Ignite 3", "Ignite 4"),
-            passive = "Windup",
+            passive = listOf(Nimble(2)),
             range = 0,
             magazineSize = 0
         )
@@ -334,7 +348,8 @@ object ItemDataSource {
             tier = 1,
             id = 1001,
             durability = 4,
-            toughness = 1
+            toughness = 1,
+            abilities = listOf(Powered(), Loud(2), Complicated(2))
         )
         itemMap[1002] = ArmorTemplate(
             name = "Combat Armor",
@@ -352,7 +367,8 @@ object ItemDataSource {
             tier = 2,
             id = 1003,
             durability = 5,
-            toughness = 2
+            toughness = 2,
+            abilities = listOf(Powered(), RadResistant(2), Loud(2), Complicated(2))
         )
 
         // Currencies

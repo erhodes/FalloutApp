@@ -78,6 +78,9 @@
     <string name="search">Search</string>
     <string name="acquire">Acquire</string>
 
+    <string name="abilities">Abilities</string>
+    <string name="passives">Passives</string>
+
     <!-- Server specific strings -->
     <string name="user_list">User List</string>
     <string name="login">Login</string>

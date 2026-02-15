@@ -156,8 +156,8 @@ fun FalloutApp(
             composable(route = FalloutScreen.AddItemScreen.name) {
                 AcquireItemScreen(
                     items = itemViewModel.getAvailableItems(),
-                    selectedTier = itemViewModel.currentTier,
-                    onTierChanged = { itemViewModel.selectCurrentTier(it) },
+                    selectedTier = itemViewModel.filterTier,
+                    onTierChanged = { itemViewModel.updateFilterTier(it) },
                     onAcquireItem = {
                         characterViewModel.addNewItemToActiveCharacter(it)
                         navController.popBackStack()

@@ -12,17 +12,17 @@ import org.koin.core.component.inject
 class ItemViewModel: ViewModel(), KoinComponent {
     private val repo: ItemRepository by inject()
 
-    var currentTier by mutableStateOf(0)
+    var filterTier by mutableStateOf(0)
         private set
 
-    fun selectCurrentTier(tier: Int) {
-        currentTier = tier
+    fun updateFilterTier(tier: Int) {
+        filterTier = tier
     }
 
     fun getAvailableItems(): Collection<ItemTemplate> {
 
-        val items = if (currentTier > 0) {
-            repo.getAllItemTemplates().filter { it.tier == currentTier }
+        val items = if (filterTier > 0) {
+            repo.getAllItemTemplates().filter { it.tier == filterTier }
         } else {
             repo.getAllItemTemplates()
         }

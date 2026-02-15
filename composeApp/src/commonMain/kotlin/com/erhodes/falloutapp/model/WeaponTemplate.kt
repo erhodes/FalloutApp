@@ -1,5 +1,7 @@
 package com.erhodes.falloutapp.model
 
+import com.erhodes.falloutapp.model.ability.Ability
+
 open class WeaponTemplate(
     name: String,
     description: String,
@@ -8,7 +10,7 @@ open class WeaponTemplate(
     id: Int,
     val damage: List<Int>,
     val ability: List<String>,
-    val passive: String,
+    val passive: List<Ability>,
     val magazineSize: Int,
     val range: Int
 ): ItemTemplate(name, description, load, tier, id)
