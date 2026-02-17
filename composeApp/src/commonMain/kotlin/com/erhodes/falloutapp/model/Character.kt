@@ -96,8 +96,8 @@ class Character(
 
     fun removeItem(item: Item) {
         if (item == equippedArmor) {
-            loadoutWeight -= 1
-            equippedArmor == null
+            loadoutWeight -= (item as Armor).getEquippedWeight()
+            equippedArmor = null
         } else if (inventory.contains(item)) {
             removeItemFromInventory(item)
         } else if (loadout.contains(item)) {
@@ -192,32 +192,33 @@ class Character(
         if (item is Weapon && item.ammo - count >= 0) {
             if (inventory.contains(item)) {
                 item.ammo-=count
-                recalculateInventoryLoad()
+                recalculateInventoryWeight()
             } else if (loadout.contains(item)) {
                 item.ammo-=count
-                recalculateLoadoutLoad()
+                recalculateLoadoutWeight()
             }
         }
         if (item is StackableItem && item.count - count >= 0) {
             if (inventory.contains(item)) {
                 item.count-=count
-                recalculateInventoryLoad()
+                recalculateInventoryWeight()
             } else if (loadout.contains(item)) {
                 item.count-=count
-                recalculateLoadoutLoad()
+                recalculateLoadoutWeight()
             }
         }
     }
 
-    private fun recalculateLoadoutLoad() {
+    private fun recalculateLoadoutWeight() {
         var weight = 0
         loadout.forEach {
             weight+=it.load
         }
+        equippedArmor?.let { weight+=it.getEquippedWeight() }
         loadoutWeight = weight
     }
 
-    private fun recalculateInventoryLoad() {
+    private fun recalculateInventoryWeight() {
         var weight = 0
         inventory.forEach {
             weight+=it.load
@@ -230,13 +231,13 @@ class Character(
         if (equippedArmor != null) {
             return
         }
-        loadoutWeight += 1
+        loadoutWeight += armor.getEquippedWeight()
         equippedArmor = armor
         removeItemFromInventory(armor)
     }
 
     private fun unequipArmor(armor: Armor) {
-        loadoutWeight -= 1
+        loadoutWeight -= armor.getEquippedWeight()
         equippedArmor = null
         addItemToInventory(armor)
     }

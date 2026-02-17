@@ -102,6 +102,30 @@ class CharacterTests {
     }
 
     @Test
+    fun armorAndCaps() {
+        val character = Character("Bob")
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
+        val caps = StackableItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_CAPS), 1)
+
+        assertEquals(0, character.loadoutWeight)
+        assertEquals(0, character.inventoryWeight)
+
+        character.addItemToInventory(armor)
+        character.addItemToInventory(caps)
+        assertEquals(0, character.loadoutWeight)
+        assertEquals(armor.load + caps.load, character.inventoryWeight)
+
+        character.equipItem(armor)
+        assertEquals(armor.getEquippedWeight(), character.loadoutWeight)
+        character.equipItem(caps)
+        assertEquals(armor.getEquippedWeight() + caps.load, character.loadoutWeight)
+        assertEquals(0, character.inventoryWeight)
+
+        character.decreaseStackCountForItem(caps, 1)
+        assertEquals(armor.getEquippedWeight(), character.loadoutWeight)
+    }
+
+    @Test
     fun addAndRemoveItems() {
         val character = Character("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
@@ -166,8 +190,8 @@ class CharacterTests {
 
         assertEquals(1, character.inventoryWeight)
 
-        character.increaseStackCountForItem(grenades, 1)
-        assertEquals(2, grenades.ammo)
+        character.increaseStackCountForItem(grenades, 2)
+        assertEquals(3, grenades.ammo)
         assertEquals(2, character.inventoryWeight)
 
         character.increaseStackCountForItem(knives, 1)

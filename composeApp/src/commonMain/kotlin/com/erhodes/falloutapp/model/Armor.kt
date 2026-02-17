@@ -16,4 +16,8 @@ class Armor(override val template: ItemTemplate, var damageTaken: Int): Item {
 
     @Transient
     val abilities: List<Ability> = (template as ArmorTemplate).abilities
+
+    fun getEquippedWeight(): Int {
+        return 1
+    }
 }
