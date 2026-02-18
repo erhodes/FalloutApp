@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.network
 
+import com.erhodes.falloutapp.data.DataManager
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -13,6 +14,7 @@ fun createHttpClient(hostAddress: String) = HttpClient {
             isLenient = true
             coerceInputValues = true
             ignoreUnknownKeys = true
+            serializersModule = DataManager.serializerModule
         })
     }
     defaultRequest {

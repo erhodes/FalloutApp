@@ -23,16 +23,7 @@ class CharacterDataSource(
     val kStore = store
 
     val json: Json = Json {
-        serializersModule = SerializersModule {
-            contextual(ItemTemplateSerializer)
-            contextual(PerkSerializer)
-            polymorphic(Item::class){
-                subclass(BasicItem::class)
-                subclass(Armor::class)
-                subclass(StackableItem::class)
-                subclass(Weapon::class)
-            }
-        }
+        serializersModule = DataManager.serializerModule
     }
 
     fun saveCharacters(characters: List<Character>) {

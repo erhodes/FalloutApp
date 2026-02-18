@@ -45,8 +45,13 @@ class CharacterRepository(
         saveCharacters()
 	}
 
-    fun addCharacters(characters: List<Character>) {
-        this.characters.addAll(characters)
+    fun addCharacters(newCharacters: List<Character>) {
+        // only one character per player
+        newCharacters.forEach { newChar ->
+            if (characters.none() { it.ownerId == newChar.ownerId }) {
+                characters.add(newChar)
+            }
+        }
         saveCharacters()
     }
 
