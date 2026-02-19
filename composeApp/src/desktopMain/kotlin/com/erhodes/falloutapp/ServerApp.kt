@@ -56,7 +56,8 @@ fun ServerApp(
                 val groups by userViewModel.userCharacterGroups.collectAsState()
                 UserListScreen(
                     users = users,
-                    groups = groups
+                    groups = groups,
+                    onDeleteClicked = { characterViewModel.onDeleteCharacterClicked(it) }
                 )
             }
         }

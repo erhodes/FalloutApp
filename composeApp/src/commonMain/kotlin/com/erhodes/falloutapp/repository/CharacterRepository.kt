@@ -48,9 +48,12 @@ class CharacterRepository(
     fun addCharacters(newCharacters: List<Character>) {
         // only one character per player
         newCharacters.forEach { newChar ->
-            if (characters.none() { it.ownerId == newChar.ownerId }) {
-                characters.add(newChar)
+            characters.forEach { existingChar ->
+                if (existingChar.ownerId == newChar.ownerId) {
+                    characters.remove(existingChar)
+                }
             }
+            characters.add(newChar)
         }
         saveCharacters()
     }

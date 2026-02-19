@@ -15,7 +15,7 @@ import com.erhodes.falloutapp.presentation.UserCharacterGroup
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun UserListScreen(users: List<User>, groups: List<UserCharacterGroup>) {
+fun UserListScreen(users: List<User>, groups: List<UserCharacterGroup>, onDeleteClicked: (Character) -> Unit) {
     Column {
         Text("User List")
         users.forEach {
@@ -23,10 +23,18 @@ fun UserListScreen(users: List<User>, groups: List<UserCharacterGroup>) {
         }
         Spacer(modifier = Modifier.height(8.dp))
 
+        Text(
+            text = "Active Characters",
+            style = MaterialTheme.typography.displaySmall
+        )
         groups.forEach {
-            Text("User: ${it.userName}")
             it.characters.forEach { char ->
                 Text("Character: ${char.name}")
+                CharacterSelector(
+                    character = char,
+                    onSelect = {},
+                    onDeleteClicked = { onDeleteClicked(char) }
+                )
             }
         }
 
@@ -46,7 +54,6 @@ fun UserDetail(user: User) {
         )
         Text("(${user.uuid})")
     }
-
 }
 
 @Preview
@@ -59,5 +66,9 @@ fun UserListScreenPreview() {
     val characters = listOf(
         Character(name = "Alice", ownerId = "1")
     )
-    UserListScreen(users = users, arrayListOf(UserCharacterGroup("Alice", characters)))
+    UserListScreen(
+        users = users,
+        groups = arrayListOf(UserCharacterGroup("Alice", characters)),
+        onDeleteClicked = {}
+    )
 }
