@@ -298,7 +298,7 @@ object ItemDataSource {
             damage = listOf(3, 4, 5),
             ability = listOf(NoAbility, Suppress(2), Suppress(3)),
             passive = listOf(Heavy(), Burst(), BurstOnly()),
-            range = 10,
+            range = 15,
             magazineSize = 0
         )
         itemMap[21] = WeaponTemplate(
@@ -422,12 +422,13 @@ object ItemDataSource {
 
         // Chems
 
-        itemMap[2000] = ItemTemplate(
+        itemMap[2000] = StackableItemTemplate(
             name = "Stimpak",
             description = "A medicinal chem. Heals 2 damage.",
             load = 1,
             tier = 1,
-            id = 2000
+            id = 2000,
+            max = 1
         )
         itemMap[2001] = ItemTemplate(
             name = "Super Stimpak",
@@ -603,7 +604,7 @@ object ItemDataSource {
         )
         itemMap[3015] = StackableItemTemplate(
             name = "Molotov Cocktail",
-            description = "Burst 1, create an area of hazardous terrain. Anyone starting in, or passing through, takes 1 damage and 1 Burn",
+            description = "Within range 8, create a Burst 1 area of hazardous terrain. Anyone starting in, or passing through, takes 1 damage and 1 Burn",
             load = 1,
             tier = 1,
             id = 3015,
@@ -619,7 +620,7 @@ object ItemDataSource {
         )
         itemMap[3017] = ItemTemplate(
             name = "Repeller",
-            description = "Reaction: Knockback 1 all adjacent creatures.",
+            description = "Consumable. Reaction: Knockback 1 all adjacent creatures.",
             load = 1,
             tier = 1,
             id = 3017
@@ -687,7 +688,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4003,
-            max = 3
+            max = 10
         )
         itemMap[4004] = StackableItemTemplate(
             name = "Blade Attachment",
@@ -695,7 +696,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4004,
-            max = 3
+            max = 10
         )
         itemMap[4005] = StackableItemTemplate(
             name = "Breach Shells",
@@ -703,7 +704,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4005,
-            max = 3
+            max = 10
         )
         itemMap[4006] = StackableItemTemplate(
             name = "Dragon's Breath Shells",
@@ -711,7 +712,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4006,
-            max = 3
+            max = 10
         )
         itemMap[4007] = StackableItemTemplate(
             name = "Gamma Wave Cell",
@@ -719,7 +720,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4007,
-            max = 3
+            max = 10
         )
         itemMap[4008] = StackableItemTemplate(
             name = "High Energy Cell",
@@ -727,7 +728,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4008,
-            max = 3
+            max = 10
         )
         itemMap[4009] = StackableItemTemplate(
             name = "High Impact 5.56 Rounds",
@@ -735,7 +736,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4009,
-            max = 3
+            max = 10
         )
         itemMap[4010] = StackableItemTemplate(
             name = "Incendiary 5.56 Rounds",
@@ -743,7 +744,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4010,
-            max = 3
+            max = 10
         )
         itemMap[4011] = StackableItemTemplate(
             name = "Overcharged Cell",
@@ -751,7 +752,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4011,
-            max = 3
+            max = 10
         )
         itemMap[4012] = StackableItemTemplate(
             name = "Slug Shells",
@@ -759,7 +760,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4012,
-            max = 3
+            max = 10
         )
         itemMap[4013] = StackableItemTemplate(
             name = "Shrieker 5.56 Rounds",
@@ -767,7 +768,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4013,
-            max = 3
+            max = 10
         )
         itemMap[4014] = StackableItemTemplate(
             name = "Fire Punch Attachment",
@@ -775,14 +776,14 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4014,
-            max = 3
+            max = 10
         )
 
         // Magazines
         itemMap[5000] = ItemTemplate(
             name = "Tesla Science Issue 12: Maximum Burn",
             description = "Teaches Incinerator",
-            load = 1,
+            load = 0,
             tier = 1,
             id = 5000
         )
