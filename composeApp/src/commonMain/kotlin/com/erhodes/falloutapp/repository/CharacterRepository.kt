@@ -167,6 +167,11 @@ class CharacterRepository(
         saveCharacters()
     }
 
+    fun modifyFearForCharacter(amount: Int, character: Character) {
+        character.modifyFear(amount)
+        saveCharacters()
+    }
+
     private fun saveCharacters() {
         dataSource.saveCharacters(characters)
     }

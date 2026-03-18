@@ -19,7 +19,7 @@ class Character(
 ) {
 
     companion object {
-        const val MAX_STRESS = 5
+        const val MAX_STRESS = 10
     }
 
     var level = 1
@@ -29,6 +29,7 @@ class Character(
     var stress = 0
     var radiation = 0
     var fatigue = 0
+    var fear = 0
 
     var loadoutWeight = 0
     val loadoutLimit = strength + 4
@@ -299,6 +300,24 @@ class Character(
         if (radiation + amount < 0) return
         radiation += amount
         fatigue = max(fatigue, getMinimumFatigue())
+    }
+
+    fun modifyFear(amount: Int) {
+        if (fear + amount < 0) return
+        fear += amount
+    }
+
+    fun getCourage(): Int {
+        return intelligence + getArmorToughness()
+    }
+
+    fun getFearLevel(): FearLevel {
+        return when {
+            fear < getCourage() -> FearLevel.STEADY
+            fear < getCourage() * 2 -> FearLevel.SHAKEN
+            fear < getCourage() * 3 -> FearLevel.PANICKED
+            else -> FearLevel.BROKEN
+        }
     }
 
     fun qualifiesForPerk(perk: Perk): Boolean {

@@ -4,6 +4,7 @@ import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.data.PerkDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.FearLevel
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.util.AppLogger
@@ -214,5 +215,36 @@ class CharacterTests {
         assertEquals(6, character.speed)
         character.gainPerk(PerkDataSource.getPerkById(12))
         assertEquals(8, character.speed)
+    }
+
+    @Test
+    fun addFear() {
+        val character = Character("Bob")
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
+
+        assertEquals(0, character.fear)
+        assertEquals(FearLevel.STEADY, character.getFearLevel())
+        assertEquals(1, character.getCourage())
+
+        character.modifyFear(1)
+        assertEquals(1, character.fear)
+        assertEquals(FearLevel.SHAKEN, character.getFearLevel())
+
+        character.addItemToInventory(armor)
+        character.equipItem(armor)
+        assertEquals(2, character.getCourage())
+        assertEquals(FearLevel.STEADY, character.getFearLevel())
+
+        character.modifyFear(1)
+        assertEquals(2, character.fear)
+        assertEquals(FearLevel.SHAKEN, character.getFearLevel())
+
+        character.modifyFear(2)
+        assertEquals(4, character.fear)
+        assertEquals(FearLevel.PANICKED, character.getFearLevel())
+
+        character.modifyFear(2)
+        assertEquals(6, character.fear)
+        assertEquals(FearLevel.BROKEN, character.getFearLevel())
     }
 }

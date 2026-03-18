@@ -7,10 +7,12 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.FearLevel
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -25,6 +27,7 @@ fun VitalsScreen(
     onHealDamage: (Int) -> Unit,
     onRepair: (Int) -> Unit,
     onModifyStress: (Int) -> Unit,
+    onModifyFear: (Int) -> Unit,
     onModifyFatigue: (Int) -> Unit,
     onModifyRadiation: (Int) -> Unit
 ) {
@@ -48,6 +51,7 @@ fun VitalsScreen(
                     SecondaryVitalsPanel(
                         characterState = characterState,
                         onModifyStress = onModifyStress,
+                        onModifyFear = onModifyFear,
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
                     )
@@ -65,6 +69,7 @@ fun VitalsScreen(
                     SecondaryVitalsPanel(
                         characterState = characterState,
                         onModifyStress = onModifyStress,
+                        onModifyFear = onModifyFear,
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
                     )
@@ -150,6 +155,7 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
 fun SecondaryVitalsPanel(
     characterState: CharacterUiState,
     onModifyStress: (Int) -> Unit,
+    onModifyFear: (Int) -> Unit,
     onModifyFatigue: (Int) -> Unit,
     onModifyRadiation: (Int) -> Unit
     ) {
@@ -165,6 +171,23 @@ fun SecondaryVitalsPanel(
                 PlusMinusButtons(
                     onIncrease = { onModifyStress(1) },
                     onDecrease = { onModifyStress(-1) }
+                )
+            }
+        }
+        Row {
+            Text(
+                text = "${stringResource(Res.string.fear)}: ${character.fear}  ${stringResource(Res.string.courage)}: ${character.getCourage()}",
+                color = when (character.getFearLevel()) {
+                    FearLevel.STEADY -> MaterialTheme.colorScheme.onSurface
+                    FearLevel.SHAKEN -> MaterialTheme.colorScheme.secondary
+                    FearLevel.PANICKED -> MaterialTheme.colorScheme.error
+                    FearLevel.BROKEN -> Color.Green
+                },
+                modifier = Modifier.fillMaxWidth(0.2f))
+            if (editable) {
+                PlusMinusButtons(
+                    onIncrease = { onModifyFear(1) },
+                    onDecrease = { onModifyFear(-1) }
                 )
             }
         }
@@ -223,6 +246,7 @@ fun VitalsScreenPreview() {
             {},
             {},
             {},
+            {},
             {}
         )
     }
@@ -239,6 +263,7 @@ fun VitalsScreenPreviewNonEditable() {
             {},
             {},
             {},
+            {},
             {}
         )
     }
@@ -250,6 +275,7 @@ fun VitalsScreenPreviewWide() {
     FalloutAppTheme {
         VitalsScreen(
             CharacterUiState(Character("Tom")),
+            {},
             {},
             {},
             {},

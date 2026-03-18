@@ -135,6 +135,7 @@ fun FalloutApp(
                     onHealDamage = { characterViewModel.onHealCharacterClicked(it) },
                     onRepair = { characterViewModel.onRepairArmorClicked(it) },
                     onModifyStress = { characterViewModel.onModifyStressClicked(it) },
+                    onModifyFear = { characterViewModel.onModifyFearClicked(it) },
                     onModifyFatigue = { characterViewModel.onModifyFatigueClicked(it) },
                     onModifyRadiation = { characterViewModel.onModifyRadiationClicked(it) },
                     onGainMilestone = {

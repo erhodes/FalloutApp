@@ -4,7 +4,6 @@ import com.erhodes.falloutapp.model.ArmorTemplate
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.WeaponTemplate
-import com.erhodes.falloutapp.model.ability.Ability
 import com.erhodes.falloutapp.model.ability.Accurate
 import com.erhodes.falloutapp.model.ability.Blast
 import com.erhodes.falloutapp.model.ability.Burst
@@ -23,7 +22,7 @@ import com.erhodes.falloutapp.model.ability.RadResistant
 import com.erhodes.falloutapp.model.ability.Recoverable
 import com.erhodes.falloutapp.model.ability.Shred
 import com.erhodes.falloutapp.model.ability.Storm
-import com.erhodes.falloutapp.model.ability.Suppress
+import com.erhodes.falloutapp.model.ability.Frighten
 import com.erhodes.falloutapp.model.ability.Trap
 import com.erhodes.falloutapp.model.ability.WindUp
 
@@ -52,7 +51,7 @@ object ItemDataSource {
             tier = 1,
             id = 0,
             damage = listOf(1, 2, 3),
-            ability = listOf(NoAbility, Suppress(1), Suppress(2)),
+            ability = listOf(NoAbility, Frighten(1), Frighten(2)),
             passive = listOf(Burst()),
             range = 15,
             magazineSize = 0
@@ -64,7 +63,7 @@ object ItemDataSource {
             tier = 1,
             id = 1,
             damage = listOf(1, 2, 3),
-            ability = listOf(NoAbility, Suppress(2), Suppress(3)),
+            ability = listOf(NoAbility, Frighten(2), Frighten(3)),
             passive = listOf(Blast(1), Consumable()),
             range = 8,
             magazineSize = 2
@@ -148,7 +147,7 @@ object ItemDataSource {
             tier = 1,
             id = 8,
             damage = listOf(2, 3, 4),
-            ability = listOf(NoAbility, Suppress(2), Suppress(3)),
+            ability = listOf(NoAbility, Frighten(2), Frighten(3)),
             passive = listOf(Blast(1), Trap(3), Consumable()),
             range = 1,
             magazineSize = 0
@@ -188,7 +187,7 @@ object ItemDataSource {
             tier = 2,
             id = 9,
             damage = listOf(2, 3, 4),
-            ability = listOf(NoAbility, Suppress(2), Suppress(3)),
+            ability = listOf(NoAbility, Frighten(2), Frighten(3)),
             passive = listOf(Burst()),
             range = 15,
             magazineSize = 0
@@ -200,7 +199,7 @@ object ItemDataSource {
             tier = 2,
             id = 10,
             damage = listOf(2, 3, 4),
-            ability = listOf(NoAbility, Suppress(2), Suppress(3)),
+            ability = listOf(NoAbility, Frighten(2), Frighten(3)),
             passive = listOf(Blast(1), Consumable()),
             range = 8,
             magazineSize = 2
@@ -284,7 +283,7 @@ object ItemDataSource {
             tier = 2,
             id = 17,
             damage = listOf(3, 4, 5),
-            ability = listOf(NoAbility, Suppress(2), Suppress(3)),
+            ability = listOf(NoAbility, Frighten(2), Frighten(3)),
             passive = listOf(Blast(1), Trap(3), Consumable()),
             range = 1,
             magazineSize = 0
@@ -296,7 +295,7 @@ object ItemDataSource {
             tier = 2,
             id = 18,
             damage = listOf(3, 4, 5),
-            ability = listOf(NoAbility, Suppress(2), Suppress(3)),
+            ability = listOf(NoAbility, Frighten(2), Frighten(3)),
             passive = listOf(Heavy(), Burst(), BurstOnly()),
             range = 15,
             magazineSize = 0
@@ -474,7 +473,7 @@ object ItemDataSource {
         )
         itemMap[2007] = ItemTemplate(
             name = "Psycho",
-            description = "Gain Advantage on melee attacks, and ignore the effects of Bloodied and Suppressed. You cannot use Push. Lasts 5 minutes. Suffer 2 Fatigue.",
+            description = "Gain Advantage on melee attacks, and ignore the effects of Bloodied and Fear. You cannot use Push. Lasts 5 minutes. Suffer 2 Fatigue.",
             load = 1,
             tier = 1,
             id = 2007
@@ -627,7 +626,7 @@ object ItemDataSource {
         )
         itemMap[3018] = ItemTemplate(
             name = "Screecher",
-            description = "A voice modulator that distorts the user’s voice in terrifying ways. Roll Charisma + Speech against all enemies within 10. Inflict Suppress 2/3/4 against them. The modulator burns out after a single use.",
+            description = "A voice modulator that distorts the user’s voice in terrifying ways. Make a Demoralize test against all enemies within 10, inflicting +1 Fear. The modulator burns out after a single use.",
             load = 1,
             tier = 1,
             id = 3018
@@ -764,7 +763,7 @@ object ItemDataSource {
         )
         itemMap[4013] = StackableItemTemplate(
             name = "Shrieker 5.56 Rounds",
-            description = "Special rounds that emit a horrible sound while whistling through the air. Add 1 Suppress.",
+            description = "Special rounds that emit a horrible sound while whistling through the air. Add 1 Frighten.",
             load = 1,
             tier = 1,
             id = 4013,

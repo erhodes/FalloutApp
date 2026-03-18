@@ -30,6 +30,7 @@ fun CharacterScreen(state: CharacterUiState,
                     onHealDamage: (Int) -> Unit,
                     onRepair: (Int) -> Unit,
                     onModifyStress: (Int) -> Unit,
+                    onModifyFear: (Int) -> Unit,
                     onModifyFatigue: (Int) -> Unit,
                     onModifyRadiation: (Int) -> Unit,
                     onGainMilestone: () -> Unit,
@@ -120,6 +121,7 @@ fun CharacterScreen(state: CharacterUiState,
             onHealDamage = onHealDamage,
             onRepair = onRepair,
             onModifyStress = onModifyStress,
+            onModifyFear = onModifyFear,
             onModifyFatigue = onModifyFatigue,
             onModifyRadiation = onModifyRadiation
         )
@@ -289,6 +291,7 @@ fun CharacterScreenPreview() {
     FalloutAppTheme {
         CharacterScreen(
             CharacterUiState(character),
+            {},
             {},
             {},
             {},

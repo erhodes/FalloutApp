@@ -173,6 +173,11 @@ class CharacterViewModel(
         updateActiveCharacter()
     }
 
+    fun onModifyFearClicked(amount: Int) {
+        repo.modifyFearForCharacter(amount, activeCharacter)
+        updateActiveCharacter()
+    }
+
     fun getAllPerks(): Collection<Perk> {
         return perkRepository.getAllPerks().sortedBy { it.name }
     }
