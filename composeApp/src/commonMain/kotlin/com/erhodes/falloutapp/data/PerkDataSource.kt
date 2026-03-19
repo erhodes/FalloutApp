@@ -42,7 +42,7 @@ object PerkDataSource {
         )
         perkMap[4] = Perk(
             name = "Grenadier",
-            description = "Add +1 to the radius of Blast weapons",
+            description = "2 Stress: Add +1 to the radius of your next Blast attack.",
             id = 4,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
@@ -184,6 +184,55 @@ object PerkDataSource {
             name = "Wrecking Ball",
             description = "Deal +0/0/1 damage when charging with a Windup weapon.",
             id = 24,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.MELEE, 5))
+        )
+        perkMap[25] = Perk(
+            name = "Patient Shot",
+            description = "2 Stress and 1AP: As a reaction to a creature ending an action, you can make a free Attack against any target. This attack benefits from Aim",
+            id = 25,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.PERCEPTION, 2), SkillRequirement(Skills.GUNS, 5))
+        )
+        perkMap[26] = Perk(
+            name = "Bulletstorm",
+            description = "2 Stress and 1 AP: Make a Burst attack. Change the effect of Focus to +1/+1/+1 damage, or the effect of Spread to 3 additional targets within 3.",
+            id = 26,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
+        )
+        perkMap[27] = Perk(
+            name = "Detonate",
+            description = "2 Stress and 1 AP: Make an Attack with an Ignite weapon. If the target has 5+ Burn at the end of the attack, consume 5 Burn to deal 3 damage to them.",
+            id = 27,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
+        )
+        perkMap[28] = Perk(
+            name = "Power Slam",
+            description = "2 Stress and 1 AP: Make an Attack with a Knockback weapon. Add +1 Knockback. If the target collides with a creature or obstacle, deal the damage of the attack to them as well.",
+            id = 28,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.GUNS, 5))
+        )
+        perkMap[29] = Perk(
+            name = "Tempest",
+            description = "2 Stress and 1 AP: Make an Attack with a Storm weapon. This attack targets 1 additional creature within 3 of the primary target.",
+            id = 29,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
+        )
+        perkMap[30] = Perk(
+            name = "Covering Fire",
+            description = "2 Stress and 1 AP: Make an Attack with a Frighten weapon. This attack targets 1 additional creature, has -1 damage and +1 Frighten. A target who is Shaken after this attack cannot make Reactions this round.",
+            id = 30,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
+        )
+        perkMap[31] = Perk(
+            name = "Unstoppable",
+            description = "2 Stress and 1 AP: Charge with +2 speed. During this charge, you can make a free Athletics to remove an obstacle by pushing it aside or smashing through it. Requires a Windup weapon.",
+            id = 31,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.MELEE, 5))
         )
