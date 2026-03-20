@@ -104,18 +104,18 @@ object PerkDataSource {
             requirements = arrayOf(SkillRequirement(Skills.ATHLETICS, 5))
         )
         perkMap[13] = Perk(
-            name = "Gadgeteer",
-            description = "Once per day as an Activity, spend 1 Part to create a number of makeshift Gadgets with total crafting cost equal to your Engineering skill. You must have access to a scrapper’s lab or kit to use this Activity.",
+            name = "Engineer",
+            description = "2 Stress and 1 AP: You may immediately craft a gadget using parts from your inventory This chem expires at the end of your turn.",
             id = 13,
             effect = null,
-            requirements = arrayOf(SkillRequirement(Skills.ENGINEERING, 5))
+            requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.ENGINEERING, 5))
         )
         perkMap[14] = Perk(
             name = "Field Surgeon",
             description = "When you perform the First Aid activity, you may spend up to 2/4/6 supplies, and you may split the healing among multiple patients.",
             id = 14,
             effect = null,
-            requirements = arrayOf(SkillRequirement(Skills.MEDICINE, 5))
+            requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.MEDICINE, 5))
         )
         perkMap[15] = Perk(
             name = "Locksmith",
@@ -126,17 +126,17 @@ object PerkDataSource {
         )
         perkMap[16] = Perk(
             name = "Chemist",
-            description = "Once per day as an Activity, spend 1 Medical Supply to create a number of makeshift Chems with total crafting cost equal to your Science skill. You must have access to a chemist’s lab or kit to use this Activity.",
+            description = "2 Stress and 1 AP: You may immediately craft a chem using supplies from your inventory This chem expires at the end of your turn.",
             id = 16,
             effect = null,
-            requirements = arrayOf(SkillRequirement(Skills.SCIENCE, 5))
+            requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.SCIENCE, 5))
         )
         perkMap[17] = Perk(
             name = "Ghost",
             description = "Add 1/1/2 to Hide checks.",
             id = 17,
             effect = null,
-            requirements = arrayOf(SkillRequirement(Skills.SNEAK, 5))
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
         perkMap[18] = Perk(
             name = "Insightful",
@@ -235,6 +235,13 @@ object PerkDataSource {
             id = 31,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.MELEE, 5))
+        )
+        perkMap[32] = Perk(
+            name = "Teamwork",
+            description = "2 Stress: As a reaction to an ally ending their turn, another ally may immediately take their turn (if they haven't already this round).",
+            id = 32,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
         )
     }
 }
