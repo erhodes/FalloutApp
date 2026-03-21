@@ -202,7 +202,7 @@ object PerkDataSource {
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
         perkMap[27] = Perk(
-            name = "Detonate",
+            name = "Combust",
             description = "2 Stress and 1 AP: Make an Attack with an Ignite weapon. If the target has 5+ Burn at the end of the attack, consume 5 Burn to deal 3 damage to them.",
             id = 27,
             effect = null,
@@ -242,6 +242,20 @@ object PerkDataSource {
             id = 32,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
+        )
+        perkMap[33] = Perk(
+            name = "Silent Running",
+            description = "Run becomes Silent.",
+            id = 33,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
+        )
+        perkMap[34] = Perk(
+            name = "Just One More Thing",
+            description = "After a character you are negotiating with reaches maximum Patience, you may spend 2 Stress to make one last check.",
+            id = 34,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
     }
 }

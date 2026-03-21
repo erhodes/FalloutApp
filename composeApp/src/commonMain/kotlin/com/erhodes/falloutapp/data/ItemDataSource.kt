@@ -10,6 +10,7 @@ import com.erhodes.falloutapp.model.ability.Burst
 import com.erhodes.falloutapp.model.ability.BurstOnly
 import com.erhodes.falloutapp.model.ability.Complicated
 import com.erhodes.falloutapp.model.ability.Consumable
+import com.erhodes.falloutapp.model.ability.Defensive
 import com.erhodes.falloutapp.model.ability.Flexible
 import com.erhodes.falloutapp.model.ability.Heavy
 import com.erhodes.falloutapp.model.ability.Ignite
@@ -62,7 +63,7 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 1,
-            damage = listOf(1, 2, 3),
+            damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Frighten(2), Frighten(3)),
             passive = listOf(Blast(1), Consumable()),
             range = 8,
@@ -193,13 +194,13 @@ object ItemDataSource {
             magazineSize = 0
         )
         itemMap[10] = WeaponTemplate(
-            name = "Plasma Grenade",
+            name = "Frag Grenade MK2",
             description = "Creates a blast of superheated plasma on contact.",
             load = 1,
             tier = 2,
             id = 10,
-            damage = listOf(2, 3, 4),
-            ability = listOf(NoAbility, Frighten(2), Frighten(3)),
+            damage = listOf(3, 4, 5),
+            ability = listOf(NoAbility, Frighten(3), Frighten(4)),
             passive = listOf(Blast(1), Consumable()),
             range = 8,
             magazineSize = 2
@@ -328,11 +329,23 @@ object ItemDataSource {
             name = "Shishkebab",
             description = "A sword with a small propane flamethrower attached.",
             load = 2,
-            tier = 2,
+            tier = 1,
             id = 23,
+            damage = listOf(1, 2, 3),
+            ability = listOf(NoAbility, Ignite(2), Ignite(4)),
+            passive = listOf(Defensive()),
+            range = 0,
+            magazineSize = 0
+        )
+        itemMap[24] = WeaponTemplate(
+            name = "Heated Blade",
+            description = "A sword with a built in heating coil.",
+            load = 2,
+            tier = 2,
+            id = 24,
             damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Ignite(3), Ignite(5)),
-            passive = listOf(Nimble(2)),
+            passive = listOf(Defensive()),
             range = 0,
             magazineSize = 0
         )
@@ -654,6 +667,13 @@ object ItemDataSource {
             tier = 2,
             id = 3021
         )
+        itemMap[3022] = ItemTemplate(
+            name = "Syringer",
+            description = "Uses air pressure to propel syringes at a target, allowing you to apply Chems to targets within 8.",
+            load = 2,
+            tier = 1,
+            id = 3022
+        )
 
         // Ammo
         itemMap[4000] = StackableItemTemplate(
@@ -781,14 +801,14 @@ object ItemDataSource {
         // Magazines
         itemMap[5000] = ItemTemplate(
             name = "Tesla Science Issue 12: Maximum Burn",
-            description = "Teaches Incinerator",
+            description = "Teaches Combust",
             load = 0,
             tier = 1,
             id = 5000
         )
         itemMap[5001] = ItemTemplate(
             name = "Grognak the Barbarian: Zardak’s Revenge",
-            description = "Teaches Followup",
+            description = "Teaches Unstoppable",
             load = 0,
             tier = 1,
             id = 5001
@@ -802,7 +822,7 @@ object ItemDataSource {
         )
         itemMap[5003] = ItemTemplate(
             name = "Alaskan Sniper: A True American Tale",
-            description = "Teaches Hindrance",
+            description = "Teaches Pierce",
             load = 0,
             tier = 1,
             id = 5003
@@ -844,7 +864,7 @@ object ItemDataSource {
         )
         itemMap[5009] = ItemTemplate(
             name = "US Covert Operations Manual",
-            description = "Teaches Ghost",
+            description = "Teaches Silent Running",
             load = 0,
             tier = 1,
             id = 5009
@@ -855,6 +875,27 @@ object ItemDataSource {
             load = 0,
             tier = 1,
             id = 5010
+        )
+        itemMap[5011] = ItemTemplate(
+            name = "A Whiff of Grapeshot",
+            description = "Teaches Tempest",
+            load = 0,
+            tier = 1,
+            id = 5011
+        )
+        itemMap[5012] = ItemTemplate(
+            name = "Columbo Goes to Washington",
+            description = "Teaches Just One More Thing",
+            load = 0,
+            tier = 1,
+            id = 5012
+        )
+        itemMap[5013] = ItemTemplate(
+            name = "Squad Tactics 101",
+            description = "Teaches Teamwork",
+            load = 0,
+            tier = 1,
+            id = 5013
         )
     }
 }

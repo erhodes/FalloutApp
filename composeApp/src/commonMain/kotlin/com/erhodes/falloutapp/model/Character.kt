@@ -20,6 +20,7 @@ class Character(
 
     companion object {
         const val MAX_STRESS = 10
+        const val MAX_HEALTH = 5
     }
 
     var level = 1

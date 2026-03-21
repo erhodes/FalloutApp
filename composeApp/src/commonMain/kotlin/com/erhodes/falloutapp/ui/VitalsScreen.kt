@@ -88,7 +88,7 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
     val editable = characterState.editable
     Column {
         Text("Speed: ${character.speed}")
-        Text("Damage Taken ${character.damageTaken}/${Character.MAX_STRESS}")
+        Text("Damage Taken ${character.damageTaken}/${Character.MAX_HEALTH}")
 
         Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
         Text("${stringResource(Res.string.toughness)} ${character.getArmorToughness()}")
@@ -164,7 +164,7 @@ fun SecondaryVitalsPanel(
     Column {
         Row {
             Text(
-                text = "${stringResource(Res.string.stress)} ${character.stress}/5",
+                text = "${stringResource(Res.string.stress)} ${character.stress}/${Character.MAX_STRESS}",
                 modifier = Modifier.fillMaxWidth(0.2f)
             )
             if (editable) {
