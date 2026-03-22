@@ -178,6 +178,11 @@ class CharacterViewModel(
         updateActiveCharacter()
     }
 
+    fun onEditNameClicked(newName: String) {
+        repo.modifyNameForCharacter(newName, activeCharacter)
+        updateActiveCharacter()
+    }
+
     fun getAllPerks(): Collection<Perk> {
         return perkRepository.getAllPerks().sortedBy { it.name }
     }

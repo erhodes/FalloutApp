@@ -151,6 +151,9 @@ fun FalloutApp(
                     onDecreaseItem = { item, count -> characterViewModel.decreaseStackCountForActiveCharacter(item, count) },
                     onAddItem = {
                         navController.navigate(FalloutScreen.AddItemScreen.name)
+                    },
+                    onEditName = {
+                        characterViewModel.onEditNameClicked(it)
                     }
                 )
             }

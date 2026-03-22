@@ -172,6 +172,11 @@ class CharacterRepository(
         saveCharacters()
     }
 
+    fun modifyNameForCharacter(newName: String, character: Character) {
+        character.name = newName
+        saveCharacters()
+    }
+
     private fun saveCharacters() {
         dataSource.saveCharacters(characters)
     }

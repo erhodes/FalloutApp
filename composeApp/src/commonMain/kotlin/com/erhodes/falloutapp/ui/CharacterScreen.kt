@@ -1,25 +1,55 @@
 package com.erhodes.falloutapp.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.ItemDataSource
-import com.erhodes.falloutapp.model.*
+import com.erhodes.falloutapp.model.Armor
+import com.erhodes.falloutapp.model.BasicItem
+import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Item
+import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.Skills
+import com.erhodes.falloutapp.model.StackableItem
+import com.erhodes.falloutapp.model.Stats
+import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.presentation.CharacterUiState
-import com.erhodes.falloutapp.repository.ItemRepository
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
-import falloutapp.composeapp.generated.resources.*
+import falloutapp.composeapp.generated.resources.Res
+import falloutapp.composeapp.generated.resources.add_perk
+import falloutapp.composeapp.generated.resources.backpack_24dp
+import falloutapp.composeapp.generated.resources.inventory
+import falloutapp.composeapp.generated.resources.loadout
+import falloutapp.composeapp.generated.resources.perks
+import falloutapp.composeapp.generated.resources.remove_perk
+import falloutapp.composeapp.generated.resources.skills
+import falloutapp.composeapp.generated.resources.work_24dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -41,18 +71,63 @@ fun CharacterScreen(state: CharacterUiState,
                     onDiscardItem: (Item) -> Unit,
                     onIncreaseItem: (Item, Int) -> Unit,
                     onDecreaseItem: (Item, Int) -> Unit,
-                    onAddItem: () -> Unit
+                    onAddItem: () -> Unit,
+                    onEditName: (String) -> Unit
 ) {
     val character = state.character
     val editable = state.editable
+    var showEditNameDialog by remember { mutableStateOf(false) }
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = character.name,
-            style = MaterialTheme.typography.displayMedium,
-            modifier = Modifier.padding(bottom = 10.dp)
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = character.name,
+                style = MaterialTheme.typography.displayMedium,
+                modifier = Modifier.padding(bottom = 10.dp)
+            )
+            if (editable) {
+                IconButton(
+                    onClick = { showEditNameDialog = true },
+                    modifier = Modifier.padding(start = Dimens.paddingMedium)
+                ) {
+                    Icon(
+                        Icons.Filled.Edit,
+                        contentDescription = "Edit Name"
+                    )
+                }
+            }
+        }
+
+        if (showEditNameDialog) {
+            var newName by remember { mutableStateOf(character.name) }
+            AlertDialog(
+                onDismissRequest = { showEditNameDialog = false },
+                title = { Text("Edit Character Name") },
+                text = {
+                    OutlinedTextField(
+                        value = newName,
+                        onValueChange = { newName = it },
+                        label = { Text("Name") }
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        onEditName(newName)
+                        showEditNameDialog = false
+                    }) {
+                        Text("Save")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showEditNameDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
+
 
         // SPECIAL
         Row(
@@ -156,8 +231,8 @@ fun CharacterScreen(state: CharacterUiState,
                     onIncreaseItem = { i, count -> onIncreaseItem(i, count) },
                     onDecreaseItem = { i, count -> onDecreaseItem(i, count) },
                     primaryButtonIcon = Res.drawable.backpack_24dp,
-                    primaryButtonAction = { onUnequipItem(it) },
-                    onDiscardItem = { onDiscardItem(it) }
+                    primaryButtonAction = { onUnequipItem(item) },
+                    onDiscardItem = { onDiscardItem(item) }
                 )
             }
         }
@@ -178,8 +253,8 @@ fun CharacterScreen(state: CharacterUiState,
                     onIncreaseItem = { i, count -> onIncreaseItem(i, count) },
                     onDecreaseItem = { i, count -> onDecreaseItem(i, count) },
                     primaryButtonIcon = Res.drawable.work_24dp,
-                    primaryButtonAction = { onEquipItem(it) },
-                    onDiscardItem = { onDiscardItem(it) }
+                    primaryButtonAction = { onEquipItem(item) },
+                    onDiscardItem = { onDiscardItem(item) }
                 )
             }
         }
@@ -306,6 +381,7 @@ fun CharacterScreenPreview() {
             {},
             { x, y -> },
             { x, y ->},
+            {},
             {}
         )
     }

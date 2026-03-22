@@ -440,70 +440,79 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 2000,
-            max = 1
+            max = 2
         )
-        itemMap[2001] = ItemTemplate(
+        itemMap[2001] = StackableItemTemplate(
             name = "Super Stimpak",
             description = "An advanced healing chem. Heals all damage suffered, but inflicts a point of Fatigue.",
             load = 1,
             tier = 1,
-            id = 2001
+            id = 2001,
+            max = 2
         )
-        itemMap[2002] = ItemTemplate(
+        itemMap[2002] = StackableItemTemplate(
             name = "Buffout",
             description = "Grants Advantage on all Strength, Endurance, and Agility checks, but you cannot Push. Lasts 30 minutes. Suffer 1 Fatigue.",
             load = 1,
             tier = 1,
-            id = 2002
+            id = 2002,
+            max = 2
         )
-        itemMap[2003] = ItemTemplate(
+        itemMap[2003] = StackableItemTemplate(
             name = "Jet",
             description = "Gain an additional AP every turn for 1 minute. You cannot use Push. Suffer 2 Fatigue.",
             load = 1,
             tier = 2,
-            id = 2003
+            id = 2003,
+            max = 2
         )
-        itemMap[2004] = ItemTemplate(
+        itemMap[2004] = StackableItemTemplate(
             name = "Med-X",
             description = "Ignore the Bloodied condition for 1 minute. Suffer 1 Fatigue.",
             load = 1,
             tier = 1,
-            id = 2004
+            id = 2004,
+            max = 2
         )
-        itemMap[2005] = ItemTemplate(
+        itemMap[2005] = StackableItemTemplate(
             name = "Mentats",
             description = "Grants Advantage on all Perception, Charisma, and Intelligence checks, but you cannot Push. Lasts 30 minutes. Suffer 1 Fatigue.",
             load = 1,
             tier = 1,
-            id = 2005
+            id = 2005,
+            max = 2
         )
-        itemMap[2006] = ItemTemplate(
+        itemMap[2006] = StackableItemTemplate(
             name = "Nuka-Cola",
             description = "Clear 1 Stress.",
             load = 1,
             tier = 1,
-            id = 2006
+            id = 2006,
+            max = 2
         )
-        itemMap[2007] = ItemTemplate(
+        itemMap[2007] = StackableItemTemplate(
             name = "Psycho",
             description = "Gain Advantage on melee attacks, and ignore the effects of Bloodied and Fear. You cannot use Push. Lasts 5 minutes. Suffer 2 Fatigue.",
             load = 1,
             tier = 1,
-            id = 2007
+            id = 2007,
+            max = 2
         )
-        itemMap[2008] = ItemTemplate(
+        itemMap[2008] = StackableItemTemplate(
             name = "Radaway",
             description = "Clear 10 Radiation. Usage requires an Activity performed by a character with at least 5 Medicine.",
             load = 1,
             tier = 1,
-            id = 2008
+            id = 2008,
+            max = 2
         )
-        itemMap[2009] = ItemTemplate(
+        itemMap[2009] = StackableItemTemplate(
             name = "Rad-X",
             description = "Lower Radiation damage by 10. Lasts one hour.",
             load = 1,
             tier = 1,
-            id = 2009
+            id = 2009,
+            max = 2
         )
 
         // Gadgets
