@@ -24,6 +24,7 @@ import com.erhodes.falloutapp.model.ability.Recoverable
 import com.erhodes.falloutapp.model.ability.Shred
 import com.erhodes.falloutapp.model.ability.Storm
 import com.erhodes.falloutapp.model.ability.Frighten
+import com.erhodes.falloutapp.model.ability.Immobilize
 import com.erhodes.falloutapp.model.ability.Trap
 import com.erhodes.falloutapp.model.ability.WindUp
 
@@ -142,7 +143,7 @@ object ItemDataSource {
             magazineSize = 0
         )
         itemMap[8] = WeaponTemplate(
-            name = "Mine",
+            name = "Frag Mine",
             description = "An improvised proximity explosive.",
             load = 2,
             tier = 1,
@@ -278,7 +279,7 @@ object ItemDataSource {
             magazineSize = 0
         )
         itemMap[17] = WeaponTemplate(
-            name = "Frag Mine",
+            name = "Frag Mine MK2",
             description = "An military issue proximity explosive.",
             load = 2,
             tier = 2,
@@ -346,6 +347,18 @@ object ItemDataSource {
             damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Ignite(3), Ignite(5)),
             passive = listOf(Defensive()),
+            range = 0,
+            magazineSize = 0
+        )
+        itemMap[25] = WeaponTemplate(
+            name = "Bear Trap",
+            description = "A spring-activated leg-hold trap for catcing bears. Or people, if that's what's around.",
+            load = 1,
+            tier = 1,
+            id = 25,
+            damage = listOf(1, 2, 3),
+            ability = listOf(Immobilize(1), Immobilize(2), Ignite(3)),
+            passive = listOf(Trap(3), Consumable()),
             range = 0,
             magazineSize = 0
         )
@@ -602,7 +615,7 @@ object ItemDataSource {
         )
         itemMap[3012] = StackableItemTemplate(
             name = "Concussion Grenade",
-            description = "Range 8. Burst 1, Knockback 1",
+            description = "Range 8. Burst 1, Knockback 1. Consumable",
             load = 1,
             tier = 1,
             id = 3012,
@@ -655,7 +668,7 @@ object ItemDataSource {
         )
         itemMap[3019] = StackableItemTemplate(
             name = "Smoke Grenade",
-            description = "Create a Burst 1 cloud of obscuring smoke anywhere within 8.",
+            description = "Create a Burst 1 cloud of obscuring smoke anywhere within 8. Consumable.",
             load = 1,
             tier = 1,
             id = 3019,
@@ -663,7 +676,7 @@ object ItemDataSource {
         )
         itemMap[3020] = StackableItemTemplate(
             name = "Vortex Grenade",
-            description = "Select a square within 8. All creatures within 3 of that square are pushed 1 towards it.",
+            description = "Select a square within 8. All creatures within 3 of that square are pushed 1 towards it. Consumable.",
             load = 1,
             tier = 1,
             id = 3020,

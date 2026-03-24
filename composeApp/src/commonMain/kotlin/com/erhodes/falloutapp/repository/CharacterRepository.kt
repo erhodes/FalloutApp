@@ -13,6 +13,7 @@ import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.model.WeaponTemplate
+import com.erhodes.falloutapp.model.condition.Condition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -174,6 +175,16 @@ class CharacterRepository(
 
     fun modifyNameForCharacter(newName: String, character: Character) {
         character.name = newName
+        saveCharacters()
+    }
+
+    fun addConditionToCharacter(condition: Condition, character: Character) {
+        character.addCondition(condition)
+        saveCharacters()
+    }
+
+    fun removeConditionFromCharacter(condition: Condition, character: Character) {
+        character.removeCondition(condition)
         saveCharacters()
     }
 

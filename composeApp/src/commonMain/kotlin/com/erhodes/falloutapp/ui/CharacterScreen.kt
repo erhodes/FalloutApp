@@ -38,6 +38,7 @@ import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Stats
 import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -72,7 +73,8 @@ fun CharacterScreen(state: CharacterUiState,
                     onIncreaseItem: (Item, Int) -> Unit,
                     onDecreaseItem: (Item, Int) -> Unit,
                     onAddItem: () -> Unit,
-                    onEditName: (String) -> Unit
+                    onEditName: (String) -> Unit,
+                    onAddCondition: (Condition) -> Unit
 ) {
     val character = state.character
     val editable = state.editable
@@ -198,7 +200,8 @@ fun CharacterScreen(state: CharacterUiState,
             onModifyStress = onModifyStress,
             onModifyFear = onModifyFear,
             onModifyFatigue = onModifyFatigue,
-            onModifyRadiation = onModifyRadiation
+            onModifyRadiation = onModifyRadiation,
+            onAddCondition = onAddCondition
         )
 
         ProgressionPanel(
@@ -381,6 +384,7 @@ fun CharacterScreenPreview() {
             {},
             { x, y -> },
             { x, y ->},
+            {},
             {},
             {}
         )

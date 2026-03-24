@@ -1,7 +1,9 @@
 package com.erhodes.falloutapp.model
 
+import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlin.math.max
 
 @Serializable
@@ -49,6 +51,10 @@ class Character(
     val inventory = ArrayList<Item>()
 
     val perks = HashSet<Perk>()
+
+    // should probably make this saveable but I don't want to deal with it right now
+    @Transient
+    val conditions: ArrayList<Condition> = arrayListOf()
 
     fun gainMilestone() {
         milestones++
@@ -326,5 +332,13 @@ class Character(
             if (!requirement.qualifiedForByCharacter(this)) return false
         }
         return true
+    }
+
+    fun addCondition(condition: Condition) {
+        conditions.add(condition)
+    }
+
+    fun removeCondition(condition: Condition) {
+        conditions.remove(condition)
     }
 }

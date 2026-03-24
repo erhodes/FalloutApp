@@ -8,6 +8,7 @@ import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
 import com.erhodes.falloutapp.repository.PerkRepository
@@ -180,6 +181,16 @@ class CharacterViewModel(
 
     fun onEditNameClicked(newName: String) {
         repo.modifyNameForCharacter(newName, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun onAddConditionClicked(condition: Condition) {
+        repo.addConditionToCharacter(condition, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun onRemoveConditionClicked(condition: Condition) {
+        repo.removeConditionFromCharacter(condition, activeCharacter)
         updateActiveCharacter()
     }
 

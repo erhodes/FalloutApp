@@ -154,7 +154,8 @@ fun FalloutApp(
                     },
                     onEditName = {
                         characterViewModel.onEditNameClicked(it)
-                    }
+                    },
+                    onAddCondition = { characterViewModel.onAddConditionClicked(it) }
                 )
             }
             composable(route = FalloutScreen.AddItemScreen.name) {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -13,6 +14,8 @@ import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.FearLevel
+import com.erhodes.falloutapp.model.condition.Burning
+import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -29,7 +32,8 @@ fun VitalsScreen(
     onModifyStress: (Int) -> Unit,
     onModifyFear: (Int) -> Unit,
     onModifyFatigue: (Int) -> Unit,
-    onModifyRadiation: (Int) -> Unit
+    onModifyRadiation: (Int) -> Unit,
+    onAddCondition: (Condition) -> Unit
 ) {
     val character = characterState.character
     Column {
@@ -55,6 +59,10 @@ fun VitalsScreen(
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
                     )
+                    ConditionsPanel(
+                        characterState = characterState,
+                        onAddCondition = onAddCondition
+                    )
                 }
             } else {
                 Column(
@@ -72,6 +80,10 @@ fun VitalsScreen(
                         onModifyFear = onModifyFear,
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
+                    )
+                    ConditionsPanel(
+                        characterState = characterState,
+                        onAddCondition = onAddCondition
                     )
                 }
             }
@@ -218,6 +230,28 @@ fun SecondaryVitalsPanel(
 }
 
 @Composable
+fun ConditionsPanel(characterState: CharacterUiState, onAddCondition: (Condition) -> Unit) {
+    Column {
+        Text(
+            text = "Conditions",
+            style = MaterialTheme.typography.titleMedium
+        )
+        characterState.character.conditions.forEach {
+            Row {
+                Text(it.toString())
+            }
+        }
+        Button(
+            onClick = {
+                onAddCondition(Burning(1))
+            }
+        ) {
+            Text("Add Condition")
+        }
+    }
+}
+
+@Composable
 fun PlusMinusButtons(onIncrease: () -> Unit, onDecrease: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -247,6 +281,7 @@ fun VitalsScreenPreview() {
             {},
             {},
             {},
+            {},
             {}
         )
     }
@@ -258,6 +293,7 @@ fun VitalsScreenPreviewNonEditable() {
     FalloutAppTheme {
         VitalsScreen(
             CharacterUiState(Character("Tom"), false),
+            {},
             {},
             {},
             {},
@@ -281,7 +317,22 @@ fun VitalsScreenPreviewWide() {
             {},
             {},
             {},
+            {},
             {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun ConditionsPanelPreview() {
+    val character = Character("Bob")
+    val burning = Burning(3)
+    character.addCondition(burning)
+    FalloutAppTheme {
+        ConditionsPanel(
+            characterState = CharacterUiState(character),
+            onAddCondition = {}
         )
     }
 }
