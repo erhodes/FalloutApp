@@ -257,5 +257,12 @@ object PerkDataSource {
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
+        perkMap[35] = Perk(
+            name = "Quick Trap",
+            description = "2 Stress and 2 AP: Dash and Set a Trap, in any order.",
+            id = 35,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
+        )
     }
 }

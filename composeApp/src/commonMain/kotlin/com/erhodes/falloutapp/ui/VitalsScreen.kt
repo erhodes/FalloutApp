@@ -59,10 +59,10 @@ fun VitalsScreen(
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
                     )
-                    ConditionsPanel(
-                        characterState = characterState,
-                        onAddCondition = onAddCondition
-                    )
+//                    ConditionsPanel(
+//                        characterState = characterState,
+//                        onManageConditions = onAddCondition
+//                    )
                 }
             } else {
                 Column(
@@ -81,10 +81,10 @@ fun VitalsScreen(
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
                     )
-                    ConditionsPanel(
-                        characterState = characterState,
-                        onAddCondition = onAddCondition
-                    )
+//                    ConditionsPanel(
+//                        characterState = characterState,
+//                        onManageConditions = onAddCondition
+//                    )
                 }
             }
         }
@@ -230,7 +230,7 @@ fun SecondaryVitalsPanel(
 }
 
 @Composable
-fun ConditionsPanel(characterState: CharacterUiState, onAddCondition: (Condition) -> Unit) {
+fun ConditionsPanel(characterState: CharacterUiState, onManageConditions: (Condition) -> Unit) {
     Column {
         Text(
             text = "Conditions",
@@ -243,10 +243,10 @@ fun ConditionsPanel(characterState: CharacterUiState, onAddCondition: (Condition
         }
         Button(
             onClick = {
-                onAddCondition(Burning(1))
+                onManageConditions(Burning(1))
             }
         ) {
-            Text("Add Condition")
+            Text(stringResource(Res.string.manage_conditions))
         }
     }
 }
@@ -332,7 +332,7 @@ fun ConditionsPanelPreview() {
     FalloutAppTheme {
         ConditionsPanel(
             characterState = CharacterUiState(character),
-            onAddCondition = {}
+            onManageConditions = {}
         )
     }
 }

@@ -74,7 +74,7 @@ fun CharacterScreen(state: CharacterUiState,
                     onDecreaseItem: (Item, Int) -> Unit,
                     onAddItem: () -> Unit,
                     onEditName: (String) -> Unit,
-                    onAddCondition: (Condition) -> Unit
+                    onManageConditions: (Condition) -> Unit
 ) {
     val character = state.character
     val editable = state.editable
@@ -201,7 +201,7 @@ fun CharacterScreen(state: CharacterUiState,
             onModifyFear = onModifyFear,
             onModifyFatigue = onModifyFatigue,
             onModifyRadiation = onModifyRadiation,
-            onAddCondition = onAddCondition
+            onAddCondition = onManageConditions
         )
 
         ProgressionPanel(

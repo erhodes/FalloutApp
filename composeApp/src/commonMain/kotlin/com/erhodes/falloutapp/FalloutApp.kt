@@ -34,6 +34,7 @@ enum class FalloutScreen(val title: StringResource) {
     AddItemScreen(title = Res.string.acquire_item),
     BonusSkillsScreen(title = Res.string.bonus_skills),
     PerkSelectScreen(title = Res.string.select_perk),
+    ManageConditionsScreen(title = Res.string.manage_conditions),
     Login(title = Res.string.login)
 }
 
@@ -155,7 +156,9 @@ fun FalloutApp(
                     onEditName = {
                         characterViewModel.onEditNameClicked(it)
                     },
-                    onAddCondition = { characterViewModel.onAddConditionClicked(it) }
+                    onManageConditions = {
+                        navController.navigate(FalloutScreen.ManageConditionsScreen.name)
+                    }
                 )
             }
             composable(route = FalloutScreen.AddItemScreen.name) {
@@ -165,6 +168,14 @@ fun FalloutApp(
                     onTierChanged = { itemViewModel.updateFilterTier(it) },
                     onAcquireItem = {
                         characterViewModel.addNewItemToActiveCharacter(it)
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(route = FalloutScreen.ManageConditionsScreen.name) {
+                ManageConditionsScreen(
+                    onAddCondition = {
+                        characterViewModel.onAddConditionClicked(it)
                         navController.popBackStack()
                     }
                 )
