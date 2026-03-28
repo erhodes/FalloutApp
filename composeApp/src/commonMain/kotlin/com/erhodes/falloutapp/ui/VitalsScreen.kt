@@ -100,7 +100,14 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
     val editable = characterState.editable
     Column {
         Text("Speed: ${character.speed}")
-        Text("Damage Taken ${character.damageTaken}/${Character.MAX_HEALTH}")
+        Text(
+            text = "Damage Taken ${character.damageTaken}/${Character.MAX_HEALTH}",
+            color = if (character.isBloodied()) {
+                MaterialTheme.colorScheme.error
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            }
+        )
 
         Text("Armor ${character.getArmorDamage()}/${character.getArmorDurability()}")
         Text("${stringResource(Res.string.toughness)} ${character.getArmorToughness()}")

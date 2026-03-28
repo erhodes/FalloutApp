@@ -289,6 +289,10 @@ class Character(
         }
     }
 
+    fun isBloodied(): Boolean {
+        return damageTaken >=endurance
+    }
+
     fun modifyStress(amount: Int) {
         if (stress + amount !in 0..MAX_STRESS) return
         stress += amount

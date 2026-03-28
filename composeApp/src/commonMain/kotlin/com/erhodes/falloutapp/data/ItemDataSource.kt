@@ -352,13 +352,37 @@ object ItemDataSource {
         )
         itemMap[25] = WeaponTemplate(
             name = "Bear Trap",
-            description = "A spring-activated leg-hold trap for catcing bears. Or people, if that's what's around.",
+            description = "A spring-activated leg-hold trap for catching bears. Or people, if that's what's around.",
             load = 1,
             tier = 1,
             id = 25,
             damage = listOf(1, 2, 3),
-            ability = listOf(Immobilize(1), Immobilize(2), Ignite(3)),
+            ability = listOf(Immobilize(1), Immobilize(2), Immobilize(3)),
             passive = listOf(Trap(3), Consumable()),
+            range = 0,
+            magazineSize = 0
+        )
+        itemMap[26] = WeaponTemplate(
+            name = "Sword",
+            description = "An bladed melee weapon made from improvised sharp metal bits.",
+            load = 2,
+            tier = 1,
+            id = 26,
+            damage = listOf(1, 2, 3),
+            ability = listOf(NoAbility, Shred(2), Shred(4)),
+            passive = listOf(Defensive()),
+            range = 0,
+            magazineSize = 0
+        )
+        itemMap[26] = WeaponTemplate(
+            name = "Sword MK2",
+            description = "An officer's ceremonial sword.",
+            load = 2,
+            tier = 2,
+            id = 26,
+            damage = listOf(2, 3, 4),
+            ability = listOf(NoAbility, Shred(3), Shred(5)),
+            passive = listOf(Defensive()),
             range = 0,
             magazineSize = 0
         )
@@ -915,6 +939,13 @@ object ItemDataSource {
         itemMap[5013] = ItemTemplate(
             name = "Squad Tactics 101",
             description = "Teaches Teamwork",
+            load = 0,
+            tier = 1,
+            id = 5013
+        )
+        itemMap[5014] = ItemTemplate(
+            name = "American Sportsman",
+            description = "Teaches Quick Trap",
             load = 0,
             tier = 1,
             id = 5013
