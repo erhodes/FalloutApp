@@ -212,7 +212,8 @@ fun CharacterScreen(state: CharacterUiState,
         // Loadout
         Header(
             text = stringResource(Res.string.loadout),
-            secondaryText = "${character.loadoutWeight}/${character.loadoutLimit}"
+            secondaryText = "${character.loadoutWeight}/${character.loadoutLimit}",
+            icon = Res.drawable.work_24dp
         )
         Column (
             Modifier
@@ -243,7 +244,8 @@ fun CharacterScreen(state: CharacterUiState,
         // Inventory
         Header(
             text = stringResource(Res.string.inventory),
-            secondaryText = "${character.inventoryWeight}/${character.inventoryLimit}"
+            secondaryText = "${character.inventoryWeight}/${character.inventoryLimit}",
+            icon = Res.drawable.backpack_24dp
         )
         Column (
             modifier = Modifier
