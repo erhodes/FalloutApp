@@ -88,6 +88,7 @@ fun CharacterScreen(state: CharacterUiState,
                 text = character.name,
                 style = MaterialTheme.typography.displayMedium,
                 modifier = Modifier.padding(bottom = 10.dp)
+                    .weight(1f)
             )
             if (editable) {
                 IconButton(
