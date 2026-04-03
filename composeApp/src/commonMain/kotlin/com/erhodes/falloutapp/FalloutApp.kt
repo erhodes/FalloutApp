@@ -18,10 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.erhodes.falloutapp.presentation.CharacterCreationViewModel
-import com.erhodes.falloutapp.presentation.CharacterViewModel
-import com.erhodes.falloutapp.presentation.ItemViewModel
-import com.erhodes.falloutapp.presentation.LoginStateViewModel
+import com.erhodes.falloutapp.presentation.*
 import com.erhodes.falloutapp.ui.*
 import falloutapp.composeapp.generated.resources.*
 import org.jetbrains.compose.resources.StringResource
@@ -66,6 +63,7 @@ fun FalloutApp(
     itemViewModel: ItemViewModel = viewModel { ItemViewModel() },
     creationViewModel: CharacterCreationViewModel = viewModel { CharacterCreationViewModel() },
     loginStateViewModel: LoginStateViewModel = viewModel { LoginStateViewModel() },
+    conditionsViewModel: ConditionsViewModel = viewModel { ConditionsViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     // Get current back stack entry
@@ -156,6 +154,9 @@ fun FalloutApp(
                     onEditName = {
                         characterViewModel.onEditNameClicked(it)
                     },
+                    onModifyCondition = { condition, amount ->
+                        characterViewModel.onModifyConditionClicked(condition, amount)
+                    },
                     onManageConditions = {
                         navController.navigate(FalloutScreen.ManageConditionsScreen.name)
                     }
@@ -174,6 +175,7 @@ fun FalloutApp(
             }
             composable(route = FalloutScreen.ManageConditionsScreen.name) {
                 ManageConditionsScreen(
+                    conditionTemplates = conditionsViewModel.getManageableConditions(),
                     onAddCondition = {
                         characterViewModel.onAddConditionClicked(it)
                         navController.popBackStack()

@@ -14,6 +14,7 @@ import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.model.WeaponTemplate
 import com.erhodes.falloutapp.model.condition.Condition
+import com.erhodes.falloutapp.model.condition.ScalableCondition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -180,6 +181,16 @@ class CharacterRepository(
 
     fun addConditionToCharacter(condition: Condition, character: Character) {
         character.addCondition(condition)
+        saveCharacters()
+    }
+
+    fun modifyConditionForCharacter(condition: Condition, amount: Int, character: Character) {
+        if (condition is ScalableCondition) {
+            condition.count+=amount
+            if (condition.count < 1) {
+                removeConditionFromCharacter(condition, character)
+            }
+        }
         saveCharacters()
     }
 

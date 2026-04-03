@@ -23,6 +23,7 @@ class CharacterDataSource(
     val kStore = store
 
     val json: Json = Json {
+        classDiscriminator = "type"
         serializersModule = DataManager.serializerModule
     }
 
