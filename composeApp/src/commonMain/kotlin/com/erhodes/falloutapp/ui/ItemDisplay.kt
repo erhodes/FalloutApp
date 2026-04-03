@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -76,9 +75,10 @@ fun GenericItemDisplay(
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surfaceDim)
                 .clickable{ isExpanded = !isExpanded }
-                .padding(horizontal = Dimens.paddingSmall)
+                .padding(horizontal = Dimens.paddingSmall),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column{
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
@@ -88,7 +88,6 @@ fun GenericItemDisplay(
                     text = summary
                 )
             }
-            Spacer(Modifier.weight(0.5f))
             IconButton(
                 onClick = buttonAction,
             ) {
