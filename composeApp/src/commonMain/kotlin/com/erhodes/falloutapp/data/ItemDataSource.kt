@@ -948,7 +948,35 @@ object ItemDataSource {
             description = "Teaches Quick Trap",
             load = 0,
             tier = 1,
-            id = 5013
+            id = 5014
+        )
+        itemMap[5015] = ItemTemplate(
+            name = "How to Kill People From Far Away",
+            description = "Teaches Patient Shot",
+            load = 0,
+            tier = 1,
+            id = 5015
+        )
+        itemMap[5016] = ItemTemplate(
+            name = "Tales from the Front Lines",
+            description = "Teaches Bulletstorm",
+            load = 0,
+            tier = 1,
+            id = 5016
+        )
+        itemMap[5017] = ItemTemplate(
+            name = "Boxing Times",
+            description = "Teaches Power Slam",
+            load = 0,
+            tier = 1,
+            id = 5017
+        )
+        itemMap[5018] = ItemTemplate(
+            name = "The Three Musketeers",
+            description = "Teaches Riposte",
+            load = 0,
+            tier = 1,
+            id = 5018
         )
     }
 }

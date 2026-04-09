@@ -264,5 +264,12 @@ object PerkDataSource {
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
+        perkMap[36] = Perk(
+            name = "Riposte",
+            description = "If an enemy gets 0 or less succcesses on a melee attack made against you, you may suffer 2 Stress to make a melee attack with a Defensive weapon as a free Reaction.",
+            id = 35,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
+        )
     }
 }
