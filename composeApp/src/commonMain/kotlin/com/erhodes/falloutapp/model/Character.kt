@@ -52,8 +52,6 @@ class Character(
 
     val perks = HashSet<Perk>()
 
-    // should probably make this saveable but I don't want to deal with it right now
-//    @Transient
     val conditions: HashSet<Condition> = hashSetOf()
 
     fun gainMilestone() {
