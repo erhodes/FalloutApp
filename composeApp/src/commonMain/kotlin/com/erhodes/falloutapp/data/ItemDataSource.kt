@@ -551,6 +551,23 @@ object ItemDataSource {
             id = 2009,
             max = 2
         )
+        itemMap[2010] = StackableItemTemplate(
+            name = "Purge Poison",
+            description = "Poison 1. An afflicted target must spend their first action on their turn vomiting, at which point the effect of the poison ends.",
+            load = 1,
+            tier = 1,
+            id = 2010,
+            max = 2
+        )
+        itemMap[2011] = StackableItemTemplate(
+            name = "Eyebite",
+            description = "Poison 1. An afflicted target suffers -2 to Awareness. This penalty fades by 1 at the end of each of their turns.",
+            load = 1,
+            tier = 1,
+            id = 2011,
+            max = 2
+        )
+        
 
         // Gadgets
         itemMap[3000] = ItemTemplate(
