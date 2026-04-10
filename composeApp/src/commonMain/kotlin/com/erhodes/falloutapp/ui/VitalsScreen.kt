@@ -14,8 +14,9 @@ import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.FearLevel
-import com.erhodes.falloutapp.model.condition.Burning
+import com.erhodes.falloutapp.model.condition.ConditionTemplate
 import com.erhodes.falloutapp.model.condition.Condition
+import com.erhodes.falloutapp.model.condition.ScalableCondition
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -33,7 +34,8 @@ fun VitalsScreen(
     onModifyFear: (Int) -> Unit,
     onModifyFatigue: (Int) -> Unit,
     onModifyRadiation: (Int) -> Unit,
-    onAddCondition: (Condition) -> Unit
+    onModifyCondition: (Condition, Int) -> Unit,
+    onManageConditions: () -> Unit
 ) {
     val character = characterState.character
     Column {
@@ -59,10 +61,11 @@ fun VitalsScreen(
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
                     )
-//                    ConditionsPanel(
-//                        characterState = characterState,
-//                        onManageConditions = onAddCondition
-//                    )
+                    ConditionsPanel(
+                        characterState = characterState,
+                        onModifyConditionValue = onModifyCondition,
+                        onManageConditions = onManageConditions
+                    )
                 }
             } else {
                 Column(
@@ -81,10 +84,11 @@ fun VitalsScreen(
                         onModifyFatigue = onModifyFatigue,
                         onModifyRadiation = onModifyRadiation
                     )
-//                    ConditionsPanel(
-//                        characterState = characterState,
-//                        onManageConditions = onAddCondition
-//                    )
+                    ConditionsPanel(
+                        characterState = characterState,
+                        onModifyConditionValue = onModifyCondition,
+                        onManageConditions = onManageConditions
+                    )
                 }
             }
         }
@@ -237,7 +241,7 @@ fun SecondaryVitalsPanel(
 }
 
 @Composable
-fun ConditionsPanel(characterState: CharacterUiState, onManageConditions: (Condition) -> Unit) {
+fun ConditionsPanel(characterState: CharacterUiState, onModifyConditionValue: (Condition, Int) -> Unit, onManageConditions: () -> Unit) {
     Column {
         Text(
             text = "Conditions",
@@ -245,12 +249,19 @@ fun ConditionsPanel(characterState: CharacterUiState, onManageConditions: (Condi
         )
         characterState.character.conditions.forEach {
             Row {
-                Text(it.toString())
+                Text(it.template.name)
+                if (it is ScalableCondition) {
+                    Text("${it.count}")
+                    PlusMinusButtons(
+                        onIncrease = { onModifyConditionValue(it, 1) },
+                        onDecrease = { onModifyConditionValue(it, -1) }
+                    )
+                }
             }
         }
         Button(
             onClick = {
-                onManageConditions(Burning(1))
+                onManageConditions()
             }
         ) {
             Text(stringResource(Res.string.manage_conditions))
@@ -289,6 +300,7 @@ fun VitalsScreenPreview() {
             {},
             {},
             {},
+            {_, _ ->},
             {}
         )
     }
@@ -307,7 +319,8 @@ fun VitalsScreenPreviewNonEditable() {
             {},
             {},
             {},
-            {}
+            onModifyCondition = {_, _ ->},
+            {},
         )
     }
 }
@@ -325,6 +338,7 @@ fun VitalsScreenPreviewWide() {
             {},
             {},
             {},
+            {_, _ ->},
             {}
         )
     }
@@ -334,11 +348,12 @@ fun VitalsScreenPreviewWide() {
 @Composable
 fun ConditionsPanelPreview() {
     val character = Character("Bob")
-    val burning = Burning(3)
+    val burning = Condition.buildNewCondition(ConditionTemplate.Burning)
     character.addCondition(burning)
     FalloutAppTheme {
         ConditionsPanel(
             characterState = CharacterUiState(character),
+            onModifyConditionValue = { _, _ -> },
             onManageConditions = {}
         )
     }

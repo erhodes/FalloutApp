@@ -7,15 +7,15 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.erhodes.falloutapp.model.condition.Burning
+import com.erhodes.falloutapp.model.condition.ConditionTemplate
 import com.erhodes.falloutapp.model.condition.Condition
-import com.erhodes.falloutapp.model.condition.Immobilized
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun ManageConditionsScreen(
+    conditionTemplates: List<ConditionTemplate>,
     onAddCondition: (Condition) -> Unit
 ) {
     Column(
@@ -23,11 +23,10 @@ fun ManageConditionsScreen(
             .fillMaxSize()
             .padding(Dimens.paddingMedium)
     ) {
-        Button(onClick = { onAddCondition(Burning(1)) }) {
-            Text("Burning")
-        }
-        Button(onClick = { onAddCondition(Immobilized(1)) }) {
-            Text("Immobilized")
+        conditionTemplates.forEach {
+            Button(onClick = { onAddCondition(Condition.buildNewCondition(it)) }) {
+                Text(it.title)
+            }
         }
     }
 }
@@ -37,6 +36,7 @@ fun ManageConditionsScreen(
 fun ManageConditionsScreenPreview() {
     FalloutAppTheme {
         ManageConditionsScreen(
+            conditionTemplates = listOf(ConditionTemplate.Burning, ConditionTemplate.Immobilized),
             onAddCondition = {}
         )
     }

@@ -189,6 +189,11 @@ class CharacterViewModel(
         updateActiveCharacter()
     }
 
+    fun onModifyConditionClicked(condition: Condition, amount: Int) {
+        repo.modifyConditionForCharacter(condition, amount, activeCharacter)
+        updateActiveCharacter()
+    }
+
     fun onRemoveConditionClicked(condition: Condition) {
         repo.removeConditionFromCharacter(condition, activeCharacter)
         updateActiveCharacter()
