@@ -334,7 +334,7 @@ object ItemDataSource {
             id = 23,
             damage = listOf(1, 2, 3),
             ability = listOf(NoAbility, Ignite(2), Ignite(4)),
-            passive = listOf(Defensive()),
+            passive = listOf(Defensive(1)),
             range = 0,
             magazineSize = 0
         )
@@ -346,7 +346,7 @@ object ItemDataSource {
             id = 24,
             damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Ignite(3), Ignite(5)),
-            passive = listOf(Defensive()),
+            passive = listOf(Defensive(2)),
             range = 0,
             magazineSize = 0
         )
@@ -370,7 +370,7 @@ object ItemDataSource {
             id = 26,
             damage = listOf(1, 2, 3),
             ability = listOf(NoAbility, Shred(2), Shred(4)),
-            passive = listOf(Defensive()),
+            passive = listOf(Defensive(1)),
             range = 0,
             magazineSize = 0
         )
@@ -382,7 +382,7 @@ object ItemDataSource {
             id = 26,
             damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Shred(3), Shred(5)),
-            passive = listOf(Defensive()),
+            passive = listOf(Defensive(2)),
             range = 0,
             magazineSize = 0
         )
@@ -994,6 +994,27 @@ object ItemDataSource {
             load = 0,
             tier = 1,
             id = 5018
+        )
+        itemMap[5019] = ItemTemplate(
+            name = "The Patriot's Cookbook",
+            description = "Teaches Grenadier",
+            load = 0,
+            tier = 1,
+            id = 5019
+        )
+        itemMap[5020] = ItemTemplate(
+            name = "New England Journal of Applied Chemistry",
+            description = "Teaches Chemist",
+            load = 0,
+            tier = 1,
+            id = 5020
+        )
+        itemMap[5021] = ItemTemplate(
+            name = "Field Engineer's Guide",
+            description = "Teaches Engineer",
+            load = 0,
+            tier = 1,
+            id = 5021
         )
     }
 }

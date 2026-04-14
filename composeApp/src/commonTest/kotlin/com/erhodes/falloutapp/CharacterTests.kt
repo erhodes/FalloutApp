@@ -5,11 +5,14 @@ import com.erhodes.falloutapp.data.PerkDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.FearLevel
+import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.util.AppLogger
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class CharacterTests {
 
@@ -246,5 +249,20 @@ class CharacterTests {
         character.modifyFear(2)
         assertEquals(6, character.fear)
         assertEquals(FearLevel.BROKEN, character.getFearLevel())
+    }
+
+    @Test
+    fun skillRequirements() {
+        val character = Character("Bob")
+        // 27 is Combust, which requires 5 guns or 5 melee
+        val combust = PerkDataSource.getPerkById(27)
+
+        assertFalse(character.qualifiesForPerk(combust))
+        character.skills[Skills.GUNS.ordinal] = 5
+        assertTrue(character.qualifiesForPerk(combust))
+        character.skills[Skills.MELEE.ordinal] = 5
+        assertTrue(character.qualifiesForPerk(combust))
+        character.skills[Skills.GUNS.ordinal] = 1
+        assertTrue(character.qualifiesForPerk(combust))
     }
 }

@@ -6,6 +6,7 @@ import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.effect.SpeedEffect
 import com.erhodes.falloutapp.model.StatRequirement
 import com.erhodes.falloutapp.model.Stats
+import com.erhodes.falloutapp.model.VariableSkillRequirement
 
 object PerkDataSource {
     val perkMap: HashMap<Int, Perk> = HashMap()
@@ -126,7 +127,7 @@ object PerkDataSource {
         )
         perkMap[16] = Perk(
             name = "Chemist",
-            description = "2 Stress and 1 AP: You may immediately craft a chem using supplies from your inventory This chem expires at the end of your turn.",
+            description = "2 Stress and 1 AP: You may immediately craft a chem using supplies from your inventory. This chem expires at the end of your turn.",
             id = 16,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.SCIENCE, 5))
@@ -146,11 +147,11 @@ object PerkDataSource {
             requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
         )
         perkMap[19] = Perk(
-            name = "With Me!",
-            description = "When allies use Follow the Leader on your turn, they may Run instead of Dash.",
+            name = "Pierce",
+            description = "2 Stress: Attack, then remove 2 Shredded to give target -1 Toughness until the end of your next turn.",
             id = 19,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
+            requirements = arrayOf(VariableSkillRequirement(Skills.MELEE, Skills.GUNS, 5))
         )
         perkMap[20] = Perk(
             name = "Frequent Flyer",
@@ -161,7 +162,7 @@ object PerkDataSource {
         )
         perkMap[21] = Perk(
             name = "Lucky Find",
-            description = "You may add or subtract up to 2 on any Loot roll",
+            description = "Add 1 to any Loot rolls.",
             id = 21,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.LUCK, 2))
@@ -206,14 +207,14 @@ object PerkDataSource {
             description = "2 Stress and 1 AP: Make an Attack with an Ignite weapon. If the target has 5+ Burn at the end of the attack, consume 5 Burn to deal 3 damage to them.",
             id = 27,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
+            requirements = arrayOf(VariableSkillRequirement(Skills.GUNS, Skills.MELEE, 5))
         )
         perkMap[28] = Perk(
             name = "Power Slam",
             description = "2 Stress and 1 AP: Make an Attack with a Knockback weapon. Add +1 Knockback. If the target collides with a creature or obstacle, deal the damage of the attack to them as well.",
             id = 28,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.GUNS, 5))
+            requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), VariableSkillRequirement(Skills.GUNS, Skills.MELEE, 5))
         )
         perkMap[29] = Perk(
             name = "Tempest",
@@ -266,7 +267,7 @@ object PerkDataSource {
         )
         perkMap[36] = Perk(
             name = "Riposte",
-            description = "If an enemy gets 0 or less succcesses on a melee attack made against you, you may suffer 2 Stress to make a melee attack with a Defensive weapon as a free Reaction.",
+            description = "If you take 0 damage from a melee attack made against you, you may suffer 2 Stress to make a melee attack with a Defensive weapon as a free Reaction.",
             id = 35,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
