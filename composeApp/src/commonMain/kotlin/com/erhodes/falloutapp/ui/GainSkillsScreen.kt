@@ -35,7 +35,8 @@ fun GainSkillsScreen(uiState: GainSkillUiState, onIncreaseClicked: (Int) -> Unit
             )
         }
         Button(
-            onClick = onFinalizeClicked
+            onClick = onFinalizeClicked,
+            enabled = uiState.bonuses == 0
         ) {
             Text(stringResource(Res.string.done))
         }

@@ -88,7 +88,7 @@ fun CharacterScreen(state: CharacterUiState,
             Text(
                 text = character.name,
                 style = MaterialTheme.typography.displayMedium,
-                modifier = Modifier.padding(bottom = 10.dp)
+                modifier = Modifier.padding(bottom = 10.dp, start = 5.dp)
                     .weight(1f)
             )
             if (editable) {
@@ -142,7 +142,7 @@ fun CharacterScreen(state: CharacterUiState,
                 SpecialPanel(
                     title = stringResource(it.letter),
                     value = character.getStatByOrdinal(it.ordinal),
-                    modifier = Modifier.padding(horizontal = 5.dp)
+                    modifier = Modifier.weight(1f).padding(horizontal = 2.dp)
                 )
             }
         }
