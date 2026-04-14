@@ -1,4 +1,6 @@
-package com.erhodes.falloutapp.model
+package com.erhodes.falloutapp.model.requirement
+
+import com.erhodes.falloutapp.model.Character
 
 abstract class Requirement(
     val min: Int,

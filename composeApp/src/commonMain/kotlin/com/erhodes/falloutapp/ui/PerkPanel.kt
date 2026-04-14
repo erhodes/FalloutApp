@@ -21,10 +21,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
-import com.erhodes.falloutapp.data.PerkDataSource
 import com.erhodes.falloutapp.model.Perk
-import com.erhodes.falloutapp.model.SkillRequirement
-import com.erhodes.falloutapp.model.StatRequirement
+import com.erhodes.falloutapp.model.requirement.SkillRequirement
+import com.erhodes.falloutapp.model.requirement.StatRequirement
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res

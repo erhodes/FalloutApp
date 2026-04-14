@@ -1,12 +1,12 @@
 package com.erhodes.falloutapp.data
 
 import com.erhodes.falloutapp.model.Perk
-import com.erhodes.falloutapp.model.SkillRequirement
+import com.erhodes.falloutapp.model.requirement.SkillRequirement
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.effect.SpeedEffect
-import com.erhodes.falloutapp.model.StatRequirement
+import com.erhodes.falloutapp.model.requirement.StatRequirement
 import com.erhodes.falloutapp.model.Stats
-import com.erhodes.falloutapp.model.VariableSkillRequirement
+import com.erhodes.falloutapp.model.requirement.VariableSkillRequirement
 
 object PerkDataSource {
     val perkMap: HashMap<Int, Perk> = HashMap()

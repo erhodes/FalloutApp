@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.model
 
 import com.erhodes.falloutapp.data.PerkSerializer
 import com.erhodes.falloutapp.model.effect.Effect
+import com.erhodes.falloutapp.model.requirement.Requirement
 import kotlinx.serialization.Serializable
 
 @Serializable(with = PerkSerializer::class)
