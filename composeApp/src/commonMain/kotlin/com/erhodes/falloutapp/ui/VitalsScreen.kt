@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -10,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import com.erhodes.falloutapp.model.Character
@@ -247,17 +249,35 @@ fun ConditionsPanel(characterState: CharacterUiState, onModifyConditionValue: (C
             text = "Conditions",
             style = MaterialTheme.typography.titleMedium
         )
-        characterState.character.conditions.forEach {
+        var showAbilityPopup by remember { mutableStateOf<Condition?>(null) }
+        characterState.character.conditions.forEach { c ->
             Row {
-                Text(it.template.name)
-                if (it is ScalableCondition) {
-                    Text("${it.count}")
+                Text(
+                    text = if (c is ScalableCondition) "${c.template.name} ${c.count}" else c.template.name,
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier
+                        .clickable { showAbilityPopup = c },
+                )
+                if (c is ScalableCondition) {
                     PlusMinusButtons(
-                        onIncrease = { onModifyConditionValue(it, 1) },
-                        onDecrease = { onModifyConditionValue(it, -1) }
+                        onIncrease = { onModifyConditionValue(c, 1) },
+                        onDecrease = { onModifyConditionValue(c, -1) }
                     )
                 }
             }
+        }
+        showAbilityPopup?.let {
+            AlertDialog(
+                onDismissRequest = { showAbilityPopup = null },
+                title = { Text(it.template.title) },
+                text = { Text(it.template.description) },
+                confirmButton = {
+                    TextButton(onClick = { showAbilityPopup = null }) {
+                        Text("OK")
+                    }
+                }
+            )
         }
         Button(
             onClick = {
