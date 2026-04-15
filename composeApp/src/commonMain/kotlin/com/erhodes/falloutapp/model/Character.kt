@@ -1,6 +1,7 @@
 package com.erhodes.falloutapp.model
 
 import com.erhodes.falloutapp.model.condition.Condition
+import com.erhodes.falloutapp.model.condition.ConditionTemplate
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
@@ -273,11 +274,17 @@ class Character(
             }
         }
         damageTaken += modifiedDamage
+        if (isBloodied()) {
+            addCondition(Condition.buildNewCondition(ConditionTemplate.Bloodied))
+        }
     }
 
     fun healDamage(amount: Int) {
         damageTaken -= amount
         if (damageTaken < 0) damageTaken = 0
+        if (!isBloodied()) {
+            removeCondition(ConditionTemplate.Bloodied)
+        }
     }
 
     fun repairArmor(amount: Int) {
@@ -314,6 +321,28 @@ class Character(
     fun modifyFear(amount: Int) {
         if (fear + amount < 0) return
         fear += amount
+        when (fear) {
+            in 0..<getCourage() -> {
+                removeCondition(ConditionTemplate.Shaken)
+                removeCondition(ConditionTemplate.Panicked)
+                removeCondition(ConditionTemplate.Broken)
+            }
+            in getCourage()..<getCourage() * 2 -> {
+                addCondition(Condition.buildNewCondition(ConditionTemplate.Shaken))
+                removeCondition(ConditionTemplate.Panicked)
+                removeCondition(ConditionTemplate.Broken)
+            }
+            in getCourage() * 2..<getCourage() * 3 -> {
+                removeCondition(ConditionTemplate.Shaken)
+                addCondition(Condition.buildNewCondition(ConditionTemplate.Panicked))
+                removeCondition(ConditionTemplate.Broken)
+            }
+            else -> {
+                removeCondition(ConditionTemplate.Shaken)
+                removeCondition(ConditionTemplate.Panicked)
+                addCondition(Condition.buildNewCondition(ConditionTemplate.Broken))
+            }
+        }
     }
 
     fun getCourage(): Int {
@@ -322,9 +351,9 @@ class Character(
 
     fun getFearLevel(): FearLevel {
         return when {
-            fear < getCourage() -> FearLevel.STEADY
-            fear < getCourage() * 2 -> FearLevel.SHAKEN
-            fear < getCourage() * 3 -> FearLevel.PANICKED
+            fear in 0..< getCourage() -> FearLevel.STEADY
+            fear in getCourage()..< getCourage() * 2 -> FearLevel.SHAKEN
+            fear in getCourage() * 2..< getCourage() * 3 -> FearLevel.PANICKED
             else -> FearLevel.BROKEN
         }
     }
@@ -337,10 +366,17 @@ class Character(
     }
 
     fun addCondition(condition: Condition) {
+        if (conditions.find { c -> c.template == condition.template } != null) {
+            return
+        }
         conditions.add(condition)
     }
 
     fun removeCondition(condition: Condition) {
         conditions.remove(condition)
+    }
+
+    fun removeCondition(condition: ConditionTemplate) {
+        conditions.removeAll { it.template == condition }
     }
 }
