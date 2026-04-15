@@ -11,6 +11,7 @@ import com.erhodes.falloutapp.model.ability.BurstOnly
 import com.erhodes.falloutapp.model.ability.Complicated
 import com.erhodes.falloutapp.model.ability.Consumable
 import com.erhodes.falloutapp.model.ability.Defensive
+import com.erhodes.falloutapp.model.ability.Demolish
 import com.erhodes.falloutapp.model.ability.Flexible
 import com.erhodes.falloutapp.model.ability.Heavy
 import com.erhodes.falloutapp.model.ability.Ignite
@@ -137,8 +138,8 @@ object ItemDataSource {
             tier = 1,
             id = 7,
             damage = listOf(1, 2, 3),
-            ability = listOf(Knockback(1), Knockback(2), Knockback(3)),
-            passive = listOf(WindUp()),
+            ability = listOf(NoAbility, Knockback(1), Knockback(2)),
+            passive = listOf(Demolish(1), WindUp()),
             range = 1,
             magazineSize = 0
         )
@@ -273,8 +274,8 @@ object ItemDataSource {
             tier = 2,
             id = 16,
             damage = listOf(2, 3, 4),
-            ability = listOf(Knockback(2), Knockback(3), Knockback(4)),
-            passive = listOf(WindUp()),
+            ability = listOf(NoAbility, Knockback(2), Knockback(3)),
+            passive = listOf(Demolish(2), WindUp()),
             range = 1,
             magazineSize = 0
         )

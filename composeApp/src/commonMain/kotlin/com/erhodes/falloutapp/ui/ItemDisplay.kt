@@ -267,11 +267,12 @@ fun WeaponPanel(
                         ) {
                             Text("$i", Modifier.weight(spacing))
                             Text("${weapon.damage[i]}", Modifier.weight(spacing))
-//                            Text(weapon.ability[i], Modifier.weight(spacing))
                             var showAbilityPopup by remember { mutableStateOf(false) }
                             Text(
                                 text = weapon.ability[i].title,
-                                modifier = Modifier.clickable { showAbilityPopup = true },
+                                modifier = Modifier
+                                    .weight(spacing)
+                                    .clickable { showAbilityPopup = true },
                                 color = MaterialTheme.colorScheme.primary,
                                 textDecoration = TextDecoration.Underline
                             )
