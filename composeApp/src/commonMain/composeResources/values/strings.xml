@@ -87,4 +87,6 @@
     <!-- Server specific strings -->
     <string name="user_list">User List</string>
     <string name="login">Login</string>
+    <string name="encounters">Encounters</string>
+    <string name="add_enemy">Add Enemy</string>
 </resources>
