@@ -131,40 +131,7 @@ fun CharacterScreen(state: CharacterUiState,
                 }
             )
         }
-
-
-        // SPECIAL
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Stats.entries.forEach {
-                SpecialPanel(
-                    title = stringResource(it.letter),
-                    value = character.getStatByOrdinal(it.ordinal),
-                    modifier = Modifier.weight(1f).padding(horizontal = 2.dp)
-                )
-            }
-        }
-
-        //Skills
-        Header(stringResource(Res.string.skills))
-        Row(
-            modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
-        ) {
-            Column(
-                modifier = Modifier.padding(end = 10.dp)
-            ) {
-                for (i in 0.. 5) {
-                    Text("${stringResource(Skills.entries[i].description)}: ${character.skills[i]}")
-                }
-            }
-            Column {
-                for (i in 6.. 11) {
-                    Text("${stringResource(Skills.entries[i].description)}: ${character.skills[i]}")
-                }
-            }
-        }
+        CharacterStatsPanel(character)
 
         //Perks
         Header(
@@ -331,32 +298,6 @@ fun ItemPanel(
                 buttonAction = { primaryButtonAction(item) },
                 secondaryButtonIcon = Icons.Filled.Delete,
                 secondaryButtonAction = { onDiscardItem(item) }
-            )
-        }
-    }
-}
-
-@Composable
-fun SpecialPanel(title: String, value: Int, modifier: Modifier = Modifier) {
-    Surface(
-        modifier = modifier.padding(4.dp),
-        tonalElevation = 2.dp,
-        shape = RoundedCornerShape(8.dp)
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(6.dp)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-                textAlign = TextAlign.Center
-            )
-            Text(
-                text = "$value",
-                style = MaterialTheme.typography.displayMedium,
-                textAlign = TextAlign.Center
             )
         }
     }
