@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.model
 
+import com.erhodes.falloutapp.model.action.Action
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.model.condition.ConditionTemplate
 import com.erhodes.falloutapp.util.AppLogger
@@ -54,6 +55,9 @@ class Character(
     val perks = HashSet<Perk>()
 
     val conditions: HashSet<Condition> = hashSetOf()
+
+    @Transient
+    val actions: ArrayList<Action> = arrayListOf()
 
     fun gainMilestone() {
         milestones++

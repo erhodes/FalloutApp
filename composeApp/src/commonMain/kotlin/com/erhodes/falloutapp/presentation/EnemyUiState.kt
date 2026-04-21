@@ -1,6 +1,7 @@
 package com.erhodes.falloutapp.presentation
 
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.action.Action
 
 data class EnemyUiState(
     val index: Int,
@@ -12,7 +13,14 @@ data class EnemyUiState(
     val armorToughness: Int,
     val armorDamage: Int,
     val armorDurability: Int,
+    val actions: List<Action> = emptyList(),
 ) {
+    fun testValue(action: Action): Int {
+        val stat = action.stat ?: return 0
+        val skill = action.skill ?: return 0
+        return stats[stat.ordinal] + skills[skill.ordinal]
+    }
+
     companion object {
         fun from(index: Int, character: Character) = EnemyUiState(
             index = index,
@@ -24,6 +32,7 @@ data class EnemyUiState(
             armorToughness = character.getArmorToughness(),
             armorDamage = character.getArmorDamage(),
             armorDurability = character.getArmorDurability(),
+            actions = character.actions.toList(),
         )
     }
 }
