@@ -11,19 +11,25 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.erhodes.falloutapp.model.Character
-import com.erhodes.falloutapp.model.Encounter
+import com.erhodes.falloutapp.presentation.EncounterUiState
+import com.erhodes.falloutapp.presentation.EnemyUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun EncounterScreen(encounter: Encounter, onAddEnemyClicked: () -> Unit) {
+fun EncounterScreen(
+    state: EncounterUiState,
+    onAddEnemyClicked: () -> Unit,
+    onTakeDamage: (enemyIndex: Int, amount: Int) -> Unit,
+    onHealDamage: (enemyIndex: Int, amount: Int) -> Unit,
+    onRepair: (enemyIndex: Int, amount: Int) -> Unit,
+) {
     Column(
         modifier = Modifier.padding(start = Dimens.paddingMedium)
     ) {
         Text(
-            text = encounter.name,
+            text = state.name,
             style = MaterialTheme.typography.headlineMedium
         )
         Text(
@@ -31,18 +37,23 @@ fun EncounterScreen(encounter: Encounter, onAddEnemyClicked: () -> Unit) {
             style = MaterialTheme.typography.headlineSmall
         )
         val expandedStates = remember { mutableStateMapOf<Int, Boolean>() }
-        encounter.characters.forEachIndexed { index, character ->
+        state.enemies.forEach { enemy ->
             Text(
-                text = character.name,
+                text = enemy.name,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .padding(top = 5.dp)
                     .clickable {
-                        expandedStates[index] = !(expandedStates[index] ?: false)
+                        expandedStates[enemy.index] = !(expandedStates[enemy.index] ?: false)
                     }
             )
-            if (expandedStates[index] == true) {
-                EnemyCharacterDisplay(character)
+            if (expandedStates[enemy.index] == true) {
+                EnemyCharacterDisplay(
+                    state = enemy,
+                    onTakeDamage = { onTakeDamage(enemy.index, it) },
+                    onHealDamage = { onHealDamage(enemy.index, it) },
+                    onRepair = { onRepair(enemy.index, it) },
+                )
             }
         }
         Button(
@@ -57,12 +68,18 @@ fun EncounterScreen(encounter: Encounter, onAddEnemyClicked: () -> Unit) {
 @Composable
 fun EncounterScreenPreview() {
     FalloutAppTheme {
-        val encounter = Encounter("Test")
-        encounter.addCharacter(Character("Bob"))
-        encounter.addCharacter(Character("Deathclaw"))
         EncounterScreen(
-            encounter,
-            {}
+            state = EncounterUiState(
+                name = "Test",
+                enemies = listOf(
+                    EnemyUiState(0, "Bob", List(7) { 1 }, List(12) { 2 }, 0, false, 0, 0, 0),
+                    EnemyUiState(1, "Deathclaw", List(7) { 1 }, List(12) { 2 }, 0, false, 0, 0, 0),
+                ),
+            ),
+            onAddEnemyClicked = {},
+            onTakeDamage = { _, _ -> },
+            onHealDamage = { _, _ -> },
+            onRepair = { _, _ -> },
         )
     }
 }

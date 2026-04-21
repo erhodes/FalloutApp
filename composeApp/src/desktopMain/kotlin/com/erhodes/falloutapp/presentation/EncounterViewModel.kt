@@ -15,21 +15,16 @@ class EncounterViewModel(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ): ViewModel() {
 
-    private var activeEncounter = Encounter("empty")
+    private var activeEncounter = Encounter("Test Encounter")
 
-    private val _activeEncounterState = MutableStateFlow<EncounterUiState>(EncounterUiState(activeEncounter))
+    private val _activeEncounterState = MutableStateFlow(buildState())
     val activeEncounterState = _activeEncounterState.asStateFlow()
-
-//    private val _encounter = MutableStateFlow<Encounter?>(null)
-//    val encounter: StateFlow<Encounter?> = _encounter
 
     init {
         // todo temporary until I set up a proper repository
-        val enc = Encounter("Test Encounter")
-        enc.addCharacter(EnemyDataSource.createRaiderShotgunner())
-        enc.addCharacter(EnemyDataSource.createRaiderPsycho())
-
-        updateActiveEncounter()
+        activeEncounter.addCharacter(EnemyDataSource.createRaiderShotgunner())
+        activeEncounter.addCharacter(EnemyDataSource.createRaiderPsycho())
+        publishState()
     }
 
     fun onAddEnemy(type: EnemyEnum) {
@@ -38,12 +33,38 @@ class EncounterViewModel(
             EnemyEnum.RAIDER_PSYCHO -> EnemyDataSource.createRaiderPsycho()
         }
         activeEncounter.addCharacter(newEnemy)
-        updateActiveEncounter()
+        publishState()
     }
 
-    private fun updateActiveEncounter() {
+    fun onTakeDamage(enemyIndex: Int, amount: Int) {
+        activeEncounter.characters.getOrNull(enemyIndex)?.let {
+            it.takeDamage(amount)
+            publishState()
+        }
+    }
+
+    fun onHealDamage(enemyIndex: Int, amount: Int) {
+        activeEncounter.characters.getOrNull(enemyIndex)?.let {
+            it.healDamage(amount)
+            publishState()
+        }
+    }
+
+    fun onRepairArmor(enemyIndex: Int, amount: Int) {
+        activeEncounter.characters.getOrNull(enemyIndex)?.let {
+            it.repairArmor(amount)
+            publishState()
+        }
+    }
+
+    private fun buildState() = EncounterUiState(
+        name = activeEncounter.name,
+        enemies = activeEncounter.characters.mapIndexed { i, c -> EnemyUiState.from(i, c) }
+    )
+
+    private fun publishState() {
         scope.launch {
-            _activeEncounterState.update { EncounterUiState(activeEncounter) }
+            _activeEncounterState.update { buildState() }
         }
     }
 }

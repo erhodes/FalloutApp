@@ -83,12 +83,15 @@ fun ServerApp(
                 )
             }
             composable(route = ServerScreen.EncounterScreen.name) {
-                val encounter by encounterViewModel.encounter.collectAsState()
+                val encounterState by encounterViewModel.activeEncounterState.collectAsState()
                 EncounterScreen(
-                    encounter = encounter!!,
+                    state = encounterState,
                     onAddEnemyClicked = {
                         navController.navigate(ServerScreen.AddEnemyScreen.name)
-                    }
+                    },
+                    onTakeDamage = { index, amount -> encounterViewModel.onTakeDamage(index, amount) },
+                    onHealDamage = { index, amount -> encounterViewModel.onHealDamage(index, amount) },
+                    onRepair = { index, amount -> encounterViewModel.onRepairArmor(index, amount) },
                 )
             }
             composable(route = ServerScreen.AddEnemyScreen.name) {

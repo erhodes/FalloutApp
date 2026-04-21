@@ -28,19 +28,24 @@ import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.Stats
+import com.erhodes.falloutapp.presentation.EnemyUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.heal
 import falloutapp.composeapp.generated.resources.repair
 import falloutapp.composeapp.generated.resources.take_damage
-import falloutapp.composeapp.generated.resources.toughness
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun EnemyCharacterDisplay(character: Character, onTakeDamage:(Int) -> Unit, onHealDamage:(Int) -> Unit, onRepair:(Int) -> Unit) {
+fun EnemyCharacterDisplay(
+    state: EnemyUiState,
+    onTakeDamage: (Int) -> Unit,
+    onHealDamage: (Int) -> Unit,
+    onRepair: (Int) -> Unit,
+) {
 
     Column {
         Row(
@@ -59,7 +64,7 @@ fun EnemyCharacterDisplay(character: Character, onTakeDamage:(Int) -> Unit, onHe
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "${character.getStatByOrdinal(it.ordinal)}",
+                        text = "${state.stats[it.ordinal]}",
                         textAlign = TextAlign.Center
                     )
                 }
@@ -70,21 +75,21 @@ fun EnemyCharacterDisplay(character: Character, onTakeDamage:(Int) -> Unit, onHe
             modifier = Modifier.padding(horizontal = Dimens.paddingMedium),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            for (i in 0.. 11) {
-                Text("${stringResource(Skills.entries[i].description)}: ${character.skills[i]}")
+            for (i in 0..11) {
+                Text("${stringResource(Skills.entries[i].description)}: ${state.skills[i]}")
             }
         }
         //Vitals Condensed
         Row {
             Text(
-                text = "Damage Taken ${character.damageTaken}/${Character.MAX_HEALTH}",
-                color = if (character.isBloodied()) {
+                text = "Damage Taken ${state.damageTaken}/${Character.MAX_HEALTH}",
+                color = if (state.isBloodied) {
                     MaterialTheme.colorScheme.error
                 } else {
                     MaterialTheme.colorScheme.onSurface
                 }
             )
-            Text(". Armor(${character.getArmorToughness()}) ${character.getArmorDamage()}/${character.getArmorDurability()}")
+            Text(". Armor(${state.armorToughness}) ${state.armorDamage}/${state.armorDurability}")
         }
         var amount by remember { mutableStateOf("") }
         Row(
@@ -146,12 +151,21 @@ fun EnemyCharacterDisplay(character: Character, onTakeDamage:(Int) -> Unit, onHe
 @Composable
 fun EnemyCharacterDisplayPreview() {
     FalloutAppTheme {
-        val character = Character("Bob")
         EnemyCharacterDisplay(
-            character,
-            {},
-            {},
-            {}
+            state = EnemyUiState(
+                index = 0,
+                name = "Bob",
+                stats = listOf(1, 1, 1, 1, 1, 1, 1),
+                skills = List(12) { 2 },
+                damageTaken = 0,
+                isBloodied = false,
+                armorToughness = 0,
+                armorDamage = 0,
+                armorDurability = 0,
+            ),
+            onTakeDamage = {},
+            onHealDamage = {},
+            onRepair = {},
         )
     }
 }
