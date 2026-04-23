@@ -53,4 +53,28 @@ object EnemyDataSource {
         raiderPsycho.actions.add(MeleeAttack(sledgehammer))
         return raiderPsycho
     }
+
+    fun createRaiderLieutenant(): Character {
+        val raiderLieutenant = Character(
+            name = "Raider Lieutenant",
+            strength = 1,
+            perception = 2,
+            endurance = 2,
+            charisma = 3,
+            agility = 3,
+            luck = 1,
+            intelligence = 2
+        )
+        raiderLieutenant.skills[Skills.GUNS.ordinal] = 5
+        raiderLieutenant.skills[Skills.SPEECH.ordinal] = 5
+        val assaultRifle = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 1)
+        raiderLieutenant.addItemToInventory(assaultRifle)
+        raiderLieutenant.equipItem(assaultRifle)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
+        raiderLieutenant.addItemToInventory(armor)
+        raiderLieutenant.equipItem(armor)
+        raiderLieutenant.actions.add(MeleeAttack(assaultRifle))
+        raiderLieutenant.traits.add(TraitDataSource.getTraitById(1))
+        return raiderLieutenant
+    }
 }

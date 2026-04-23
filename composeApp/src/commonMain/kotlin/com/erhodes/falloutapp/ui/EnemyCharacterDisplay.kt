@@ -14,7 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Character
@@ -66,13 +70,42 @@ fun EnemyCharacterDisplay(
                 Text("${stringResource(Skills.entries[i].description)}: ${state.character.skills[i]}")
             }
         }
+        //Traits
+        if (state.character.traits.isNotEmpty()) {
+            Column(
+                modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
+            ) {
+                state.character.traits.forEach { trait ->
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(trait.name)
+                            }
+                            append(": ${trait.description}")
+                        }
+                    )
+                }
+            }
+        }
         //Actions
         if (state.character.actions.isNotEmpty()) {
             Column(
                 modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
             ) {
                 state.character.actions.forEach { action ->
-                    Text("${action.title}: ${actionDescription(action, action.testValue(state.character))}")
+                    Text(
+                        buildAnnotatedString {
+                            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                                append(action.title)
+                            }
+                            append(": ${
+                                actionDescription(
+                                    action,
+                                    action.testValue(state.character)
+                                )
+                            }")
+                        }
+                    )
                 }
             }
         }
