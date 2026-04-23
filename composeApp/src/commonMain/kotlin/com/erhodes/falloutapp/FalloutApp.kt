@@ -31,6 +31,7 @@ enum class FalloutScreen(val title: StringResource) {
     AddItemScreen(title = Res.string.acquire_item),
     BonusSkillsScreen(title = Res.string.bonus_skills),
     PerkSelectScreen(title = Res.string.select_perk),
+    LearnRecipeScreen(title = Res.string.learn_recipe),
     ManageConditionsScreen(title = Res.string.manage_conditions),
     Login(title = Res.string.login)
 }
@@ -143,6 +144,8 @@ fun FalloutApp(
                     },
                     onAddPerk = { navController.navigate(FalloutScreen.PerkSelectScreen.name) },
                     onRemovePerk = { characterViewModel.onRemovePerk(it) },
+                    onLearnRecipe = { navController.navigate(FalloutScreen.LearnRecipeScreen.name) },
+                    onRemoveRecipe = { characterViewModel.onRemoveRecipe(it) },
                     onEquipItem = { characterViewModel.equipItemToCharacter(it) },
                     onUnequipItem = { characterViewModel.unequipItemFromCharacter(it) },
                     onDiscardItem = { characterViewModel.removeItemFromActiveCharacter(it) },
@@ -204,6 +207,16 @@ fun FalloutApp(
                     perks = characterViewModel.getAllPerks(),
                     onSelect = {
                         characterViewModel.onPerkSelected(it)
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(route = FalloutScreen.LearnRecipeScreen.name) {
+                LearnRecipeScreen(
+                    state = characterViewModel.activeCharacterState.value,
+                    recipes = characterViewModel.getAllRecipes(),
+                    onSelect = {
+                        characterViewModel.onRecipeSelected(it)
                         navController.popBackStack()
                     }
                 )

@@ -45,6 +45,8 @@ object ItemDataSource {
     const val ID_THROWING_KNIVES = 20
     const val ID_RATIONS = 1996
     const val ID_CAPS = 1997
+    const val ID_MEDICAL_SUPPLIES = 1998
+    const val ID_PARTS = 1999
     init {
         // weapons
         itemMap[0] = WeaponTemplate(

@@ -9,6 +9,7 @@ import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.Recipe
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.Weapon
@@ -86,6 +87,17 @@ class CharacterRepository(
 
     fun removePerkFromCharacter(perk: Perk, character: Character) {
         character.removePerk(perk)
+        saveCharacters()
+    }
+
+    fun addRecipeToCharacter(recipe: Recipe, character: Character) {
+        if (character.learnRecipe(recipe)) {
+            saveCharacters()
+        }
+    }
+
+    fun removeRecipeFromCharacter(recipe: Recipe, character: Character) {
+        character.recipes.remove(recipe)
         saveCharacters()
     }
 

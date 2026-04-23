@@ -7,7 +7,9 @@ import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.Recipe
 import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.data.RecipeDataSource
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
@@ -201,5 +203,23 @@ class CharacterViewModel(
 
     fun getAllPerks(): Collection<Perk> {
         return perkRepository.getAllPerks().sortedBy { it.name }
+    }
+
+    fun onRecipeSelected(recipe: Recipe) {
+        repo.addRecipeToCharacter(recipe, activeCharacter)
+        scope.launch {
+            _activeCharacterState.update { CharacterUiState(activeCharacter) }
+        }
+    }
+
+    fun onRemoveRecipe(recipe: Recipe) {
+        repo.removeRecipeFromCharacter(recipe, activeCharacter)
+        scope.launch {
+            _activeCharacterState.update { CharacterUiState(activeCharacter) }
+        }
+    }
+
+    fun getAllRecipes(): Collection<Recipe> {
+        return RecipeDataSource.recipeMap.values.sortedBy { it.itemTemplate.name }
     }
 }

@@ -58,6 +58,10 @@
     <string name="add_perk">Add Perk</string>
     <string name="remove_perk">Remove Perk</string>
 
+    <string name="recipes">Recipes</string>
+    <string name="learn_recipe">Learn Recipe</string>
+    <string name="learn">Learn</string>
+
     <string name="loadout">Loadout</string>
     <string name="inventory">Inventory</string>
 

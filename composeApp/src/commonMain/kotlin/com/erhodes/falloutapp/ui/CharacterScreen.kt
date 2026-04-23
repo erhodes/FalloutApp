@@ -34,6 +34,7 @@ import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.Recipe
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Stats
@@ -48,6 +49,8 @@ import falloutapp.composeapp.generated.resources.backpack_24dp
 import falloutapp.composeapp.generated.resources.inventory
 import falloutapp.composeapp.generated.resources.loadout
 import falloutapp.composeapp.generated.resources.perks
+import falloutapp.composeapp.generated.resources.recipes
+import falloutapp.composeapp.generated.resources.learn_recipe
 import falloutapp.composeapp.generated.resources.remove_perk
 import falloutapp.composeapp.generated.resources.skills
 import falloutapp.composeapp.generated.resources.work_24dp
@@ -67,6 +70,8 @@ fun CharacterScreen(state: CharacterUiState,
                     onGainMilestone: () -> Unit,
                     onAddPerk: () -> Unit,
                     onRemovePerk: (Perk) -> Unit,
+                    onLearnRecipe: () -> Unit,
+                    onRemoveRecipe: (Recipe) -> Unit,
                     onEquipItem: (Item) -> Unit,
                     onUnequipItem: (Item) -> Unit,
                     onDiscardItem: (Item) -> Unit,
@@ -178,6 +183,31 @@ fun CharacterScreen(state: CharacterUiState,
             state = state,
             onGainMilestone = onGainMilestone
         )
+
+        // Recipes
+        Header(
+            text = stringResource(Res.string.recipes),
+            secondaryText = "${character.recipes.size}/${character.intelligence}"
+        )
+        Column(
+            modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
+        ) {
+            character.recipes.forEach { recipe ->
+                RecipePanel(
+                    recipe = recipe,
+                    onDelete = { onRemoveRecipe(recipe) }
+                )
+            }
+        }
+        if (editable) {
+            Button(
+                onClick = onLearnRecipe,
+                enabled = character.recipes.size < character.intelligence,
+                modifier = Modifier.padding(horizontal = Dimens.paddingSmall)
+            ) {
+                Text(stringResource(Res.string.learn_recipe))
+            }
+        }
 
         // Loadout
         Header(
@@ -314,26 +344,28 @@ fun CharacterScreenPreview() {
     character.equipItem(armor)
     FalloutAppTheme {
         CharacterScreen(
-            CharacterUiState(character),
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            { x, y -> },
-            { x, y ->},
-            {},
-            {},
-            {_, _ ->},
-            {}
+            state = CharacterUiState(character),
+            onTakeDamage = {},
+            onHealDamage = {},
+            onRepair = {},
+            onModifyStress = {},
+            onModifyFear = {},
+            onModifyFatigue = {},
+            onModifyRadiation = {},
+            onGainMilestone = {},
+            onAddPerk = {},
+            onRemovePerk = {},
+            onLearnRecipe = {},
+            onRemoveRecipe = {},
+            onEquipItem = {},
+            onUnequipItem = {},
+            onDiscardItem = {},
+            onIncreaseItem = { _, _ -> },
+            onDecreaseItem = { _, _ -> },
+            onAddItem = {},
+            onEditName = {},
+            onModifyCondition = { _, _ -> },
+            onManageConditions = {},
         )
     }
 }

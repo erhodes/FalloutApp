@@ -56,6 +56,8 @@ class Character(
 
     val traits = HashSet<Trait>()
 
+    val recipes = HashSet<Recipe>()
+
     val conditions: HashSet<Condition> = hashSetOf()
 
     @Transient
@@ -362,6 +364,17 @@ class Character(
             fear in getCourage() * 2..< getCourage() * 3 -> FearLevel.PANICKED
             else -> FearLevel.BROKEN
         }
+    }
+
+    fun canLearnRecipe(recipe: Recipe): Boolean =
+        recipes.size < intelligence
+            && recipe !in recipes
+            && intelligence + skills[recipe.type.skill.ordinal] >= recipe.complexity
+
+    fun learnRecipe(recipe: Recipe): Boolean {
+        if (!canLearnRecipe(recipe)) return false
+        recipes.add(recipe)
+        return true
     }
 
     fun qualifiesForPerk(perk: Perk): Boolean {
