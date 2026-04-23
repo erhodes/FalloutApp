@@ -24,6 +24,7 @@ class EncounterViewModel(
         // todo temporary until I set up a proper repository
         activeEncounter.addCharacter(EnemyDataSource.createRaiderShotgunner())
         activeEncounter.addCharacter(EnemyDataSource.createRaiderPsycho())
+        activeEncounter.addCharacter(EnemyDataSource.createRaiderLieutenant())
         publishState()
     }
 

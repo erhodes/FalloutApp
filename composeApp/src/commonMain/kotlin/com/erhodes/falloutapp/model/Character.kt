@@ -54,6 +54,8 @@ class Character(
 
     val perks = HashSet<Perk>()
 
+    val traits = HashSet<Trait>()
+
     val conditions: HashSet<Condition> = hashSetOf()
 
     @Transient
