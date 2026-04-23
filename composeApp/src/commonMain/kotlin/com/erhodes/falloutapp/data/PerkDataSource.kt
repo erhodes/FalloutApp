@@ -197,7 +197,7 @@ object PerkDataSource {
         )
         perkMap[26] = Perk(
             name = "Bulletstorm",
-            description = "2 Stress and 1 AP: Make a Burst attack. Change the effect of Focus to +1/+1/+1 damage, or the effect of Spread to 3 additional targets within 3.",
+            description = "2 Stress. As a reaction to a character ending their turn, make an Attack against them with a Burst weapon.",
             id = 26,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
@@ -239,7 +239,7 @@ object PerkDataSource {
         )
         perkMap[32] = Perk(
             name = "Teamwork",
-            description = "2 Stress: As a reaction to an ally ending their turn, another ally may immediately take their turn (if they haven't already this round).",
+            description = "1 Stress: As a reaction to an ally ending their turn, another ally may immediately take their turn (if they haven't already this round).",
             id = 32,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))

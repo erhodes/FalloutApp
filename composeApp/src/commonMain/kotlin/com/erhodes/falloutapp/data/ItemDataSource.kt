@@ -522,7 +522,7 @@ object ItemDataSource {
         )
         itemMap[2006] = StackableItemTemplate(
             name = "Nuka-Cola",
-            description = "Clear 1 Stress.",
+            description = "Clear 2 Stress.",
             load = 1,
             tier = 1,
             id = 2006,
