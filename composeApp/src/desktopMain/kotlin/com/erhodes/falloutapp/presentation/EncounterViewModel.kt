@@ -32,6 +32,10 @@ class EncounterViewModel(
         val newEnemy = when(type) {
             EnemyEnum.RAIDER_SHOTGUNNER -> EnemyDataSource.createRaiderShotgunner()
             EnemyEnum.RAIDER_PSYCHO -> EnemyDataSource.createRaiderPsycho()
+            EnemyEnum.RAIDER_LIEUTENANT -> EnemyDataSource.createRaiderLieutenant()
+            EnemyEnum.ZAPPER -> EnemyDataSource.createZapper()
+            EnemyEnum.GHOUL -> EnemyDataSource.createGhoul()
+            EnemyEnum.PROTECTRON -> EnemyDataSource.createProtectron()
         }
         activeEncounter.addCharacter(newEnemy)
         publishState()

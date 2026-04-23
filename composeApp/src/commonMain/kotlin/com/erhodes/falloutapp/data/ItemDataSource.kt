@@ -227,7 +227,7 @@ object ItemDataSource {
             id = 12,
             damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Ignite(2), Ignite(4)),
-            passive = listOf(),
+            passive = listOf(Flexible),
             range = 10,
             magazineSize = 0
         )

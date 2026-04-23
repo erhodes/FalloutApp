@@ -43,6 +43,7 @@ import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.model.ability.Ability
+import com.erhodes.falloutapp.model.ability.NoAbility
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
@@ -268,13 +269,15 @@ fun WeaponPanel(
                             Text("$i", Modifier.weight(spacing))
                             Text("${weapon.damage[i]}", Modifier.weight(spacing))
                             var showAbilityPopup by remember { mutableStateOf(false) }
+                            val ability = weapon.ability[i]
                             Text(
-                                text = weapon.ability[i].title,
-                                modifier = Modifier
-                                    .weight(spacing)
-                                    .clickable { showAbilityPopup = true },
-                                color = MaterialTheme.colorScheme.primary,
-                                textDecoration = TextDecoration.Underline
+                                text = ability.title,
+                                modifier = if (ability is NoAbility) Modifier.weight(spacing)
+                                    else Modifier.weight(spacing).clickable { showAbilityPopup = true },
+                                color = if (ability is NoAbility) MaterialTheme.colorScheme.onSurface
+                                    else MaterialTheme.colorScheme.primary,
+                                textDecoration = if (ability is NoAbility) TextDecoration.None
+                                    else TextDecoration.Underline
                             )
                             if (showAbilityPopup) {
                                 AlertDialog(
