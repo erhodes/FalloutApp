@@ -62,6 +62,11 @@ class EncounterViewModel(
         }
     }
 
+    fun onRemoveEnemy(enemyIndex: Int) {
+        activeEncounter.removeCharacter(enemyIndex)
+        publishState()
+    }
+
     private fun buildState() = EncounterUiState(
         name = activeEncounter.name,
         enemies = activeEncounter.characters.mapIndexed { i, c -> EnemyUiState.from(i, c) }

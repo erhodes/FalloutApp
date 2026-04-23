@@ -11,7 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -39,6 +43,7 @@ fun EncounterScreen(
     onTakeDamage: (enemyIndex: Int, amount: Int) -> Unit,
     onHealDamage: (enemyIndex: Int, amount: Int) -> Unit,
     onRepair: (enemyIndex: Int, amount: Int) -> Unit,
+    onRemoveEnemy: (enemyIndex: Int) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(start = Dimens.paddingMedium)
@@ -62,6 +67,7 @@ fun EncounterScreen(
                 onTakeDamage = { onTakeDamage(enemy.index, it) },
                 onHealDamage = { onHealDamage(enemy.index, it) },
                 onRepair = { onRepair(enemy.index, it) },
+                onRemove = { onRemoveEnemy(enemy.index) },
             )
         }
         Button(
@@ -80,6 +86,7 @@ private fun EnemyRow(
     onTakeDamage: (Int) -> Unit,
     onHealDamage: (Int) -> Unit,
     onRepair: (Int) -> Unit,
+    onRemove: () -> Unit,
 ) {
     val enemy = enemyUiState.character
     var amount by remember { mutableStateOf("1") }
@@ -140,6 +147,13 @@ private fun EnemyRow(
         ) {
             Text("R")
         }
+        Spacer(Modifier.weight(1f))
+        IconButton(onClick = onRemove) {
+            Icon(
+                imageVector = Icons.Filled.Delete,
+                contentDescription = "Remove ${enemy.name}"
+            )
+        }
     }
     if (expanded) {
         EnemyCharacterDisplay(state = enemyUiState)
@@ -164,6 +178,7 @@ fun EncounterScreenPreview() {
             onTakeDamage = { _, _ -> },
             onHealDamage = { _, _ -> },
             onRepair = { _, _ -> },
+            onRemoveEnemy = {},
         )
     }
 }
