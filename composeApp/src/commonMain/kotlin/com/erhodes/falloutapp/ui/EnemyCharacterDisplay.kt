@@ -16,8 +16,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.erhodes.falloutapp.data.ItemDataSource
+import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.Stats
+import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.model.action.Attack
+import com.erhodes.falloutapp.model.action.RangedAttack
 import com.erhodes.falloutapp.presentation.EnemyUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -46,7 +51,7 @@ fun EnemyCharacterDisplay(
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = "${state.stats[it.ordinal]}",
+                        text = "${state.character.getStatByOrdinal(it.ordinal)}",
                         textAlign = TextAlign.Center
                     )
                 }
@@ -58,7 +63,17 @@ fun EnemyCharacterDisplay(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             for (i in 0..11) {
-                Text("${stringResource(Skills.entries[i].description)}: ${state.skills[i]}")
+                Text("${stringResource(Skills.entries[i].description)}: ${state.character.skills[i]}")
+            }
+        }
+        //Actions
+        if (state.character.actions.isNotEmpty()) {
+            Column(
+                modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
+            ) {
+                state.character.actions.forEach { action ->
+                    Text("${action.title}: ${actionDescription(action, action.testValue(state.character))}")
+                }
             }
         }
     }
@@ -68,17 +83,13 @@ fun EnemyCharacterDisplay(
 @Composable
 fun EnemyCharacterDisplayPreview() {
     FalloutAppTheme {
+        val weapon = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 1)
+        val character = Character("Bob")
+        character.actions.add(RangedAttack(weapon))
         EnemyCharacterDisplay(
             state = EnemyUiState(
                 index = 0,
-                name = "Bob",
-                stats = listOf(1, 1, 1, 1, 1, 1, 1),
-                skills = List(12) { 2 },
-                damageTaken = 0,
-                isBloodied = false,
-                armorToughness = 0,
-                armorDamage = 0,
-                armorDurability = 0,
+                character = character
             ),
         )
     }

@@ -54,7 +54,7 @@ fun EncounterScreen(
         val expandedStates = remember { mutableStateMapOf<Int, Boolean>() }
         state.enemies.forEach { enemy ->
             EnemyRow(
-                enemy = enemy,
+                enemyUiState = enemy,
                 expanded = expandedStates[enemy.index] ?: false,
                 onToggleExpanded = {
                     expandedStates[enemy.index] = !(expandedStates[enemy.index] ?: false)
@@ -74,13 +74,14 @@ fun EncounterScreen(
 
 @Composable
 private fun EnemyRow(
-    enemy: EnemyUiState,
+    enemyUiState: EnemyUiState,
     expanded: Boolean,
     onToggleExpanded: () -> Unit,
     onTakeDamage: (Int) -> Unit,
     onHealDamage: (Int) -> Unit,
     onRepair: (Int) -> Unit,
 ) {
+    val enemy = enemyUiState.character
     var amount by remember { mutableStateOf("1") }
     val actionButtonPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
     Row(
@@ -98,13 +99,13 @@ private fun EnemyRow(
         )
         Text(
             text = "${enemy.damageTaken}/${Character.MAX_HEALTH}",
-            color = if (enemy.isBloodied) {
+            color = if (enemy.isBloodied()) {
                 MaterialTheme.colorScheme.error
             } else {
                 MaterialTheme.colorScheme.onSurface
             }
         )
-        Text("Armor(${enemy.armorToughness}) ${enemy.armorDamage}/${enemy.armorDurability}")
+        Text("Armor(${enemy.getArmorToughness()}) ${enemy.getArmorDamage()}/${enemy.getArmorDurability()}")
         Spacer(Modifier.width(4.dp))
         OutlinedTextField(
             value = amount,
@@ -141,7 +142,7 @@ private fun EnemyRow(
         }
     }
     if (expanded) {
-        EnemyCharacterDisplay(state = enemy)
+        EnemyCharacterDisplay(state = enemyUiState)
     }
 }
 
@@ -149,12 +150,14 @@ private fun EnemyRow(
 @Composable
 fun EncounterScreenPreview() {
     FalloutAppTheme {
+        val bob = Character("Bob")
+        val deathclaw = Character("Deathclaw")
         EncounterScreen(
             state = EncounterUiState(
                 name = "Test",
                 enemies = listOf(
-                    EnemyUiState(0, "Bob", List(7) { 1 }, List(12) { 2 }, 0, false, 0, 0, 0),
-                    EnemyUiState(1, "Deathclaw", List(7) { 1 }, List(12) { 2 }, 0, false, 0, 0, 0),
+                    EnemyUiState(0, bob),
+                    EnemyUiState(1, deathclaw),
                 ),
             ),
             onAddEnemyClicked = {},

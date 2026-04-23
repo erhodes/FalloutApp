@@ -3,7 +3,10 @@ package com.erhodes.falloutapp.data
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_LEATHER
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.model.action.MeleeAttack
+import com.erhodes.falloutapp.model.action.RangedAttack
 
 object EnemyDataSource {
 
@@ -18,12 +21,14 @@ object EnemyDataSource {
             luck = 2,
             intelligence = 2
         )
+        raiderShotgunner.skills[Skills.GUNS.ordinal] = 5
         val shotgun = Weapon(ItemDataSource.getItemTemplateById(6), 1)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
         raiderShotgunner.addItemToInventory(shotgun)
         raiderShotgunner.equipItem(shotgun)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
         raiderShotgunner.addItemToInventory(armor)
         raiderShotgunner.equipItem(armor)
+        raiderShotgunner.actions.add(RangedAttack(shotgun))
         return raiderShotgunner
     }
     
@@ -38,12 +43,14 @@ object EnemyDataSource {
             luck = 2,
             intelligence = 2
         )
-        val shotgun = Weapon(ItemDataSource.getItemTemplateById(6), 1)
-        raiderPsycho.addItemToInventory(shotgun)
-        raiderPsycho.equipItem(shotgun)
+        raiderPsycho.skills[Skills.MELEE.ordinal] = 5
+        val sledgehammer = Weapon(ItemDataSource.getItemTemplateById(7), 1)
+        raiderPsycho.addItemToInventory(sledgehammer)
+        raiderPsycho.equipItem(sledgehammer)
         val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
         raiderPsycho.addItemToInventory(armor)
         raiderPsycho.equipItem(armor)
+        raiderPsycho.actions.add(MeleeAttack(sledgehammer))
         return raiderPsycho
     }
 }
