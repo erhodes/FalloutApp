@@ -1,8 +1,11 @@
 package com.erhodes.falloutapp
 
+import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.data.RecipeDataSource
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Skills
+import com.erhodes.falloutapp.model.StackableItem
+import com.erhodes.falloutapp.model.StackableItemTemplate
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -94,5 +97,77 @@ class RecipeTests {
         character.skills[Skills.ENGINEERING.ordinal] = 1
         assertTrue(character.canLearnRecipe(caltrops))
         assertTrue(character.learnRecipe(caltrops))
+    }
+
+    private fun partsTemplate(): StackableItemTemplate =
+        ItemDataSource.getItemTemplateById(ItemDataSource.ID_PARTS) as StackableItemTemplate
+
+    private fun partsCount(character: Character): Int =
+        (character.inventory + character.loadout)
+            .filterIsInstance<StackableItem>()
+            .filter { it.template.id == ItemDataSource.ID_PARTS }
+            .sumOf { it.count }
+
+    @Test
+    fun canCraftRecipe_returnsFalse_whenRecipeNotLearned() {
+        val character = Character("Bob", strength = 5, intelligence = 5)
+        character.addItemToInventory(StackableItem(partsTemplate(), 10))
+        val caltrops = RecipeDataSource.getRecipeById(1)
+
+        assertFalse(character.canCraftRecipe(caltrops))
+    }
+
+    @Test
+    fun canCraftRecipe_returnsFalse_whenNotEnoughIngredients() {
+        val character = Character("Bob", strength = 5, intelligence = 5)
+        character.skills[Skills.ENGINEERING.ordinal] = 1
+        val caltrops = RecipeDataSource.getRecipeById(1)
+        character.learnRecipe(caltrops)
+        character.addItemToInventory(StackableItem(partsTemplate(), 3))
+
+        assertFalse(character.canCraftRecipe(caltrops))
+    }
+
+    @Test
+    fun canCraftRecipe_returnsTrue_whenEnoughAcrossInventoryAndLoadout() {
+        val character = Character("Bob", strength = 5, intelligence = 5)
+        character.skills[Skills.ENGINEERING.ordinal] = 1
+        val caltrops = RecipeDataSource.getRecipeById(1)
+        character.learnRecipe(caltrops)
+
+        val invStack = StackableItem(partsTemplate(), 2)
+        character.addItemToInventory(invStack)
+        val loadoutStack = StackableItem(partsTemplate(), 3)
+        character.loadout.add(loadoutStack)
+
+        assertTrue(character.canCraftRecipe(caltrops))
+    }
+
+    @Test
+    fun consumeCraftingCost_decrementsAcrossStacks() {
+        val character = Character("Bob", strength = 5, intelligence = 5)
+        character.skills[Skills.ENGINEERING.ordinal] = 1
+        val caltrops = RecipeDataSource.getRecipeById(1)
+        character.learnRecipe(caltrops)
+
+        character.addItemToInventory(StackableItem(partsTemplate(), 2))
+        character.loadout.add(StackableItem(partsTemplate(), 3))
+
+        val before = partsCount(character)
+        assertTrue(character.consumeCraftingCost(caltrops))
+        assertEquals(before - caltrops.cost, partsCount(character))
+    }
+
+    @Test
+    fun consumeCraftingCost_returnsFalseAndDoesNotMutate_whenCannotCraft() {
+        val character = Character("Bob", strength = 5, intelligence = 5)
+        character.skills[Skills.ENGINEERING.ordinal] = 1
+        val caltrops = RecipeDataSource.getRecipeById(1)
+        character.learnRecipe(caltrops)
+        character.addItemToInventory(StackableItem(partsTemplate(), 3))
+
+        val before = partsCount(character)
+        assertFalse(character.consumeCraftingCost(caltrops))
+        assertEquals(before, partsCount(character))
     }
 }

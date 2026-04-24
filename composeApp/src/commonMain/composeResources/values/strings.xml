@@ -61,6 +61,10 @@
     <string name="recipes">Recipes</string>
     <string name="learn_recipe">Learn Recipe</string>
     <string name="learn">Learn</string>
+    <string name="craft">Craft</string>
+    <string name="craft_success">Item Crafted</string>
+    <string name="craft_failed">Cannot Craft</string>
+    <string name="craft_failed_message">Not enough ingredients.</string>
 
     <string name="loadout">Loadout</string>
     <string name="inventory">Inventory</string>

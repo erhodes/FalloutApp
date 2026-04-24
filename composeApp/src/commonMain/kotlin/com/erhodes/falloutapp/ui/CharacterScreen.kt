@@ -1,12 +1,9 @@
 package com.erhodes.falloutapp.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -16,7 +13,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -26,18 +22,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
+import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.Recipe
-import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.StackableItem
-import com.erhodes.falloutapp.model.Stats
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.presentation.CharacterUiState
@@ -46,13 +40,18 @@ import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_perk
 import falloutapp.composeapp.generated.resources.backpack_24dp
+import falloutapp.composeapp.generated.resources.craft
+import falloutapp.composeapp.generated.resources.craft_failed
+import falloutapp.composeapp.generated.resources.craft_failed_message
+import falloutapp.composeapp.generated.resources.craft_success
+import falloutapp.composeapp.generated.resources.discard
+import falloutapp.composeapp.generated.resources.done
 import falloutapp.composeapp.generated.resources.inventory
+import falloutapp.composeapp.generated.resources.learn_recipe
 import falloutapp.composeapp.generated.resources.loadout
 import falloutapp.composeapp.generated.resources.perks
 import falloutapp.composeapp.generated.resources.recipes
-import falloutapp.composeapp.generated.resources.learn_recipe
 import falloutapp.composeapp.generated.resources.remove_perk
-import falloutapp.composeapp.generated.resources.skills
 import falloutapp.composeapp.generated.resources.work_24dp
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.stringResource
@@ -72,6 +71,9 @@ fun CharacterScreen(state: CharacterUiState,
                     onRemovePerk: (Perk) -> Unit,
                     onLearnRecipe: () -> Unit,
                     onRemoveRecipe: (Recipe) -> Unit,
+                    onCraftRecipe: (Recipe) -> Unit,
+                    onAddCraftedToLoadout: (ItemTemplate) -> Unit,
+                    onAddCraftedToInventory: (ItemTemplate) -> Unit,
                     onEquipItem: (Item) -> Unit,
                     onUnequipItem: (Item) -> Unit,
                     onDiscardItem: (Item) -> Unit,
@@ -85,6 +87,8 @@ fun CharacterScreen(state: CharacterUiState,
     val character = state.character
     val editable = state.editable
     var showEditNameDialog by remember { mutableStateOf(false) }
+    var craftedItem by remember { mutableStateOf<ItemTemplate?>(null) }
+    var craftErrorRecipe by remember { mutableStateOf<Recipe?>(null) }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -195,6 +199,16 @@ fun CharacterScreen(state: CharacterUiState,
             character.recipes.forEach { recipe ->
                 RecipePanel(
                     recipe = recipe,
+                    buttonLabel = if (editable) stringResource(Res.string.craft) else null,
+                    buttonEnabled = editable && character.canCraftRecipe(recipe),
+                    onClick = {
+                        if (character.canCraftRecipe(recipe)) {
+                            onCraftRecipe(recipe)
+                            craftedItem = recipe.itemTemplate
+                        } else {
+                            craftErrorRecipe = recipe
+                        }
+                    },
                     onDelete = { onRemoveRecipe(recipe) }
                 )
             }
@@ -207,6 +221,46 @@ fun CharacterScreen(state: CharacterUiState,
             ) {
                 Text(stringResource(Res.string.learn_recipe))
             }
+        }
+
+        craftedItem?.let { template ->
+            val canFitLoadout = character.loadoutWeight + template.load <= character.loadoutLimit
+            AlertDialog(
+                onDismissRequest = { craftedItem = null },
+                title = { Text(stringResource(Res.string.craft_success)) },
+                text = { Text("You have crafted ${template.name}. Where should it be placed?") },
+                confirmButton = {
+                    Row {
+                        TextButton(
+                            enabled = canFitLoadout,
+                            onClick = {
+                                onAddCraftedToLoadout(template)
+                                craftedItem = null
+                            }
+                        ) { Text(stringResource(Res.string.loadout)) }
+                        TextButton(onClick = {
+                            onAddCraftedToInventory(template)
+                            craftedItem = null
+                        }) { Text(stringResource(Res.string.inventory)) }
+                        TextButton(onClick = { craftedItem = null }) {
+                            Text(stringResource(Res.string.discard))
+                        }
+                    }
+                }
+            )
+        }
+
+        if (craftErrorRecipe != null) {
+            AlertDialog(
+                onDismissRequest = { craftErrorRecipe = null },
+                title = { Text(stringResource(Res.string.craft_failed)) },
+                text = { Text(stringResource(Res.string.craft_failed_message)) },
+                confirmButton = {
+                    TextButton(onClick = { craftErrorRecipe = null }) {
+                        Text(stringResource(Res.string.done))
+                    }
+                }
+            )
         }
 
         // Loadout
@@ -357,6 +411,9 @@ fun CharacterScreenPreview() {
             onRemovePerk = {},
             onLearnRecipe = {},
             onRemoveRecipe = {},
+            onCraftRecipe = {},
+            onAddCraftedToLoadout = {},
+            onAddCraftedToInventory = {},
             onEquipItem = {},
             onUnequipItem = {},
             onDiscardItem = {},
