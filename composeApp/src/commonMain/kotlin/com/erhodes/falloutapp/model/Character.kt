@@ -377,6 +377,30 @@ class Character(
         return true
     }
 
+    fun canCraftRecipe(recipe: Recipe): Boolean {
+        if (recipe !in recipes) return false
+        val available = (inventory + loadout)
+            .filterIsInstance<StackableItem>()
+            .filter { it.template.id == recipe.type.costItemId }
+            .sumOf { it.count }
+        return available >= recipe.cost
+    }
+
+    fun consumeCraftingCost(recipe: Recipe): Boolean {
+        if (!canCraftRecipe(recipe)) return false
+        var remaining = recipe.cost
+        val stacks = (inventory + loadout)
+            .filterIsInstance<StackableItem>()
+            .filter { it.template.id == recipe.type.costItemId }
+        for (stack in stacks) {
+            if (remaining <= 0) break
+            val take = kotlin.math.min(stack.count, remaining)
+            decreaseStackCountForItem(stack, take)
+            remaining -= take
+        }
+        return true
+    }
+
     fun qualifiesForPerk(perk: Perk): Boolean {
         perk.requirements.forEach { requirement ->
             if (!requirement.qualifiedForByCharacter(this)) return false

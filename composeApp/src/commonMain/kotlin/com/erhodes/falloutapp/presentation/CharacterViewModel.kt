@@ -222,4 +222,22 @@ class CharacterViewModel(
     fun getAllRecipes(): Collection<Recipe> {
         return RecipeDataSource.recipeMap.values.sortedBy { it.itemTemplate.name }
     }
+
+    fun onCraftRecipe(recipe: Recipe) {
+        if (repo.craftRecipeForCharacter(recipe, activeCharacter)) {
+            updateActiveCharacter()
+        }
+    }
+
+    fun addCraftedItemToInventory(template: ItemTemplate) {
+        repo.addNewItemToCharacter(template, activeCharacter)
+        updateActiveCharacter()
+    }
+
+    fun addCraftedItemToLoadout(template: ItemTemplate) {
+        repo.addNewItemToCharacter(template, activeCharacter)
+        val newItem = activeCharacter.inventory.lastOrNull() ?: return
+        repo.equipItemToCharacter(newItem, activeCharacter)
+        updateActiveCharacter()
+    }
 }

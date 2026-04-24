@@ -101,6 +101,12 @@ class CharacterRepository(
         saveCharacters()
     }
 
+    fun craftRecipeForCharacter(recipe: Recipe, character: Character): Boolean {
+        val ok = character.consumeCraftingCost(recipe)
+        if (ok) saveCharacters()
+        return ok
+    }
+
     fun increaseStackCountForCharacter(item: Item, count: Int, character: Character) {
         character.increaseStackCountForItem(item, count)
         saveCharacters()
