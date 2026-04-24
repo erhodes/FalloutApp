@@ -23,5 +23,75 @@ object RecipeDataSource {
             complexity = 6,
             cost = 4,
         )
+        recipeMap[2] = Recipe(
+            id = 2,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(2000), // Stimpak
+            complexity = 8,
+            cost = 3,
+        )
+        recipeMap[3] = Recipe(
+            id = 3,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(2005), // Mentats
+            complexity = 8,
+            cost = 4,
+        )
+        recipeMap[4] = Recipe(
+            id = 4,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(2004), // Med-X
+            complexity = 9,
+            cost = 3,
+        )
+        recipeMap[5] = Recipe(
+            id = 5,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(3016), // Perfume
+            complexity = 8,
+            cost = 3,
+        )
+        recipeMap[6] = Recipe(
+            id = 6,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(2008), // Radaway
+            complexity = 9,
+            cost = 5,
+        )
+        recipeMap[7] = Recipe(
+            id = 7,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(2009), // Rad-X
+            complexity = 8,
+            cost = 2,
+        )
+        recipeMap[8] = Recipe(
+            id = 8,
+            type = RecipeType.GADGET,
+            itemTemplate = ItemDataSource.getItemTemplateById(3010), // Ablative Plating (spec: "Ablative Armor")
+            complexity = 8,
+            cost = 3,
+        )
+        recipeMap[9] = Recipe(
+            id = 9,
+            type = RecipeType.GADGET,
+            itemTemplate = ItemDataSource.getItemTemplateById(3013), // Flashbang
+            complexity = 8,
+            cost = 3,
+        )
+        recipeMap[10] = Recipe(
+            id = 10,
+            type = RecipeType.GADGET,
+            itemTemplate = ItemDataSource.getItemTemplateById(1), // Frag Grenade
+            complexity = 10,
+            cost = 3,
+        )
+        recipeMap[11] = Recipe(
+            id = 11,
+            type = RecipeType.GADGET,
+            itemTemplate = ItemDataSource.getItemTemplateById(3019), // Smoke Grenade
+            complexity = 8,
+            cost = 2,
+        )
     }
 }
