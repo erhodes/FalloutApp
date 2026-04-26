@@ -211,7 +211,7 @@ object PerkDataSource {
         )
         perkMap[28] = Perk(
             name = "Power Slam",
-            description = "2 Stress and 1 AP: Make an Attack with a Knockback weapon. Add +1 Knockback. If the target collides with a creature or obstacle, deal the damage of the attack to them as well.",
+            description = "2 Stress and 1 AP: Attack with +1 Knockback. If the Knockback is equal to the target's Strength, they are knocked prone.",
             id = 28,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), VariableSkillRequirement(Skills.GUNS, Skills.MELEE, 5))

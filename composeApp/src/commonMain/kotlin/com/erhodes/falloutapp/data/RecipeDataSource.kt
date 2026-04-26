@@ -14,7 +14,7 @@ object RecipeDataSource {
             type = RecipeType.CHEM,
             itemTemplate = ItemDataSource.getItemTemplateById(2002), // Buffout
             complexity = 8,
-            cost = 8,
+            cost = 4,
         )
         recipeMap[1] = Recipe(
             id = 1,
@@ -68,7 +68,7 @@ object RecipeDataSource {
         recipeMap[8] = Recipe(
             id = 8,
             type = RecipeType.GADGET,
-            itemTemplate = ItemDataSource.getItemTemplateById(3010), // Ablative Plating (spec: "Ablative Armor")
+            itemTemplate = ItemDataSource.getItemTemplateById(3010), // Ablative Plating
             complexity = 8,
             cost = 3,
         )
@@ -92,6 +92,20 @@ object RecipeDataSource {
             itemTemplate = ItemDataSource.getItemTemplateById(3019), // Smoke Grenade
             complexity = 8,
             cost = 2,
+        )
+        recipeMap[12] = Recipe(
+            id = 12,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(2011), // Eyebite
+            complexity = 8,
+            cost = 3,
+        )
+        recipeMap[13] = Recipe(
+            id = 13,
+            type = RecipeType.CHEM,
+            itemTemplate = ItemDataSource.getItemTemplateById(2010), // Purge
+            complexity = 8,
+            cost = 3,
         )
     }
 }
