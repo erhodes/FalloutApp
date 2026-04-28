@@ -3,10 +3,10 @@ package com.erhodes.falloutapp.presentation
 import androidx.lifecycle.ViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Recipe
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.data.RecipeDataSource
@@ -33,7 +33,7 @@ class CharacterViewModel(
     val characters = repo.characters
     val remoteCharacters = repo.remoteCharacters
 
-    private var activeCharacter = Character("empty")
+    private var activeCharacter = PlayerCharacter("empty")
 
     private val _activeCharacterState = MutableStateFlow(CharacterUiState(activeCharacter))
     val activeCharacterState = _activeCharacterState.asStateFlow()
@@ -44,7 +44,7 @@ class CharacterViewModel(
 
     //TODO add DI and move this logic to the creation view model
 
-    fun setActiveCharacter(character: Character) {
+    fun setActiveCharacter(character: PlayerCharacter) {
         activeCharacter = character
         scope.launch {
             //todo the ownerId = uuid thing didn't work well on web for some reason. Fix that in the future.
@@ -53,7 +53,7 @@ class CharacterViewModel(
 
     }
 
-    fun onDeleteCharacterClicked(character: Character) {
+    fun onDeleteCharacterClicked(character: PlayerCharacter) {
         repo.removeCharacter(character)
     }
 

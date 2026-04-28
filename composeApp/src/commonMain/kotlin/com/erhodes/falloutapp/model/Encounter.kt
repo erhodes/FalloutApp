@@ -3,9 +3,9 @@ package com.erhodes.falloutapp.model
 class Encounter(
     val name: String
 ) {
-    val characters: MutableList<Character> = mutableListOf()
+    val characters: MutableList<Enemy> = mutableListOf()
 
-    fun addCharacter(character: Character) {
+    fun addCharacter(character: Enemy) {
         characters.add(character)
     }
 

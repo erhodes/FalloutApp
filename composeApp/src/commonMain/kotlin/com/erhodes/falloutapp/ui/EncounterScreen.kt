@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Enemy
 import com.erhodes.falloutapp.presentation.EncounterUiState
 import com.erhodes.falloutapp.presentation.EnemyUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
@@ -164,8 +165,8 @@ private fun EnemyRow(
 @Composable
 fun EncounterScreenPreview() {
     FalloutAppTheme {
-        val bob = Character("Bob")
-        val deathclaw = Character("Deathclaw")
+        val bob = Enemy("Bob")
+        val deathclaw = Enemy("Deathclaw")
         EncounterScreen(
             state = EncounterUiState(
                 name = "Test",

@@ -3,7 +3,7 @@ package com.erhodes.falloutapp.presentation
 import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,7 +15,7 @@ import org.koin.core.component.inject
 
 data class UserCharacterGroup(
     val userName: String,
-    val characters: List<Character>
+    val characters: List<PlayerCharacter>
 )
 
 class UserViewModel: ViewModel(), KoinComponent {

@@ -2,7 +2,7 @@ package com.erhodes.falloutapp
 
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.data.RecipeDataSource
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.StackableItemTemplate
@@ -15,7 +15,7 @@ class RecipeTests {
 
     @Test
     fun learnRecipeAddsToSet() {
-        val character = Character("Bob", intelligence = 5)
+        val character = PlayerCharacter("Bob", intelligence = 5)
         character.skills[Skills.SCIENCE.ordinal] = 3
         val buffout = RecipeDataSource.getRecipeById(0)
 
@@ -26,7 +26,7 @@ class RecipeTests {
 
     @Test
     fun removeRecipeFromSet() {
-        val character = Character("Bob", intelligence = 5)
+        val character = PlayerCharacter("Bob", intelligence = 5)
         character.skills[Skills.ENGINEERING.ordinal] = 1
         val caltrops = RecipeDataSource.getRecipeById(1)
 
@@ -40,7 +40,7 @@ class RecipeTests {
 
     @Test
     fun cannotLearnSameRecipeTwice() {
-        val character = Character("Bob", intelligence = 5)
+        val character = PlayerCharacter("Bob", intelligence = 5)
         character.skills[Skills.SCIENCE.ordinal] = 3
         val buffout = RecipeDataSource.getRecipeById(0)
 
@@ -51,7 +51,7 @@ class RecipeTests {
 
     @Test
     fun cannotExceedIntelligenceCap() {
-        val character = Character("Bob", intelligence = 1)
+        val character = PlayerCharacter("Bob", intelligence = 1)
         character.skills[Skills.SCIENCE.ordinal] = 8
         character.skills[Skills.ENGINEERING.ordinal] = 8
         val buffout = RecipeDataSource.getRecipeById(0)
@@ -70,7 +70,7 @@ class RecipeTests {
     @Test
     fun skillRequirementEnforced() {
         // Buffout complexity = 8, needs intelligence + SCIENCE >= 8
-        val character = Character("Bob", intelligence = 5)
+        val character = PlayerCharacter("Bob", intelligence = 5)
         val buffout = RecipeDataSource.getRecipeById(0)
 
         // default skills = 2, so 5 + 2 = 7 < 8
@@ -87,7 +87,7 @@ class RecipeTests {
     fun skillRequirementUsesRecipeTypeSkill() {
         // Caltrops is a GADGET recipe, so it checks ENGINEERING, not SCIENCE.
         // Complexity = 6: intelligence + ENGINEERING >= 6.
-        val character = Character("Bob", intelligence = 5)
+        val character = PlayerCharacter("Bob", intelligence = 5)
         character.skills[Skills.SCIENCE.ordinal] = 10
         character.skills[Skills.ENGINEERING.ordinal] = 0
         val caltrops = RecipeDataSource.getRecipeById(1)
@@ -102,7 +102,7 @@ class RecipeTests {
     private fun partsTemplate(): StackableItemTemplate =
         ItemDataSource.getItemTemplateById(ItemDataSource.ID_PARTS) as StackableItemTemplate
 
-    private fun partsCount(character: Character): Int =
+    private fun partsCount(character: PlayerCharacter): Int =
         (character.inventory + character.loadout)
             .filterIsInstance<StackableItem>()
             .filter { it.template.id == ItemDataSource.ID_PARTS }
@@ -110,7 +110,7 @@ class RecipeTests {
 
     @Test
     fun canCraftRecipe_returnsFalse_whenRecipeNotLearned() {
-        val character = Character("Bob", strength = 5, intelligence = 5)
+        val character = PlayerCharacter("Bob", strength = 5, intelligence = 5)
         character.addItemToInventory(StackableItem(partsTemplate(), 10))
         val caltrops = RecipeDataSource.getRecipeById(1)
 
@@ -119,7 +119,7 @@ class RecipeTests {
 
     @Test
     fun canCraftRecipe_returnsFalse_whenNotEnoughIngredients() {
-        val character = Character("Bob", strength = 5, intelligence = 5)
+        val character = PlayerCharacter("Bob", strength = 5, intelligence = 5)
         character.skills[Skills.ENGINEERING.ordinal] = 1
         val caltrops = RecipeDataSource.getRecipeById(1)
         character.learnRecipe(caltrops)
@@ -130,7 +130,7 @@ class RecipeTests {
 
     @Test
     fun canCraftRecipe_returnsTrue_whenEnoughAcrossInventoryAndLoadout() {
-        val character = Character("Bob", strength = 5, intelligence = 5)
+        val character = PlayerCharacter("Bob", strength = 5, intelligence = 5)
         character.skills[Skills.ENGINEERING.ordinal] = 1
         val caltrops = RecipeDataSource.getRecipeById(1)
         character.learnRecipe(caltrops)
@@ -145,7 +145,7 @@ class RecipeTests {
 
     @Test
     fun consumeCraftingCost_decrementsAcrossStacks() {
-        val character = Character("Bob", strength = 5, intelligence = 5)
+        val character = PlayerCharacter("Bob", strength = 5, intelligence = 5)
         character.skills[Skills.ENGINEERING.ordinal] = 1
         val caltrops = RecipeDataSource.getRecipeById(1)
         character.learnRecipe(caltrops)
@@ -160,7 +160,7 @@ class RecipeTests {
 
     @Test
     fun consumeCraftingCost_returnsFalseAndDoesNotMutate_whenCannotCraft() {
-        val character = Character("Bob", strength = 5, intelligence = 5)
+        val character = PlayerCharacter("Bob", strength = 5, intelligence = 5)
         character.skills[Skills.ENGINEERING.ordinal] = 1
         val caltrops = RecipeDataSource.getRecipeById(1)
         character.learnRecipe(caltrops)

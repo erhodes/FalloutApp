@@ -3,7 +3,7 @@ package com.erhodes.falloutapp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.data.PerkDataSource
 import com.erhodes.falloutapp.model.Armor
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.FearLevel
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.StackableItem
@@ -18,7 +18,7 @@ class CharacterTests {
 
     @Test
     fun takeAndHealDamage() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         assertEquals(0, character.damageTaken)
         character.takeDamage(3)
         assertEquals(3, character.damageTaken)
@@ -28,7 +28,7 @@ class CharacterTests {
 
     @Test
     fun takeDamageWithArmor() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER), 0)
 
         assertEquals(0, armor.damageTaken)
@@ -50,7 +50,7 @@ class CharacterTests {
 
     @Test
     fun takeDamageWithToughArmor() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
 
         assertEquals(0, armor.damageTaken)
@@ -80,7 +80,7 @@ class CharacterTests {
 
     @Test
     fun increaseRadiation() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
 
         assertEquals(0, character.getMinimumFatigue())
 
@@ -92,7 +92,7 @@ class CharacterTests {
 
     @Test
     fun equipArmor() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
 
         assertEquals(0, character.loadoutWeight)
@@ -107,7 +107,7 @@ class CharacterTests {
 
     @Test
     fun armorAndCaps() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
         val caps = StackableItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_CAPS), 1)
 
@@ -131,7 +131,7 @@ class CharacterTests {
 
     @Test
     fun addAndRemoveItems() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
         val weapon = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 0)
 
@@ -158,7 +158,7 @@ class CharacterTests {
 
     @Test
     fun stackCounts() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val caps = StackableItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_CAPS), 1)
 
         assertEquals(1, caps.count)
@@ -182,7 +182,7 @@ class CharacterTests {
 
     @Test
     fun weaponStackCounts() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val grenades = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_FRAG_GRENADE), 1)
         val knives = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_THROWING_KNIVES), 0)
 
@@ -213,7 +213,7 @@ class CharacterTests {
 
     @Test
     fun applyPerk() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
 
         assertEquals(6, character.speed)
         character.gainPerk(PerkDataSource.getPerkById(12))
@@ -222,7 +222,7 @@ class CharacterTests {
 
     @Test
     fun addFear() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
 
         assertEquals(0, character.fear)
@@ -253,7 +253,7 @@ class CharacterTests {
 
     @Test
     fun skillRequirements() {
-        val character = Character("Bob")
+        val character = PlayerCharacter("Bob")
         // 27 is Combust, which requires 5 guns or 5 melee
         val combust = PerkDataSource.getPerkById(27)
 

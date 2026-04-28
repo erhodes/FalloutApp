@@ -10,12 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.User
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.presentation.UserCharacterGroup
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun UserListScreen(users: List<User>, groups: List<UserCharacterGroup>, onDeleteClicked: (Character) -> Unit) {
+fun UserListScreen(users: List<User>, groups: List<UserCharacterGroup>, onDeleteClicked: (PlayerCharacter) -> Unit) {
     Column {
         Text("User List")
         users.forEach {
@@ -64,7 +64,7 @@ fun UserListScreenPreview() {
         User("2", "Bob")
     )
     val characters = listOf(
-        Character(name = "Alice", ownerId = "1")
+        PlayerCharacter(name = "Alice", ownerId = "1")
     )
     UserListScreen(
         users = users,

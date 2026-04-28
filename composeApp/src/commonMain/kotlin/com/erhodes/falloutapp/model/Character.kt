@@ -9,67 +9,46 @@ import kotlinx.serialization.Transient
 import kotlin.math.max
 
 @Serializable
-class Character(
-    var name: String,
-    val ownerId: String = "",
-    val strength: Int = 1,
-    val perception: Int = 1,
-    val endurance: Int = 1,
-    val charisma: Int = 1,
-    val agility: Int = 1,
-    val intelligence: Int = 1,
-    val luck: Int = 1,
-    val skills: ArrayList<Int> = arrayListOf<Int>(2,2,2,2,2,2,2,2,2,2,2,2)
-) {
+sealed class Character {
+
+    abstract var name: String
+    abstract val ownerId: String
+    abstract val strength: Int
+    abstract val perception: Int
+    abstract val endurance: Int
+    abstract val charisma: Int
+    abstract val agility: Int
+    abstract val intelligence: Int
+    abstract val luck: Int
+    abstract val skills: ArrayList<Int>
 
     companion object {
-        const val MAX_STRESS = 10
         const val MAX_HEALTH = 5
     }
 
-    var level = 1
-    var milestones = 0
-
     var damageTaken = 0
-    var stress = 0
     var radiation = 0
     var fatigue = 0
     var fear = 0
 
     var loadoutWeight = 0
-    val loadoutLimit = strength + 4
+    val loadoutLimit get() = strength + 4
     var equippedArmor: Armor? = null
 
     var speed: Int = 6
 
-//    val transport = Ship(2, VehicleTemplate(1))
-//
-//    val wheels = Car(3, CarTemplate(2, false))
-
     var inventoryWeight = 0
-    var inventoryLimit = strength + 15
+    val inventoryLimit get() = strength + 15
 
     val loadout = ArrayList<Item>()
     val inventory = ArrayList<Item>()
 
     val perks = HashSet<Perk>()
 
-    val traits = HashSet<Trait>()
-
-    val recipes = HashSet<Recipe>()
-
     val conditions: HashSet<Condition> = hashSetOf()
 
     @Transient
     val actions: ArrayList<Action> = arrayListOf()
-
-    fun gainMilestone() {
-        milestones++
-        if (milestones >= 3) {
-            level++
-            milestones = 0
-        }
-    }
 
     fun getStatByOrdinal(ordinal: Int): Int {
         return when (ordinal) {
@@ -82,21 +61,6 @@ class Character(
             6 -> luck
             else -> 0
         }
-    }
-
-    fun getMaxSkillValue(): Int {
-        return 5 + level/2
-    }
-
-    fun gainPerk(perk: Perk) {
-        if (perks.size > level) return
-        perks.add(perk)
-        perk.effect?.apply(this)
-    }
-
-    fun removePerk(perk: Perk) {
-        perks.remove(perk)
-        perk.effect?.remove(this)
     }
 
     fun addItemToInventory(item: Item) {
@@ -306,11 +270,6 @@ class Character(
         return damageTaken >=endurance
     }
 
-    fun modifyStress(amount: Int) {
-        if (stress + amount !in 0..MAX_STRESS) return
-        stress += amount
-    }
-
     fun modifyFatigue(amount: Int) {
         if (fatigue + amount < getMinimumFatigue()) return
         fatigue += amount
@@ -364,48 +323,6 @@ class Character(
             fear in getCourage() * 2..< getCourage() * 3 -> FearLevel.PANICKED
             else -> FearLevel.BROKEN
         }
-    }
-
-    fun canLearnRecipe(recipe: Recipe): Boolean =
-        recipes.size < intelligence
-            && recipe !in recipes
-            && intelligence + skills[recipe.type.skill.ordinal] >= recipe.complexity
-
-    fun learnRecipe(recipe: Recipe): Boolean {
-        if (!canLearnRecipe(recipe)) return false
-        recipes.add(recipe)
-        return true
-    }
-
-    fun canCraftRecipe(recipe: Recipe): Boolean {
-        if (recipe !in recipes) return false
-        val available = (inventory + loadout)
-            .filterIsInstance<StackableItem>()
-            .filter { it.template.id == recipe.type.costItemId }
-            .sumOf { it.count }
-        return available >= recipe.cost
-    }
-
-    fun consumeCraftingCost(recipe: Recipe): Boolean {
-        if (!canCraftRecipe(recipe)) return false
-        var remaining = recipe.cost
-        val stacks = (inventory + loadout)
-            .filterIsInstance<StackableItem>()
-            .filter { it.template.id == recipe.type.costItemId }
-        for (stack in stacks) {
-            if (remaining <= 0) break
-            val take = kotlin.math.min(stack.count, remaining)
-            decreaseStackCountForItem(stack, take)
-            remaining -= take
-        }
-        return true
-    }
-
-    fun qualifiesForPerk(perk: Perk): Boolean {
-        perk.requirements.forEach { requirement ->
-            if (!requirement.qualifiedForByCharacter(this)) return false
-        }
-        return true
     }
 
     fun addCondition(condition: Condition) {

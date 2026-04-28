@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 import com.erhodes.falloutapp.Greeting
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
@@ -25,12 +25,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CharacterListScreen(
-    characters: List<Character>,
-    remoteCharacters: List<Character>,
-    onSelect: (Character) -> Unit,
-    onSelectRemote: (Character) -> Unit,
+    characters: List<PlayerCharacter>,
+    remoteCharacters: List<PlayerCharacter>,
+    onSelect: (PlayerCharacter) -> Unit,
+    onSelectRemote: (PlayerCharacter) -> Unit,
     onNewCharacter: () -> Unit,
-    onDeleteClicked: (Character) -> Unit,
+    onDeleteClicked: (PlayerCharacter) -> Unit,
     onLogin: () -> Unit
 ) {
     Column(
@@ -78,7 +78,7 @@ fun CharacterListScreen(
 }
 
 @Composable
-fun CharacterSelector(character: Character, onSelect: () -> Unit, onDeleteClicked: () -> Unit, modifier: Modifier = Modifier) {
+fun CharacterSelector(character: PlayerCharacter, onSelect: () -> Unit, onDeleteClicked: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
     ) {
@@ -103,7 +103,7 @@ fun CharacterSelector(character: Character, onSelect: () -> Unit, onDeleteClicke
 }
 
 @Composable
-fun RemoteCharacterSelector(character: Character, onSelect: () -> Unit, modifier: Modifier = Modifier) {
+fun RemoteCharacterSelector(character: PlayerCharacter, onSelect: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
     ) {
@@ -124,9 +124,9 @@ fun RemoteCharacterSelector(character: Character, onSelect: () -> Unit, modifier
 @Composable
 fun CharacterListScreenPreview() {
     FalloutAppTheme {
-        val character1 = Character("Tom")
-        val character2 = Character("Jerry")
-        val remoteCharacter1 = Character("Sam", ownerId = "111")
+        val character1 = PlayerCharacter("Tom")
+        val character2 = PlayerCharacter("Jerry")
+        val remoteCharacter1 = PlayerCharacter("Sam", ownerId = "111")
         CharacterListScreen(
             characters = listOf(character1, character2),
             remoteCharacters = listOf(remoteCharacter1),
@@ -144,7 +144,7 @@ fun CharacterListScreenPreview() {
 fun CharacterSelectorPreview() {
     FalloutAppTheme {
         CharacterSelector(
-            character = Character("Tom"),
+            character = PlayerCharacter("Tom"),
             {},
             {}
         )

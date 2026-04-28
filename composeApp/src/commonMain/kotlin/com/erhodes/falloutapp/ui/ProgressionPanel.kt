@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -48,7 +48,7 @@ fun ProgressionPanel(state: CharacterUiState, onGainMilestone: () -> Unit, modif
 fun ProgressionPanelPreview() {
     FalloutAppTheme {
         ProgressionPanel(
-            state = CharacterUiState(Character("Tom")),
+            state = CharacterUiState(PlayerCharacter("Tom")),
             onGainMilestone = {}
         )
     }

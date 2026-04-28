@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.runtime.Composable
 import com.erhodes.falloutapp.data.PerkDataSource
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.presentation.CharacterUiState
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -40,6 +40,6 @@ fun PerkSelectPanel(perk: Perk, enabled: Boolean, onSelect: (Perk) -> Unit) {
 fun PerkSelectScreenPreview() {
     FalloutAppTheme {
         val perks = arrayListOf(PerkDataSource.getPerkById(0), PerkDataSource.getPerkById(1), PerkDataSource.getPerkById(2))
-        PerkSelectScreen(CharacterUiState(Character("Tom")), perks, {})
+        PerkSelectScreen(CharacterUiState(PlayerCharacter("Tom")), perks, {})
     }
 }

@@ -1,6 +1,6 @@
 package com.erhodes.falloutapp.data
 
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.network.UserApi
 import com.erhodes.falloutapp.network.createHttpClient
@@ -19,7 +19,7 @@ class UserDataSource(private val characterRepository: CharacterRepository) {
         return userApi.login(user)
     }
 
-    suspend fun syncCharacters(characters: List<Character>, address: String): List<Character> {
+    suspend fun syncCharacters(characters: List<PlayerCharacter>, address: String): List<PlayerCharacter> {
         val client = createHttpClient(address)
         val userApi = UserApi(client)
         return userApi.syncCharacters(characters)

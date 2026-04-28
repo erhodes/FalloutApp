@@ -5,7 +5,7 @@ import com.erhodes.falloutapp.data.ItemTemplateSerializer
 import com.erhodes.falloutapp.data.PerkSerializer
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.BasicItem
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.User
@@ -59,7 +59,7 @@ fun Application.falloutModule(userRepository: UserRepository, characterRepositor
         }
         route("/characters") {
             post {
-                val characters = call.receive<List<Character>>()
+                val characters = call.receive<List<PlayerCharacter>>()
                 AppLogger.d("Eric", "received characters: ${characters.size}")
 
                 characterRepository.addCharacters(characters)

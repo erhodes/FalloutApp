@@ -2,7 +2,7 @@ package com.erhodes.falloutapp.repository
 
 import com.erhodes.falloutapp.data.UserDataSource
 import com.erhodes.falloutapp.data.localIdStore
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CompletableDeferred
@@ -59,7 +59,7 @@ class LoginRepository(
         _loggedIn.value = success
     }
 
-    suspend fun syncCharacters(characters: List<Character>) {
+    suspend fun syncCharacters(characters: List<PlayerCharacter>) {
         val remoteCharacters = dataSource.syncCharacters(characters, serverAddress)
         // any characters we own should be excluded as they are not remote
         val filteredList = remoteCharacters.filter { it.ownerId != userId }
