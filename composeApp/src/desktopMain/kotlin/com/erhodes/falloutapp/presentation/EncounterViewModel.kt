@@ -33,6 +33,8 @@ class EncounterViewModel(
             EnemyEnum.RAIDER_SHOTGUNNER -> EnemyDataSource.createRaiderShotgunner()
             EnemyEnum.RAIDER_PSYCHO -> EnemyDataSource.createRaiderPsycho()
             EnemyEnum.RAIDER_LIEUTENANT -> EnemyDataSource.createRaiderLieutenant()
+            EnemyEnum.RAIDER_HEAVY -> EnemyDataSource.createRaiderHeavy()
+            EnemyEnum.RAIDER_STALKER -> EnemyDataSource.createRaiderStalker()
             EnemyEnum.ZAPPER -> EnemyDataSource.createZapper()
             EnemyEnum.GHOUL -> EnemyDataSource.createGhoul()
             EnemyEnum.PROTECTRON -> EnemyDataSource.createProtectron()

@@ -1,6 +1,9 @@
 package com.erhodes.falloutapp.data
 
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_LEATHER
+import com.erhodes.falloutapp.data.ItemDataSource.ID_MINIGUN
+import com.erhodes.falloutapp.data.ItemDataSource.ID_PA_RAIDER
+import com.erhodes.falloutapp.data.ItemDataSource.ID_SNIPER_RIFLE
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Skills
@@ -122,6 +125,53 @@ object EnemyDataSource {
         protectron.actions.add(MeleeAttack(laserPistol))
         protectron.traits.add(TraitDataSource.getTraitById(5))
         return protectron
+    }
+
+    fun createRaiderHeavy(): Character {
+        val raiderHeavy = Character(
+            name = "Raider Heavy",
+            strength = 3,
+            perception = 2,
+            endurance = 3,
+            charisma = 1,
+            intelligence = 1,
+            agility = 3,
+            luck = 1,
+        )
+        raiderHeavy.skills[Skills.GUNS.ordinal] = 6
+        val minigun = Weapon(ItemDataSource.getItemTemplateById(ID_MINIGUN), 1)
+        raiderHeavy.addItemToInventory(minigun)
+        raiderHeavy.equipItem(minigun)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_PA_RAIDER), 0)
+        raiderHeavy.addItemToInventory(armor)
+        raiderHeavy.equipItem(armor)
+        raiderHeavy.actions.add(RangedAttack(minigun))
+        return raiderHeavy
+    }
+
+    fun createRaiderStalker(): Character {
+        val raiderStalker = Character(
+            name = "Raider Stalker",
+            strength = 2,
+            perception = 3,
+            endurance = 2,
+            charisma = 1,
+            intelligence = 2,
+            agility = 3,
+            luck = 1,
+        )
+        raiderStalker.skills[Skills.GUNS.ordinal] = 6
+        raiderStalker.skills[Skills.SNEAK.ordinal] = 6
+        val sniperRifle = Weapon(ItemDataSource.getItemTemplateById(ID_SNIPER_RIFLE), 1)
+        raiderStalker.addItemToInventory(sniperRifle)
+        raiderStalker.equipItem(sniperRifle)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
+        raiderStalker.addItemToInventory(armor)
+        raiderStalker.equipItem(armor)
+        raiderStalker.actions.add(RangedAttack(sniperRifle))
+        raiderStalker.traits.add(TraitDataSource.getTraitById(9))
+        raiderStalker.traits.add(TraitDataSource.getTraitById(8))
+        return raiderStalker
     }
 
     fun createZapper(): Character {

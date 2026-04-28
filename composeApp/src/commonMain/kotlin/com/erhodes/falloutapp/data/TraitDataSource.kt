@@ -48,5 +48,15 @@ object TraitDataSource {
             description = "As a reaction, gain Defence 2 against a single attack this creature is aware of.",
             id = 7,
         )
+        traitMap[8] = Trait(
+            name = "Stealthy",
+            description = "Roll an additional dice on Hide checks.",
+            id = 8,
+        )
+        traitMap[9] = Trait(
+            name = "Assassin",
+            description = "Roll an additional dice when attacking creatures this creature is hidden from.",
+            id = 9,
+        )
      }
 }
