@@ -93,6 +93,7 @@ fun ServerApp(
                     onHealDamage = { index, amount -> encounterViewModel.onHealDamage(index, amount) },
                     onRepair = { index, amount -> encounterViewModel.onRepairArmor(index, amount) },
                     onRemoveEnemy = { index -> encounterViewModel.onRemoveEnemy(index) },
+                    onRenameEnemy = { index, newName -> encounterViewModel.onRenameEnemy(index, newName) },
                 )
             }
             composable(route = ServerScreen.AddEnemyScreen.name) {

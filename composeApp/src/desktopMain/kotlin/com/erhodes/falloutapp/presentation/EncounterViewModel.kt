@@ -64,6 +64,13 @@ class EncounterViewModel(
         }
     }
 
+    fun onRenameEnemy(enemyIndex: Int, newName: String) {
+        activeEncounter.characters.getOrNull(enemyIndex)?.let {
+            it.name = newName
+            publishState()
+        }
+    }
+
     fun onRemoveEnemy(enemyIndex: Int) {
         activeEncounter.removeCharacter(enemyIndex)
         publishState()

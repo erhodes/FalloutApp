@@ -13,12 +13,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -44,6 +47,7 @@ fun EncounterScreen(
     onHealDamage: (enemyIndex: Int, amount: Int) -> Unit,
     onRepair: (enemyIndex: Int, amount: Int) -> Unit,
     onRemoveEnemy: (enemyIndex: Int) -> Unit,
+    onRenameEnemy: (enemyIndex: Int, newName: String) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(start = Dimens.paddingMedium)
@@ -68,6 +72,7 @@ fun EncounterScreen(
                 onHealDamage = { onHealDamage(enemy.index, it) },
                 onRepair = { onRepair(enemy.index, it) },
                 onRemove = { onRemoveEnemy(enemy.index) },
+                onRename = { onRenameEnemy(enemy.index, it) },
             )
         }
         Button(
@@ -87,9 +92,11 @@ private fun EnemyRow(
     onHealDamage: (Int) -> Unit,
     onRepair: (Int) -> Unit,
     onRemove: () -> Unit,
+    onRename: (String) -> Unit,
 ) {
     val enemy = enemyUiState.character
     var amount by remember { mutableStateOf("1") }
+    var showEditNameDialog by remember { mutableStateOf(false) }
     val actionButtonPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -102,7 +109,6 @@ private fun EnemyRow(
         Text(
             text = enemy.name,
             style = MaterialTheme.typography.titleMedium,
-//            modifier = Modifier.clickable { onToggleExpanded() }
         )
         Text(
             text = "${enemy.damageTaken}/${Character.MAX_HEALTH}",
@@ -148,6 +154,12 @@ private fun EnemyRow(
             Text("R")
         }
         Spacer(Modifier.weight(1f))
+        IconButton(onClick = { showEditNameDialog = true }) {
+            Icon(
+                imageVector = Icons.Filled.Edit,
+                contentDescription = "Rename ${enemy.name}"
+            )
+        }
         IconButton(onClick = onRemove) {
             Icon(
                 imageVector = Icons.Filled.Delete,
@@ -157,6 +169,33 @@ private fun EnemyRow(
     }
     if (expanded) {
         EnemyCharacterDisplay(state = enemyUiState)
+    }
+    if (showEditNameDialog) {
+        var newName by remember { mutableStateOf(enemy.name) }
+        AlertDialog(
+            onDismissRequest = { showEditNameDialog = false },
+            title = { Text("Edit Enemy Name") },
+            text = {
+                OutlinedTextField(
+                    value = newName,
+                    onValueChange = { newName = it },
+                    label = { Text("Name") }
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onRename(newName)
+                    showEditNameDialog = false
+                }) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditNameDialog = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }
 
@@ -179,6 +218,7 @@ fun EncounterScreenPreview() {
             onHealDamage = { _, _ -> },
             onRepair = { _, _ -> },
             onRemoveEnemy = {},
+            onRenameEnemy = { _, _ -> },
         )
     }
 }
