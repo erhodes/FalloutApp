@@ -11,6 +11,7 @@ import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CharacterRepository
+import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.http.ContentType.Application.Json
@@ -33,7 +34,11 @@ import kotlinx.serialization.modules.subclass
 @Serializable
 data class HealthStatus(val status: String = "ok")
 
-fun Application.falloutModule(userRepository: UserRepository, characterRepository: CharacterRepository) {
+fun Application.falloutModule(
+    userRepository: UserRepository,
+    characterRepository: CharacterRepository,
+    encounterRepository: EncounterRepository
+    ) {
     install(ContentNegotiation) {
         json(
             Json {
@@ -66,11 +71,21 @@ fun Application.falloutModule(userRepository: UserRepository, characterRepositor
                 call.respond(characterRepository.characters)
             }
         }
+        route("/encounters") {
+            get {
+                call.respond(encounterRepository.activeEncounter)
+            }
+        }
     }
 }
 
-fun startEmbeddedServer(userRepository: UserRepository, characterRepository: CharacterRepository, port: Int = 8080): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
+fun startEmbeddedServer(
+    userRepository: UserRepository,
+    characterRepository: CharacterRepository,
+    encounterRepository: EncounterRepository,
+    port: Int = 8080
+): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
     return embeddedServer(Netty, port = port, host = "0.0.0.0") {
-        falloutModule(userRepository, characterRepository)
+        falloutModule(userRepository, characterRepository, encounterRepository)
     }.start(wait = false)
 }

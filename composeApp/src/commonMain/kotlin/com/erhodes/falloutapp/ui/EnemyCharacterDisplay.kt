@@ -71,7 +71,7 @@ fun EnemyCharacterDisplay(
             }
         }
         //Traits
-        if (state.character.traits.isNotEmpty()) {
+        if (state.character is Enemy && state.character.traits.isNotEmpty()) {
             Column(
                 modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
             ) {

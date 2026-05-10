@@ -4,16 +4,20 @@ import androidx.lifecycle.ViewModel
 import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.EnemyEnum
+import com.erhodes.falloutapp.repository.EncounterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class EncounterViewModel(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-): ViewModel() {
+): ViewModel(), KoinComponent {
+    private val repo: EncounterRepository by inject()
 
     private var activeEncounter = Encounter("Test Encounter")
 
@@ -21,10 +25,7 @@ class EncounterViewModel(
     val activeEncounterState = _activeEncounterState.asStateFlow()
 
     init {
-        // todo temporary until I set up a proper repository
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderShotgunner())
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderPsycho())
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderLieutenant())
+        activeEncounter = repo.activeEncounter
         publishState()
     }
 

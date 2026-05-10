@@ -1,11 +1,14 @@
 package com.erhodes.falloutapp.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class Encounter(
     val name: String
 ) {
-    val characters: MutableList<Enemy> = mutableListOf()
+    val characters: MutableList<Character> = mutableListOf()
 
-    fun addCharacter(character: Enemy) {
+    fun addCharacter(character: Character) {
         characters.add(character)
     }
 
