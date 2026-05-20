@@ -26,7 +26,10 @@ class EncounterViewModel(
 
     init {
         activeEncounter = repo.activeEncounter
-        publishState()
+        publishState() // eager initial state; the collector below runs async
+        scope.launch {
+            repo.changes.collect { publishState() }
+        }
     }
 
     fun onAddEnemy(type: EnemyEnum) {
@@ -40,35 +43,16 @@ class EncounterViewModel(
             EnemyEnum.GHOUL -> EnemyDataSource.createGhoul()
             EnemyEnum.PROTECTRON -> EnemyDataSource.createProtectron()
         }
-        activeEncounter.addCharacter(newEnemy)
-        publishState()
+        repo.addCharacterToEncounter(newEnemy)
     }
 
-    fun onTakeDamage(enemyIndex: Int, amount: Int) {
-        activeEncounter.characters.getOrNull(enemyIndex)?.let {
-            it.takeDamage(amount)
-            publishState()
-        }
-    }
+    fun onTakeDamage(enemyIndex: Int, amount: Int) = repo.damageCharacter(enemyIndex, amount)
 
-    fun onHealDamage(enemyIndex: Int, amount: Int) {
-        activeEncounter.characters.getOrNull(enemyIndex)?.let {
-            it.healDamage(amount)
-            publishState()
-        }
-    }
+    fun onHealDamage(enemyIndex: Int, amount: Int) = repo.healCharacter(enemyIndex, amount)
 
-    fun onRepairArmor(enemyIndex: Int, amount: Int) {
-        activeEncounter.characters.getOrNull(enemyIndex)?.let {
-            it.repairArmor(amount)
-            publishState()
-        }
-    }
+    fun onRepairArmor(enemyIndex: Int, amount: Int) = repo.repairArmor(enemyIndex, amount)
 
-    fun onRemoveEnemy(enemyIndex: Int) {
-        activeEncounter.removeCharacter(enemyIndex)
-        publishState()
-    }
+    fun onRemoveEnemy(enemyIndex: Int) = repo.removeCharacter(enemyIndex)
 
     private fun buildState() = EncounterUiState(
         name = activeEncounter.name,

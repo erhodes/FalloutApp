@@ -15,6 +15,7 @@ import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -78,7 +79,8 @@ fun Application.falloutModule(
             post {
                 val character = call.receive<PlayerCharacter>()
                 AppLogger.d("Eric", "received character: ${character.name}")
-                encounterRepository.activeEncounter.addCharacter(character)
+                encounterRepository.addCharacterToEncounter(character)
+                call.respond(HttpStatusCode.OK)
             }
         }
     }
