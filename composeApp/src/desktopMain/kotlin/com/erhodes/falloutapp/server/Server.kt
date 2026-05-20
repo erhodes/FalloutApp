@@ -75,6 +75,11 @@ fun Application.falloutModule(
             get {
                 call.respond(encounterRepository.activeEncounter)
             }
+            post {
+                val character = call.receive<PlayerCharacter>()
+                AppLogger.d("Eric", "received character: ${character.name}")
+                encounterRepository.activeEncounter.addCharacter(character)
+            }
         }
     }
 }

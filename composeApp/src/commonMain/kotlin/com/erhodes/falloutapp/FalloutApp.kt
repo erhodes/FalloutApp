@@ -228,11 +228,12 @@ fun FalloutApp(
                 val loginState = loginStateViewModel.loginState.collectAsState()
                 LoginScreen(
                     loggedIn = loginState.value,
+                    characters = characterViewModel.characters,
                     onLogin = { name, address ->
                         loginStateViewModel.login(name, address)
                     },
-                    onSync = {
-                        loginStateViewModel.sync()
+                    onJoinEncounter = { character ->
+                        loginStateViewModel.joinEncounter(character)
                     },
                     onGetEncounter = {
                         loginStateViewModel.getActiveEncounter()

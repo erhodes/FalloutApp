@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
 import com.erhodes.falloutapp.repository.RemoteEncounterRepository
@@ -27,6 +28,12 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             val characters = characterRepo.characters
             repo.syncCharacters(characters)
+        }
+    }
+
+    fun joinEncounter(character: PlayerCharacter) {
+        viewModelScope.launch {
+            repo.joinEncounter(character)
         }
     }
 

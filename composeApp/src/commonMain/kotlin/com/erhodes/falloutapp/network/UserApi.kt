@@ -41,6 +41,17 @@ class UserApi(private val httpClient: HttpClient) {
         }
     }
 
+    suspend fun joinEncounter(character: PlayerCharacter): Boolean {
+        AppLogger.d("Eric","joining active encounter with ${character.name}")
+
+        val httpResponse = httpClient.post("/encounters") {
+            contentType(ContentType.Application.Json)
+            setBody(character)
+        }
+        AppLogger.d("Eric"," got response $httpResponse")
+        return httpResponse.status.value in 200..299
+    }
+
     suspend fun getActiveEncounter(): Encounter {
         AppLogger.d("Eric","getting active encounter")
 

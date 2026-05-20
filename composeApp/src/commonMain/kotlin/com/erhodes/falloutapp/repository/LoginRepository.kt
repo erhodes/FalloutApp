@@ -68,6 +68,10 @@ class LoginRepository(
         }
     }
 
+    suspend fun joinEncounter(character: PlayerCharacter) {
+        dataSource.joinEncounter(character, serverAddress)
+    }
+
     suspend fun getActiveEncounter() {
         val remoteEncounter = dataSource.getActiveEncounter(serverAddress)
         encounterRepository.setActiveEncounter(remoteEncounter)
