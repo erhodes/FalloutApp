@@ -30,13 +30,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun LoginScreen(
     loggedIn: Boolean,
     characters: List<PlayerCharacter>,
+    initialName: String,
+    initialAddress: String,
     onLogin: (String, String) -> Unit,
     onJoinEncounter: (PlayerCharacter) -> Unit,
     onGetEncounter: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var name by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("10.0.0.166") }
+    var name by remember(initialName) { mutableStateOf(initialName) }
+    var address by remember(initialAddress) {
+        mutableStateOf(initialAddress.ifEmpty { "10.0.0.166" })
+    }
     var selectedCharacter by remember(characters) { mutableStateOf(characters.firstOrNull()) }
     var characterMenuExpanded by remember { mutableStateOf(false) }
     val hasCharacters = characters.isNotEmpty()
@@ -121,6 +125,14 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     FalloutAppTheme {
-        LoginScreen(true, characters = emptyList(), onLogin = {a, b ->}, onJoinEncounter = {}, onGetEncounter = {})
+        LoginScreen(
+            loggedIn = true,
+            characters = emptyList(),
+            initialName = "",
+            initialAddress = "",
+            onLogin = { a, b -> },
+            onJoinEncounter = {},
+            onGetEncounter = {}
+        )
     }
 }

@@ -17,6 +17,8 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
     private val characterRepo: CharacterRepository by inject()
 
     val loginState = repo.loggedIn
+    val savedUsername = repo.savedUsername
+    val savedServerAddress = repo.savedServerAddress
 
     fun login(name: String, address: String) {
         viewModelScope.launch {

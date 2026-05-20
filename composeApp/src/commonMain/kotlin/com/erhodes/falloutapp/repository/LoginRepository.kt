@@ -1,7 +1,10 @@
 package com.erhodes.falloutapp.repository
 
+import com.erhodes.falloutapp.data.LocalDataSource
 import com.erhodes.falloutapp.data.NetworkDataSource
 import com.erhodes.falloutapp.data.localIdStore
+import com.erhodes.falloutapp.data.serverAddressStore
+import com.erhodes.falloutapp.data.usernameStore
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
@@ -24,6 +27,7 @@ class LoginRepository(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
     val dataSource = NetworkDataSource(characterRepository)
+    val localDataSource = LocalDataSource()
 
     var userId: String = ""
         private set
@@ -34,6 +38,12 @@ class LoginRepository(
 
     private val _loggedIn = MutableStateFlow(false)
     val loggedIn = _loggedIn.asStateFlow()
+
+    private val _savedUsername = MutableStateFlow("")
+    val savedUsername = _savedUsername.asStateFlow()
+
+    private val _savedServerAddress = MutableStateFlow("")
+    val savedServerAddress = _savedServerAddress.asStateFlow()
 
     private var serverAddress: String = ""
 
@@ -47,6 +57,9 @@ class LoginRepository(
             userId = uuid
             AppLogger.d("Eric", "UUID: $userId")
 //            userIdReady.complete(uuid)
+
+            _savedUsername.value = localDataSource.getUsername()
+            _savedServerAddress.value = localDataSource.getAddress()
         }
     }
 
@@ -55,6 +68,9 @@ class LoginRepository(
         val success = dataSource.submitLoginRequest(User(userId, username), address)
         if (success) {
             serverAddress = address
+            _savedUsername.value = username
+            _savedServerAddress.value = address
+            localDataSource.updateLoginInfo(username, address)
         }
         _loggedIn.value = success
     }
