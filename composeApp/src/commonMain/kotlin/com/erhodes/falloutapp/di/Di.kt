@@ -4,6 +4,7 @@ import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.ItemRepository
 import com.erhodes.falloutapp.repository.LoginRepository
 import com.erhodes.falloutapp.repository.PerkRepository
+import com.erhodes.falloutapp.repository.RemoteEncounterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.core.context.startKoin
@@ -15,6 +16,7 @@ val appModule = module {
     single { ItemRepository() }
     single { PerkRepository() }
     single { LoginRepository(get(), get()) }
+    single { RemoteEncounterRepository() }
 }
 
 /** Initialize Koin with the app module. Safe to call multiple times. */

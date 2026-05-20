@@ -206,7 +206,7 @@ sealed class Character {
     }
 
     private fun equipArmor(armor: Armor) {
-        AppLogger.d("Eric","equipping ${armor.name} current armor is ${equippedArmor != null}")
+//        AppLogger.d("Eric","equipping ${armor.name} current armor is ${equippedArmor != null}")
         if (equippedArmor != null) {
             return
         }

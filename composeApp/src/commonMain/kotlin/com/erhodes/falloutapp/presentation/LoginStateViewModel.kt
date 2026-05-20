@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
+import com.erhodes.falloutapp.repository.RemoteEncounterRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -26,6 +27,12 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             val characters = characterRepo.characters
             repo.syncCharacters(characters)
+        }
+    }
+
+    fun getActiveEncounter() {
+        viewModelScope.launch {
+            repo.getActiveEncounter()
         }
     }
 }

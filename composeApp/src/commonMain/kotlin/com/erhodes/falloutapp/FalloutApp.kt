@@ -233,6 +233,9 @@ fun FalloutApp(
                     },
                     onSync = {
                         loginStateViewModel.sync()
+                    },
+                    onGetEncounter = {
+                        loginStateViewModel.getActiveEncounter()
                     }
                 )
             }

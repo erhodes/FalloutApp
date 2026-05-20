@@ -21,9 +21,9 @@ import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: () -> Unit, modifier: Modifier = Modifier) {
+fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: () -> Unit, onGetEncounter: () -> Unit, modifier: Modifier = Modifier) {
     var name by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("10.0.0.214") }
+    var address by remember { mutableStateOf("10.0.0.166") }
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -61,6 +61,11 @@ fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: ()
         ) {
             Text("Sync Characters")
         }
+        Button(
+            onClick = { onGetEncounter() }
+        ) {
+            Text("Get Encounter")
+        }
     }
 }
 
@@ -68,6 +73,6 @@ fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: ()
 @Composable
 fun LoginScreenPreview() {
     FalloutAppTheme {
-        LoginScreen(true, onLogin = {a, b ->}, onSync = {})
+        LoginScreen(true, onLogin = {a, b ->}, onSync = {}, onGetEncounter = {})
     }
 }

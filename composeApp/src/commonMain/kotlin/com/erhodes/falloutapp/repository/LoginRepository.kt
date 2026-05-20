@@ -1,11 +1,10 @@
 package com.erhodes.falloutapp.repository
 
-import com.erhodes.falloutapp.data.UserDataSource
+import com.erhodes.falloutapp.data.NetworkDataSource
 import com.erhodes.falloutapp.data.localIdStore
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,14 +15,15 @@ import kotlin.uuid.Uuid
 
 /**
  * The idea with this class is that it tracks the current status of the server connection.
- * It also handles requests to the server through the [UserDataSource].
+ * It also handles requests to the server through the [NetworkDataSource].
  */
 @OptIn(ExperimentalUuidApi::class)
 class LoginRepository(
     private val characterRepository: CharacterRepository,
+    private val encounterRepository: RemoteEncounterRepository,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
-    val dataSource = UserDataSource(characterRepository)
+    val dataSource = NetworkDataSource(characterRepository)
 
     var userId: String = ""
         private set
@@ -66,5 +66,11 @@ class LoginRepository(
         if (filteredList.isNotEmpty()) {
             characterRepository.setRemoteCharacters(filteredList)
         }
+    }
+
+    suspend fun getActiveEncounter() {
+        val remoteEncounter = dataSource.getActiveEncounter(serverAddress)
+        encounterRepository.setActiveEncounter(remoteEncounter)
+
     }
 }
