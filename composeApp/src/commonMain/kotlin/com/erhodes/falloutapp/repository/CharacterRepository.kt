@@ -5,10 +5,10 @@ import com.erhodes.falloutapp.data.CharacterDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.ArmorTemplate
 import com.erhodes.falloutapp.model.BasicItem
-import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Recipe
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.StackableItemTemplate
@@ -31,9 +31,9 @@ class CharacterRepository(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
 
-	val characters = mutableStateListOf<Character>()
+	val characters = mutableStateListOf<PlayerCharacter>()
 
-    val remoteCharacters = mutableStateListOf<Character>()
+    val remoteCharacters = mutableStateListOf<PlayerCharacter>()
 
     val dataSource = CharacterDataSource()
 
@@ -43,12 +43,12 @@ class CharacterRepository(
         }
 	}
 
-	fun add(character: Character) {
+	fun add(character: PlayerCharacter) {
 		characters.add(character)
         saveCharacters()
 	}
 
-    fun addCharacters(newCharacters: List<Character>) {
+    fun addCharacters(newCharacters: List<PlayerCharacter>) {
         // only one character per player
         newCharacters.forEach { newChar ->
             characters.forEach { existingChar ->
@@ -61,18 +61,18 @@ class CharacterRepository(
         saveCharacters()
     }
 
-    fun removeCharacter(character: Character) {
+    fun removeCharacter(character: PlayerCharacter) {
         characters.remove(character)
         saveCharacters()
     }
 
-    fun setRemoteCharacters(characters: List<Character>) {
+    fun setRemoteCharacters(characters: List<PlayerCharacter>) {
         remoteCharacters.clear()
         remoteCharacters.addAll(characters)
         // no local storage for remote characters at the moment
     }
 
-    fun increaseSkillsForCharacter(increases: List<Int>, character: Character, milestone: Boolean) {
+    fun increaseSkillsForCharacter(increases: List<Int>, character: PlayerCharacter, milestone: Boolean) {
         for (i in 0 until increases.size) {
             character.skills[i]+=increases[i]
         }
@@ -80,55 +80,55 @@ class CharacterRepository(
         saveCharacters()
     }
 
-    fun addPerkToCharacter(perk: Perk, character: Character) {
+    fun addPerkToCharacter(perk: Perk, character: PlayerCharacter) {
         character.gainPerk(perk)
         saveCharacters()
     }
 
-    fun removePerkFromCharacter(perk: Perk, character: Character) {
+    fun removePerkFromCharacter(perk: Perk, character: PlayerCharacter) {
         character.removePerk(perk)
         saveCharacters()
     }
 
-    fun addRecipeToCharacter(recipe: Recipe, character: Character) {
+    fun addRecipeToCharacter(recipe: Recipe, character: PlayerCharacter) {
         if (character.learnRecipe(recipe)) {
             saveCharacters()
         }
     }
 
-    fun removeRecipeFromCharacter(recipe: Recipe, character: Character) {
+    fun removeRecipeFromCharacter(recipe: Recipe, character: PlayerCharacter) {
         character.recipes.remove(recipe)
         saveCharacters()
     }
 
-    fun craftRecipeForCharacter(recipe: Recipe, character: Character): Boolean {
+    fun craftRecipeForCharacter(recipe: Recipe, character: PlayerCharacter): Boolean {
         val ok = character.consumeCraftingCost(recipe)
         if (ok) saveCharacters()
         return ok
     }
 
-    fun increaseStackCountForCharacter(item: Item, count: Int, character: Character) {
+    fun increaseStackCountForCharacter(item: Item, count: Int, character: PlayerCharacter) {
         character.increaseStackCountForItem(item, count)
         saveCharacters()
     }
 
-    fun decreaseStackCountForCharacter(item: Item, count: Int, character: Character) {
+    fun decreaseStackCountForCharacter(item: Item, count: Int, character: PlayerCharacter) {
         character.decreaseStackCountForItem(item, count)
         saveCharacters()
     }
 
-    fun addAmmoToWeapon(weapon: Weapon, count: Int, character: Character) {
+    fun addAmmoToWeapon(weapon: Weapon, count: Int, character: PlayerCharacter) {
         character.increaseStackCountForItem(weapon, count)
         saveCharacters()
     }
 
-    fun removeAmmoFromWeapon(weapon: Weapon, count: Int, character: Character) {
+    fun removeAmmoFromWeapon(weapon: Weapon, count: Int, character: PlayerCharacter) {
         if (weapon.ammo - count < 0) return
         character.decreaseStackCountForItem(weapon, count)
         saveCharacters()
     }
 
-    fun addNewItemToCharacter(newItem: ItemTemplate, character: Character) {
+    fun addNewItemToCharacter(newItem: ItemTemplate, character: PlayerCharacter) {
         if (newItem is ArmorTemplate) {
             character.addItemToInventory(Armor(newItem, 0))
         } else if (newItem is WeaponTemplate) {
@@ -142,67 +142,67 @@ class CharacterRepository(
         saveCharacters()
     }
 
-    fun removeItemFromCharacter(item: Item, character: Character) {
+    fun removeItemFromCharacter(item: Item, character: PlayerCharacter) {
         character.removeItem(item)
         saveCharacters()
     }
 
-    fun equipItemToCharacter(item: Item, character: Character) {
+    fun equipItemToCharacter(item: Item, character: PlayerCharacter) {
         character.equipItem(item)
         saveCharacters()
     }
 
-    fun unequipItemFromCharacter(item: Item, character: Character) {
+    fun unequipItemFromCharacter(item: Item, character: PlayerCharacter) {
         character.unequipItem(item)
         saveCharacters()
     }
 
-    fun damageCharacter(amount: Int, character: Character) {
+    fun damageCharacter(amount: Int, character: PlayerCharacter) {
         character.takeDamage(amount)
         saveCharacters()
     }
 
-    fun healCharacter(amount: Int, character: Character) {
+    fun healCharacter(amount: Int, character: PlayerCharacter) {
         character.healDamage(amount)
         saveCharacters()
     }
 
-    fun repairArmorForCharacter(amount: Int, character: Character) {
+    fun repairArmorForCharacter(amount: Int, character: PlayerCharacter) {
         character.repairArmor(amount)
         saveCharacters()
     }
 
-    fun modifyStressForCharacter(amount: Int, character: Character) {
+    fun modifyStressForCharacter(amount: Int, character: PlayerCharacter) {
         character.modifyStress(amount)
         saveCharacters()
     }
 
-    fun modifyFatigueForCharacter(amount: Int, character: Character) {
+    fun modifyFatigueForCharacter(amount: Int, character: PlayerCharacter) {
         character.modifyFatigue(amount)
         saveCharacters()
     }
 
-    fun modifyRadiationForCharacter(amount: Int, character: Character) {
+    fun modifyRadiationForCharacter(amount: Int, character: PlayerCharacter) {
         character.modifyRadiation(amount)
         saveCharacters()
     }
 
-    fun modifyFearForCharacter(amount: Int, character: Character) {
+    fun modifyFearForCharacter(amount: Int, character: PlayerCharacter) {
         character.modifyFear(amount)
         saveCharacters()
     }
 
-    fun modifyNameForCharacter(newName: String, character: Character) {
+    fun modifyNameForCharacter(newName: String, character: PlayerCharacter) {
         character.name = newName
         saveCharacters()
     }
 
-    fun addConditionToCharacter(condition: Condition, character: Character) {
+    fun addConditionToCharacter(condition: Condition, character: PlayerCharacter) {
         character.addCondition(condition)
         saveCharacters()
     }
 
-    fun modifyConditionForCharacter(condition: Condition, amount: Int, character: Character) {
+    fun modifyConditionForCharacter(condition: Condition, amount: Int, character: PlayerCharacter) {
         if (condition is ScalableCondition) {
             condition.count+=amount
             if (condition.count < 1) {
@@ -212,7 +212,7 @@ class CharacterRepository(
         saveCharacters()
     }
 
-    fun removeConditionFromCharacter(condition: Condition, character: Character) {
+    fun removeConditionFromCharacter(condition: Condition, character: PlayerCharacter) {
         character.removeCondition(condition)
         saveCharacters()
     }

@@ -1,5 +1,8 @@
 package com.erhodes.falloutapp.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class Encounter(
     val name: String
 ) {

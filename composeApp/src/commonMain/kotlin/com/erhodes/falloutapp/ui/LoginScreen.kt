@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -16,14 +20,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: () -> Unit, modifier: Modifier = Modifier) {
-    var name by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("10.0.0.214") }
+fun LoginScreen(
+    loggedIn: Boolean,
+    characters: List<PlayerCharacter>,
+    initialName: String,
+    initialAddress: String,
+    onLogin: (String, String) -> Unit,
+    onJoinEncounter: (PlayerCharacter) -> Unit,
+    onGetEncounter: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var name by remember(initialName) { mutableStateOf(initialName) }
+    var address by remember(initialAddress) {
+        mutableStateOf(initialAddress.ifEmpty { "10.0.0.166" })
+    }
+    var selectedCharacter by remember(characters) { mutableStateOf(characters.firstOrNull()) }
+    var characterMenuExpanded by remember { mutableStateOf(false) }
+    val hasCharacters = characters.isNotEmpty()
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -53,13 +73,50 @@ fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: ()
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
+        ExposedDropdownMenuBox(
+            expanded = characterMenuExpanded && hasCharacters,
+            onExpandedChange = { if (hasCharacters) characterMenuExpanded = !characterMenuExpanded }
+        ) {
+            OutlinedTextField(
+                value = if (hasCharacters) selectedCharacter?.name.orEmpty() else "No characters available",
+                onValueChange = {},
+                readOnly = true,
+                enabled = hasCharacters,
+                label = { Text("Character") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = characterMenuExpanded && hasCharacters)
+                },
+                modifier = Modifier.menuAnchor().fillMaxWidth()
+            )
+            ExposedDropdownMenu(
+                expanded = characterMenuExpanded && hasCharacters,
+                onDismissRequest = { characterMenuExpanded = false }
+            ) {
+                characters.forEach { character ->
+                    DropdownMenuItem(
+                        text = { Text(character.name) },
+                        onClick = {
+                            selectedCharacter = character
+                            characterMenuExpanded = false
+                        }
+                    )
+                }
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
         Button(onClick = { onLogin(name, address) }) {
             Text("Login")
         }
         Button(
-            onClick = { onSync() }
+            onClick = { selectedCharacter?.let(onJoinEncounter) },
+            enabled = selectedCharacter != null
         ) {
-            Text("Sync Characters")
+            Text("Join Encounter")
+        }
+        Button(
+            onClick = { onGetEncounter() }
+        ) {
+            Text("Get Encounter")
         }
     }
 }
@@ -68,6 +125,14 @@ fun LoginScreen(loggedIn: Boolean, onLogin: (String, String) -> Unit, onSync: ()
 @Composable
 fun LoginScreenPreview() {
     FalloutAppTheme {
-        LoginScreen(true, onLogin = {a, b ->}, onSync = {})
+        LoginScreen(
+            loggedIn = true,
+            characters = emptyList(),
+            initialName = "",
+            initialAddress = "",
+            onLogin = { a, b -> },
+            onJoinEncounter = {},
+            onGetEncounter = {}
+        )
     }
 }

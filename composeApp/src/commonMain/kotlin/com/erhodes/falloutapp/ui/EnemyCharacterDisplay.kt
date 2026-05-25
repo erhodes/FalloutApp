@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.ItemDataSource
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Enemy
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.Stats
 import com.erhodes.falloutapp.model.Weapon
@@ -71,7 +71,7 @@ fun EnemyCharacterDisplay(
             }
         }
         //Traits
-        if (state.character.traits.isNotEmpty()) {
+        if (state.character is Enemy && state.character.traits.isNotEmpty()) {
             Column(
                 modifier = Modifier.padding(horizontal = Dimens.paddingMedium)
             ) {
@@ -117,7 +117,7 @@ fun EnemyCharacterDisplay(
 fun EnemyCharacterDisplayPreview() {
     FalloutAppTheme {
         val weapon = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 1)
-        val character = Character("Bob")
+        val character = Enemy("Bob")
         character.actions.add(RangedAttack(weapon))
         EnemyCharacterDisplay(
             state = EnemyUiState(

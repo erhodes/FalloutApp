@@ -1,9 +1,9 @@
 package com.erhodes.falloutapp.presentation
 
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 
 data class GainSkillUiState(
-    val character: Character,
+    val character: PlayerCharacter,
     val bonuses: Int,
     val milestone: Boolean,
     val appliedBonuses: ArrayList<Int> = arrayListOf(0,0,0,0,0,0,0,0,0,0,0,0)

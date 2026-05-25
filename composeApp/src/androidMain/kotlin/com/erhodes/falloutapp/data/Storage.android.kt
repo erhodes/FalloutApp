@@ -25,3 +25,17 @@ actual val localIdStore: KStore<String> by lazy {
         default = ""
     )
 }
+actual val usernameStore: KStore<String> by lazy {
+    val filesDir = appContext.filesDir.absolutePath
+    storeOf(
+        file = Path("$filesDir/username.json"),
+        default = ""
+    )
+}
+actual val serverAddressStore: KStore<String> by lazy {
+    val filesDir = appContext.filesDir.absolutePath
+    storeOf(
+        file = Path("$filesDir/serverAddress.json"),
+        default = ""
+    )
+}

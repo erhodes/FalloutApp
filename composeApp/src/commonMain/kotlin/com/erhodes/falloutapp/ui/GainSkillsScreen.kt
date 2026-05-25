@@ -8,7 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.presentation.GainSkillUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
@@ -71,7 +71,7 @@ fun ModifySkillPanel(ordinal: Int,
 fun GainSkillScreenPreview() {
     MaterialTheme {
         GainSkillsScreen(
-            uiState = GainSkillUiState(character = Character("Tom"), 2, false),
+            uiState = GainSkillUiState(character = PlayerCharacter("Tom"), 2, false),
             {},
             {},
             {}

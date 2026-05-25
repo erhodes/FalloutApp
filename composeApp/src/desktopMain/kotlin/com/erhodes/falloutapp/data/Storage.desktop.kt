@@ -33,6 +33,32 @@ actual val localIdStore: KStore<String> by lazy {
         default = ""
     )
 }
+actual val usernameStore: KStore<String> by lazy {
+    val homeDir = System.getProperty("user.home")
+    val appDir = Path("$homeDir/.falloutapp")
+
+    if (!SystemFileSystem.exists(appDir)) {
+        SystemFileSystem.createDirectories(appDir)
+    }
+
+    storeOf(
+        file = Path("$homeDir/.falloutapp/username.json"),
+        default = ""
+    )
+}
+actual val serverAddressStore: KStore<String> by lazy {
+    val homeDir = System.getProperty("user.home")
+    val appDir = Path("$homeDir/.falloutapp")
+
+    if (!SystemFileSystem.exists(appDir)) {
+        SystemFileSystem.createDirectories(appDir)
+    }
+
+    storeOf(
+        file = Path("$homeDir/.falloutapp/serverAddress.json"),
+        default = ""
+    )
+}
 
 val localUserStore: KStore<String> by lazy {
     val homeDir = System.getProperty("user.home")

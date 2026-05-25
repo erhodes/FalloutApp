@@ -1,10 +1,12 @@
 package com.erhodes.falloutapp.network
 
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Encounter
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -22,7 +24,7 @@ class UserApi(private val httpClient: HttpClient) {
         return httpResponse.status.value in 200..299
     }
 
-    suspend fun syncCharacters(characters: List<Character>): List<Character> {
+    suspend fun syncCharacters(characters: List<PlayerCharacter>): List<PlayerCharacter> {
         AppLogger.d("Eric","sending characters ${characters.size}")
 
         val httpResponse = httpClient.post("/characters") {
@@ -31,11 +33,39 @@ class UserApi(private val httpClient: HttpClient) {
         }
         AppLogger.d("Eric"," got response $httpResponse")
         if (httpResponse.status.value in 200..299) {
-            val characters = httpResponse.body<List<Character>>()
+            val characters = httpResponse.body<List<PlayerCharacter>>()
 
             return characters
         } else {
             return ArrayList()
+        }
+    }
+
+    suspend fun joinEncounter(character: PlayerCharacter): Boolean {
+        AppLogger.d("Eric","joining active encounter with ${character.name}")
+
+        val httpResponse = httpClient.post("/encounters") {
+            contentType(ContentType.Application.Json)
+            setBody(character)
+        }
+        AppLogger.d("Eric"," got response $httpResponse")
+        return httpResponse.status.value in 200..299
+    }
+
+    suspend fun getActiveEncounter(): Encounter {
+        AppLogger.d("Eric","getting active encounter")
+
+        val httpResponse = httpClient.get("/encounters") {
+            contentType(ContentType.Application.Json)
+        }
+
+        AppLogger.d("Eric", "got response $httpResponse")
+        if (httpResponse.status.value in 200..299) {
+            val encounter = httpResponse.body<Encounter>()
+
+            return encounter
+        } else {
+            return Encounter("ERROR")
         }
     }
 }

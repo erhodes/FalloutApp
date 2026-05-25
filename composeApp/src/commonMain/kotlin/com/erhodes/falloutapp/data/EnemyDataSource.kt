@@ -5,7 +5,7 @@ import com.erhodes.falloutapp.data.ItemDataSource.ID_MINIGUN
 import com.erhodes.falloutapp.data.ItemDataSource.ID_PA_RAIDER
 import com.erhodes.falloutapp.data.ItemDataSource.ID_SNIPER_RIFLE
 import com.erhodes.falloutapp.model.Armor
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Enemy
 import com.erhodes.falloutapp.model.Skills
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.model.action.MeleeAttack
@@ -13,8 +13,8 @@ import com.erhodes.falloutapp.model.action.RangedAttack
 
 object EnemyDataSource {
 
-    fun createRaiderShotgunner(): Character {
-        val raiderShotgunner = Character(
+    fun createRaiderShotgunner(): Enemy {
+        val raiderShotgunner = Enemy(
             name = "Raider Shotgunner",
             strength = 2,
             perception = 2,
@@ -34,9 +34,9 @@ object EnemyDataSource {
         raiderShotgunner.actions.add(RangedAttack(shotgun))
         return raiderShotgunner
     }
-    
-    fun createRaiderPsycho(): Character {
-        val raiderPsycho = Character(
+
+    fun createRaiderPsycho(): Enemy {
+        val raiderPsycho = Enemy(
             name = "Raider Psycho",
             strength = 3,
             perception = 2,
@@ -57,8 +57,8 @@ object EnemyDataSource {
         return raiderPsycho
     }
 
-    fun createRaiderLieutenant(): Character {
-        val raiderLieutenant = Character(
+    fun createRaiderLieutenant(): Enemy {
+        val raiderLieutenant = Enemy(
             name = "Raider Lieutenant",
             strength = 1,
             perception = 2,
@@ -81,8 +81,8 @@ object EnemyDataSource {
         return raiderLieutenant
     }
 
-    fun createGhoul(): Character {
-        val ghoul = Character(
+    fun createGhoul(): Enemy {
+        val ghoul = Enemy(
             name = "Ghoul",
             strength = 3,
             perception = 2,
@@ -102,8 +102,8 @@ object EnemyDataSource {
         return ghoul
     }
 
-    fun createProtectron(): Character {
-        val protectron = Character(
+    fun createProtectron(): Enemy {
+        val protectron = Enemy(
             name = "Protectron",
             strength = 2,
             perception = 2,
@@ -127,8 +127,8 @@ object EnemyDataSource {
         return protectron
     }
 
-    fun createRaiderHeavy(): Character {
-        val raiderHeavy = Character(
+    fun createRaiderHeavy(): Enemy {
+        val raiderHeavy = Enemy(
             name = "Raider Heavy",
             strength = 3,
             perception = 2,
@@ -149,8 +149,8 @@ object EnemyDataSource {
         return raiderHeavy
     }
 
-    fun createRaiderStalker(): Character {
-        val raiderStalker = Character(
+    fun createRaiderStalker(): Enemy {
+        val raiderStalker = Enemy(
             name = "Raider Stalker",
             strength = 2,
             perception = 3,
@@ -174,8 +174,8 @@ object EnemyDataSource {
         return raiderStalker
     }
 
-    fun createZapper(): Character {
-        val zapper = Character(
+    fun createZapper(): Enemy {
+        val zapper = Enemy(
             name = "Zapper",
             strength = 2,
             perception = 2,

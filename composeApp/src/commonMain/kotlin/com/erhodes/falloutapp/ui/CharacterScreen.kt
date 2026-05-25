@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.BasicItem
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
@@ -390,7 +390,7 @@ fun ItemPanel(
 @Preview
 @Composable
 fun CharacterScreenPreview() {
-    val character = Character("Tom")
+    val character = PlayerCharacter("Tom")
     val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ARMOR_LEATHER), 0)
     val banner = BasicItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_BATTLE_STANDARD))
     character.addItemToInventory(armor)

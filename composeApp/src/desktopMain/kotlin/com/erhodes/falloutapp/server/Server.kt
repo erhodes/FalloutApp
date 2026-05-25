@@ -5,15 +5,17 @@ import com.erhodes.falloutapp.data.ItemTemplateSerializer
 import com.erhodes.falloutapp.data.PerkSerializer
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.BasicItem
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CharacterRepository
+import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.http.ContentType.Application.Json
+import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -33,7 +35,11 @@ import kotlinx.serialization.modules.subclass
 @Serializable
 data class HealthStatus(val status: String = "ok")
 
-fun Application.falloutModule(userRepository: UserRepository, characterRepository: CharacterRepository) {
+fun Application.falloutModule(
+    userRepository: UserRepository,
+    characterRepository: CharacterRepository,
+    encounterRepository: EncounterRepository
+    ) {
     install(ContentNegotiation) {
         json(
             Json {
@@ -59,18 +65,34 @@ fun Application.falloutModule(userRepository: UserRepository, characterRepositor
         }
         route("/characters") {
             post {
-                val characters = call.receive<List<Character>>()
+                val characters = call.receive<List<PlayerCharacter>>()
                 AppLogger.d("Eric", "received characters: ${characters.size}")
 
                 characterRepository.addCharacters(characters)
                 call.respond(characterRepository.characters)
             }
         }
+        route("/encounters") {
+            get {
+                call.respond(encounterRepository.activeEncounter)
+            }
+            post {
+                val character = call.receive<PlayerCharacter>()
+                AppLogger.d("Eric", "received character: ${character.name}")
+                encounterRepository.addCharacterToEncounter(character)
+                call.respond(HttpStatusCode.OK)
+            }
+        }
     }
 }
 
-fun startEmbeddedServer(userRepository: UserRepository, characterRepository: CharacterRepository, port: Int = 8080): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
+fun startEmbeddedServer(
+    userRepository: UserRepository,
+    characterRepository: CharacterRepository,
+    encounterRepository: EncounterRepository,
+    port: Int = 8080
+): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
     return embeddedServer(Netty, port = port, host = "0.0.0.0") {
-        falloutModule(userRepository, characterRepository)
+        falloutModule(userRepository, characterRepository, encounterRepository)
     }.start(wait = false)
 }

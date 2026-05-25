@@ -2,8 +2,10 @@ package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
+import com.erhodes.falloutapp.repository.RemoteEncounterRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -15,6 +17,8 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
     private val characterRepo: CharacterRepository by inject()
 
     val loginState = repo.loggedIn
+    val savedUsername = repo.savedUsername
+    val savedServerAddress = repo.savedServerAddress
 
     fun login(name: String, address: String) {
         viewModelScope.launch {
@@ -26,6 +30,18 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             val characters = characterRepo.characters
             repo.syncCharacters(characters)
+        }
+    }
+
+    fun joinEncounter(character: PlayerCharacter) {
+        viewModelScope.launch {
+            repo.joinEncounter(character)
+        }
+    }
+
+    fun getActiveEncounter() {
+        viewModelScope.launch {
+            repo.getActiveEncounter()
         }
     }
 }

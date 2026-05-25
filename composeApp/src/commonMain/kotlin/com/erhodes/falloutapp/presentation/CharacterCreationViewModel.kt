@@ -1,7 +1,7 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
 import kotlinx.coroutines.CoroutineScope
@@ -29,9 +29,9 @@ class CharacterCreationViewModel(
     private val _creationUiState = MutableStateFlow(CharacterCreationUiState())
     val creationUiState = _creationUiState.asStateFlow()
 
-    fun addCharacter(name: String, uiState: CharacterCreationUiState): Character {
+    fun addCharacter(name: String, uiState: CharacterCreationUiState): PlayerCharacter {
         val newChar =
-            Character(
+            PlayerCharacter(
                 name = name,
                 ownerId = loginRepository.userId,
                 strength = uiState.stats[0],

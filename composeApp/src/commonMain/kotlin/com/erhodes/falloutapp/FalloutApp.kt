@@ -226,13 +226,21 @@ fun FalloutApp(
             }
             composable(route = FalloutScreen.Login.name) {
                 val loginState = loginStateViewModel.loginState.collectAsState()
+                val savedName = loginStateViewModel.savedUsername.collectAsState()
+                val savedAddress = loginStateViewModel.savedServerAddress.collectAsState()
                 LoginScreen(
                     loggedIn = loginState.value,
+                    characters = characterViewModel.characters,
+                    initialName = savedName.value,
+                    initialAddress = savedAddress.value,
                     onLogin = { name, address ->
                         loginStateViewModel.login(name, address)
                     },
-                    onSync = {
-                        loginStateViewModel.sync()
+                    onJoinEncounter = { character ->
+                        loginStateViewModel.joinEncounter(character)
+                    },
+                    onGetEncounter = {
+                        loginStateViewModel.getActiveEncounter()
                     }
                 )
             }

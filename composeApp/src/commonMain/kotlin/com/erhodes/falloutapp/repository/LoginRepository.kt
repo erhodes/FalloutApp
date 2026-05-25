@@ -1,11 +1,13 @@
 package com.erhodes.falloutapp.repository
 
-import com.erhodes.falloutapp.data.UserDataSource
+import com.erhodes.falloutapp.data.LocalDataSource
+import com.erhodes.falloutapp.data.NetworkDataSource
 import com.erhodes.falloutapp.data.localIdStore
-import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.data.serverAddressStore
+import com.erhodes.falloutapp.data.usernameStore
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,14 +18,16 @@ import kotlin.uuid.Uuid
 
 /**
  * The idea with this class is that it tracks the current status of the server connection.
- * It also handles requests to the server through the [UserDataSource].
+ * It also handles requests to the server through the [NetworkDataSource].
  */
 @OptIn(ExperimentalUuidApi::class)
 class LoginRepository(
     private val characterRepository: CharacterRepository,
+    private val encounterRepository: RemoteEncounterRepository,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
-    val dataSource = UserDataSource(characterRepository)
+    val dataSource = NetworkDataSource(characterRepository)
+    val localDataSource = LocalDataSource()
 
     var userId: String = ""
         private set
@@ -34,6 +38,12 @@ class LoginRepository(
 
     private val _loggedIn = MutableStateFlow(false)
     val loggedIn = _loggedIn.asStateFlow()
+
+    private val _savedUsername = MutableStateFlow("")
+    val savedUsername = _savedUsername.asStateFlow()
+
+    private val _savedServerAddress = MutableStateFlow("")
+    val savedServerAddress = _savedServerAddress.asStateFlow()
 
     private var serverAddress: String = ""
 
@@ -47,6 +57,9 @@ class LoginRepository(
             userId = uuid
             AppLogger.d("Eric", "UUID: $userId")
 //            userIdReady.complete(uuid)
+
+            _savedUsername.value = localDataSource.getUsername()
+            _savedServerAddress.value = localDataSource.getAddress()
         }
     }
 
@@ -55,16 +68,29 @@ class LoginRepository(
         val success = dataSource.submitLoginRequest(User(userId, username), address)
         if (success) {
             serverAddress = address
+            _savedUsername.value = username
+            _savedServerAddress.value = address
+            localDataSource.updateLoginInfo(username, address)
         }
         _loggedIn.value = success
     }
 
-    suspend fun syncCharacters(characters: List<Character>) {
+    suspend fun syncCharacters(characters: List<PlayerCharacter>) {
         val remoteCharacters = dataSource.syncCharacters(characters, serverAddress)
         // any characters we own should be excluded as they are not remote
         val filteredList = remoteCharacters.filter { it.ownerId != userId }
         if (filteredList.isNotEmpty()) {
             characterRepository.setRemoteCharacters(filteredList)
         }
+    }
+
+    suspend fun joinEncounter(character: PlayerCharacter) {
+        dataSource.joinEncounter(character, serverAddress)
+    }
+
+    suspend fun getActiveEncounter() {
+        val remoteEncounter = dataSource.getActiveEncounter(serverAddress)
+        encounterRepository.setActiveEncounter(remoteEncounter)
+
     }
 }

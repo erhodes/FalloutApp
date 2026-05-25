@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.FearLevel
 import com.erhodes.falloutapp.model.condition.ConditionTemplate
 import com.erhodes.falloutapp.model.condition.Condition
@@ -189,7 +190,7 @@ fun SecondaryVitalsPanel(
     Column {
         Row {
             Text(
-                text = "${stringResource(Res.string.stress)} ${character.stress}/${Character.MAX_STRESS}",
+                text = "${stringResource(Res.string.stress)} ${character.stress}/${PlayerCharacter.MAX_STRESS}",
                 modifier = Modifier.fillMaxWidth(0.2f)
             )
             if (editable) {
@@ -312,7 +313,7 @@ fun PlusMinusButtons(onIncrease: () -> Unit, onDecrease: () -> Unit) {
 fun VitalsScreenPreview() {
     FalloutAppTheme {
         VitalsScreen(
-            CharacterUiState(Character("Tom")),
+            CharacterUiState(PlayerCharacter("Tom")),
             {},
             {},
             {},
@@ -331,7 +332,7 @@ fun VitalsScreenPreview() {
 fun VitalsScreenPreviewNonEditable() {
     FalloutAppTheme {
         VitalsScreen(
-            CharacterUiState(Character("Tom"), false),
+            CharacterUiState(PlayerCharacter("Tom"), false),
             {},
             {},
             {},
@@ -350,7 +351,7 @@ fun VitalsScreenPreviewNonEditable() {
 fun VitalsScreenPreviewWide() {
     FalloutAppTheme {
         VitalsScreen(
-            CharacterUiState(Character("Tom")),
+            CharacterUiState(PlayerCharacter("Tom")),
             {},
             {},
             {},
@@ -367,7 +368,7 @@ fun VitalsScreenPreviewWide() {
 @Preview
 @Composable
 fun ConditionsPanelPreview() {
-    val character = Character("Bob")
+    val character = PlayerCharacter("Bob")
     val burning = Condition.buildNewCondition(ConditionTemplate.Burning)
     character.addCondition(burning)
     FalloutAppTheme {

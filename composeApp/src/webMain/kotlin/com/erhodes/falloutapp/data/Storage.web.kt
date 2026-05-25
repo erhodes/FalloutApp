@@ -16,3 +16,17 @@ actual val localIdStore: KStore<String> by lazy {
         default = ""
     )
 }
+
+actual val usernameStore: KStore<String> by lazy {
+    storeOf(
+        key = "username",
+        default = ""
+    )
+}
+
+actual val serverAddressStore: KStore<String> by lazy {
+    storeOf(
+        key = "serverAddress",
+        default = ""
+    )
+}

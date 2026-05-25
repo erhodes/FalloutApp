@@ -4,16 +4,20 @@ import androidx.lifecycle.ViewModel
 import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.EnemyEnum
+import com.erhodes.falloutapp.repository.EncounterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 class EncounterViewModel(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
-): ViewModel() {
+): ViewModel(), KoinComponent {
+    private val repo: EncounterRepository by inject()
 
     private var activeEncounter = Encounter("Test Encounter")
 
@@ -21,11 +25,11 @@ class EncounterViewModel(
     val activeEncounterState = _activeEncounterState.asStateFlow()
 
     init {
-        // todo temporary until I set up a proper repository
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderShotgunner())
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderPsycho())
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderLieutenant())
-        publishState()
+        activeEncounter = repo.activeEncounter
+        publishState() // eager initial state; the collector below runs async
+        scope.launch {
+            repo.changes.collect { publishState() }
+        }
     }
 
     fun onAddEnemy(type: EnemyEnum) {
@@ -39,30 +43,14 @@ class EncounterViewModel(
             EnemyEnum.GHOUL -> EnemyDataSource.createGhoul()
             EnemyEnum.PROTECTRON -> EnemyDataSource.createProtectron()
         }
-        activeEncounter.addCharacter(newEnemy)
-        publishState()
+        repo.addCharacterToEncounter(newEnemy)
     }
 
-    fun onTakeDamage(enemyIndex: Int, amount: Int) {
-        activeEncounter.characters.getOrNull(enemyIndex)?.let {
-            it.takeDamage(amount)
-            publishState()
-        }
-    }
+    fun onTakeDamage(enemyIndex: Int, amount: Int) = repo.damageCharacter(enemyIndex, amount)
 
-    fun onHealDamage(enemyIndex: Int, amount: Int) {
-        activeEncounter.characters.getOrNull(enemyIndex)?.let {
-            it.healDamage(amount)
-            publishState()
-        }
-    }
+    fun onHealDamage(enemyIndex: Int, amount: Int) = repo.healCharacter(enemyIndex, amount)
 
-    fun onRepairArmor(enemyIndex: Int, amount: Int) {
-        activeEncounter.characters.getOrNull(enemyIndex)?.let {
-            it.repairArmor(amount)
-            publishState()
-        }
-    }
+    fun onRepairArmor(enemyIndex: Int, amount: Int) = repo.repairArmor(enemyIndex, amount)
 
     fun onRenameEnemy(enemyIndex: Int, newName: String) {
         activeEncounter.characters.getOrNull(enemyIndex)?.let {

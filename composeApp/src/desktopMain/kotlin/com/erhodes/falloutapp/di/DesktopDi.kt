@@ -1,11 +1,13 @@
 package com.erhodes.falloutapp.di
 
+import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 private val desktopModule = module {
     single { UserRepository() }
+    single { EncounterRepository() }
 }
 
 /**

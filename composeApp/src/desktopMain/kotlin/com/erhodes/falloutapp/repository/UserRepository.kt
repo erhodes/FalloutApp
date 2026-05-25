@@ -1,7 +1,6 @@
 package com.erhodes.falloutapp.repository
 
 import com.erhodes.falloutapp.data.localUserStore
-import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CoroutineScope
