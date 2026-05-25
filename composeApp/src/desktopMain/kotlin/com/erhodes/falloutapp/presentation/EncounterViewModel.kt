@@ -52,7 +52,17 @@ class EncounterViewModel(
 
     fun onRepairArmor(enemyIndex: Int, amount: Int) = repo.repairArmor(enemyIndex, amount)
 
-    fun onRemoveEnemy(enemyIndex: Int) = repo.removeCharacter(enemyIndex)
+    fun onRenameEnemy(enemyIndex: Int, newName: String) {
+        activeEncounter.characters.getOrNull(enemyIndex)?.let {
+            it.name = newName
+            publishState()
+        }
+    }
+
+    fun onRemoveEnemy(enemyIndex: Int) {
+        activeEncounter.removeCharacter(enemyIndex)
+        publishState()
+    }
 
     private fun buildState() = EncounterUiState(
         name = activeEncounter.name,
