@@ -3,8 +3,6 @@ package com.erhodes.falloutapp.repository
 import com.erhodes.falloutapp.data.LocalDataSource
 import com.erhodes.falloutapp.data.NetworkDataSource
 import com.erhodes.falloutapp.data.localIdStore
-import com.erhodes.falloutapp.data.serverAddressStore
-import com.erhodes.falloutapp.data.usernameStore
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.util.AppLogger
@@ -84,8 +82,8 @@ class LoginRepository(
         }
     }
 
-    suspend fun joinEncounter(character: PlayerCharacter) {
-        dataSource.joinEncounter(character, serverAddress)
+    suspend fun joinCampaign(character: PlayerCharacter) {
+        dataSource.joinCampaign(character, serverAddress)
     }
 
     suspend fun getActiveEncounter() {

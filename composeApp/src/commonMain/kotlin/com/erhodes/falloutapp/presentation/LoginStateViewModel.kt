@@ -5,9 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
-import com.erhodes.falloutapp.repository.RemoteEncounterRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -33,9 +30,9 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun joinEncounter(character: PlayerCharacter) {
+    fun joinCampaign(character: PlayerCharacter) {
         viewModelScope.launch {
-            repo.joinEncounter(character)
+            repo.joinCampaign(character)
         }
     }
 

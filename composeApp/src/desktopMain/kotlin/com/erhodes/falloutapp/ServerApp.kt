@@ -22,15 +22,18 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.erhodes.falloutapp.presentation.CampaignViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.EncounterViewModel
 import com.erhodes.falloutapp.presentation.UserViewModel
 import com.erhodes.falloutapp.ui.AddEnemyScreen
+import com.erhodes.falloutapp.ui.CampaignScreen
 import com.erhodes.falloutapp.ui.EncounterScreen
 import com.erhodes.falloutapp.ui.UserListScreen
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_enemy
 import falloutapp.composeapp.generated.resources.back_button
+import falloutapp.composeapp.generated.resources.campaign
 import falloutapp.composeapp.generated.resources.encounters
 import falloutapp.composeapp.generated.resources.user_list
 import org.jetbrains.compose.resources.StringResource
@@ -40,7 +43,8 @@ import org.jetbrains.compose.resources.stringResource
 enum class ServerScreen(val title: StringResource) {
     UserListScreen(title = Res.string.user_list),
     EncounterScreen(title = Res.string.encounters),
-    AddEnemyScreen(title = Res.string.add_enemy)
+    AddEnemyScreen(title = Res.string.add_enemy),
+    CampaignScreen(title = Res.string.campaign)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +53,7 @@ fun ServerApp(
     userViewModel: UserViewModel = viewModel { UserViewModel() },
     characterViewModel: CharacterViewModel = viewModel { CharacterViewModel() },
     encounterViewModel: EncounterViewModel = viewModel { EncounterViewModel() },
+    campaignViewModel: CampaignViewModel = viewModel { CampaignViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -68,7 +73,7 @@ fun ServerApp(
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = ServerScreen.EncounterScreen.name,
+            startDestination = ServerScreen.CampaignScreen.name,
             modifier = Modifier.fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
@@ -103,6 +108,10 @@ fun ServerApp(
                         navController.navigate(ServerScreen.EncounterScreen.name)
                     }
                 )
+            }
+            composable(route = ServerScreen.CampaignScreen.name) {
+                val campaignState by campaignViewModel.activeCampaignState.collectAsState()
+                CampaignScreen(campaignState)
             }
         }
     }

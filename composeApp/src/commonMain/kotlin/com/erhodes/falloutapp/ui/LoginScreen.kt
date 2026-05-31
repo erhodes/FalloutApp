@@ -33,7 +33,7 @@ fun LoginScreen(
     initialName: String,
     initialAddress: String,
     onLogin: (String, String) -> Unit,
-    onJoinEncounter: (PlayerCharacter) -> Unit,
+    onJoinCampaign: (PlayerCharacter) -> Unit,
     onGetEncounter: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -108,10 +108,10 @@ fun LoginScreen(
             Text("Login")
         }
         Button(
-            onClick = { selectedCharacter?.let(onJoinEncounter) },
+            onClick = { selectedCharacter?.let(onJoinCampaign) },
             enabled = selectedCharacter != null
         ) {
-            Text("Join Encounter")
+            Text("Join Campaign")
         }
         Button(
             onClick = { onGetEncounter() }
@@ -131,7 +131,7 @@ fun LoginScreenPreview() {
             initialName = "",
             initialAddress = "",
             onLogin = { a, b -> },
-            onJoinEncounter = {},
+            onJoinCampaign = {},
             onGetEncounter = {}
         )
     }

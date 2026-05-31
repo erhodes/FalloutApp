@@ -97,4 +97,6 @@
     <string name="login">Login</string>
     <string name="encounters">Encounters</string>
     <string name="add_enemy">Add Enemy</string>
+
+    <string name="campaign">Campaign</string>
 </resources>

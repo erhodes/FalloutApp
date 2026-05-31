@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.server
 
+import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.UserRepository
@@ -10,11 +11,12 @@ class ServerManager: KoinComponent {
     val userRepository: UserRepository by inject()
     val characterRepository: CharacterRepository by inject()
     val encounterRepository: EncounterRepository by inject()
+    val campaignRepository: CampaignRepository by inject()
 
     fun startServer() {
         println("Server started")
 
-        val engine = startEmbeddedServer(userRepository, characterRepository, encounterRepository)
+        val engine = startEmbeddedServer(userRepository, characterRepository, encounterRepository, campaignRepository)
 
         Runtime.getRuntime().addShutdownHook(Thread { engine.stop(1000, 2000) })
     }

@@ -45,7 +45,7 @@ class UserRepository(
         saveUsers(_users.value)
     }
 
-    private fun findUserById(uuid: String): User? {
+    fun findUserById(uuid: String): User? {
         return _users.value.find { it.uuid == uuid }
     }
 

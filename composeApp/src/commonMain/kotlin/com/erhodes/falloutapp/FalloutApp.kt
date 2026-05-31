@@ -236,8 +236,8 @@ fun FalloutApp(
                     onLogin = { name, address ->
                         loginStateViewModel.login(name, address)
                     },
-                    onJoinEncounter = { character ->
-                        loginStateViewModel.joinEncounter(character)
+                    onJoinCampaign = { character ->
+                        loginStateViewModel.joinCampaign(character)
                     },
                     onGetEncounter = {
                         loginStateViewModel.getActiveEncounter()

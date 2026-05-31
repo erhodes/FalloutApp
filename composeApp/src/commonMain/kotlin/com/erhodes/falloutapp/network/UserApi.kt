@@ -41,10 +41,10 @@ class UserApi(private val httpClient: HttpClient) {
         }
     }
 
-    suspend fun joinEncounter(character: PlayerCharacter): Boolean {
-        AppLogger.d("Eric","joining active encounter with ${character.name}")
+    suspend fun joinCampaign(character: PlayerCharacter): Boolean {
+        AppLogger.d("Eric","joining campaign with ${character.name}")
 
-        val httpResponse = httpClient.post("/encounters") {
+        val httpResponse = httpClient.post("/campaign") {
             contentType(ContentType.Application.Json)
             setBody(character)
         }

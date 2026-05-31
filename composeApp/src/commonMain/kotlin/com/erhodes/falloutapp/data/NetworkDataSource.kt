@@ -24,10 +24,10 @@ class NetworkDataSource(private val characterRepository: CharacterRepository) {
         return userApi.syncCharacters(characters)
     }
 
-    suspend fun joinEncounter(character: PlayerCharacter, address: String): Boolean {
+    suspend fun joinCampaign(character: PlayerCharacter, address: String): Boolean {
         val client = createHttpClient(address)
         val userApi = UserApi(client)
-        return userApi.joinEncounter(character)
+        return userApi.joinCampaign(character)
     }
 
     suspend fun getActiveEncounter(address: String): Encounter {

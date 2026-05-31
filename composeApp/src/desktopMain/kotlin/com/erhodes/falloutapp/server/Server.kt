@@ -10,6 +10,7 @@ import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.Weapon
+import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.UserRepository
@@ -38,7 +39,8 @@ data class HealthStatus(val status: String = "ok")
 fun Application.falloutModule(
     userRepository: UserRepository,
     characterRepository: CharacterRepository,
-    encounterRepository: EncounterRepository
+    encounterRepository: EncounterRepository,
+    campaignRepository: CampaignRepository
     ) {
     install(ContentNegotiation) {
         json(
@@ -83,6 +85,15 @@ fun Application.falloutModule(
                 call.respond(HttpStatusCode.OK)
             }
         }
+        route("/campaign") {
+            post {
+                val character = call.receive<PlayerCharacter>()
+                AppLogger.d("Eric", "received character: ${character.name} for ${character.ownerId}")
+                userRepository.findUserById(character.ownerId)
+                campaignRepository.addCharacterToCampaign(character)
+                call.respond(HttpStatusCode.OK)
+            }
+        }
     }
 }
 
@@ -90,9 +101,10 @@ fun startEmbeddedServer(
     userRepository: UserRepository,
     characterRepository: CharacterRepository,
     encounterRepository: EncounterRepository,
+    campaignRepository: CampaignRepository,
     port: Int = 8080
 ): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
     return embeddedServer(Netty, port = port, host = "0.0.0.0") {
-        falloutModule(userRepository, characterRepository, encounterRepository)
+        falloutModule(userRepository, characterRepository, encounterRepository, campaignRepository)
     }.start(wait = false)
 }
