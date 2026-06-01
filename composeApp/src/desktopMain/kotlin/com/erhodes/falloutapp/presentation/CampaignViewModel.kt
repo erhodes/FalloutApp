@@ -3,6 +3,7 @@ package com.erhodes.falloutapp.presentation
 import androidx.lifecycle.ViewModel
 import com.erhodes.falloutapp.model.Campaign
 import com.erhodes.falloutapp.repository.CampaignRepository
+import com.erhodes.falloutapp.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,21 +18,30 @@ class CampaignViewModel(
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ): ViewModel(), KoinComponent {
     private val repo: CampaignRepository by inject()
-    var activeCampaign = Campaign("Test", "1")
+    private val userRepository: UserRepository by inject()
+    var activeCampaign: Campaign = repo.activeCampaign
 
     private val _activeCampaignState = MutableStateFlow(buildState())
     val activeCampaignState = _activeCampaignState.asStateFlow()
 
     init {
-        activeCampaign = repo.activeCampaign
         publishState()
         scope.launch {
             repo.changes.collect { publishState() }
         }
+        scope.launch {
+            userRepository.users.collect { publishState() }
+        }
     }
 
     private fun buildState() = CampaignUiState(
-        campaign = activeCampaign
+        campaign = activeCampaign,
+        players = activeCampaign.activePlayers.map { player ->
+            CampaignPlayerRow(
+                ownerName = userRepository.findUserById(player.ownerId)?.name ?: "Unknown",
+                characterName = player.name,
+            )
+        }
     )
 
     private fun publishState() {

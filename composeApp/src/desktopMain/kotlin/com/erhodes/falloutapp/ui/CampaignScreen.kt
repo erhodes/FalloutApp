@@ -3,6 +3,7 @@ package com.erhodes.falloutapp.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
 import com.erhodes.falloutapp.model.Campaign
 import com.erhodes.falloutapp.presentation.CampaignUiState
@@ -17,9 +18,17 @@ fun CampaignScreen(campaignUiState: CampaignUiState) {
             text = campaign.name,
             style = MaterialTheme.typography.h3
         )
-        Text(text = "Active Players")
-        campaign.activePlayers.forEach {
-            Text(it.name)
+        Text(
+            text = "Active Players",
+            style = MaterialTheme.typography.h5
+        )
+        campaignUiState.players.forEach { row ->
+            Text("${row.ownerName} — ${row.characterName}")
+        }
+        Button(
+            onClick = {}
+        ) {
+            Text("Encounters")
         }
     }
 }

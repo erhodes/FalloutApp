@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class CampaignRepository {
-    var activeCampaign = Campaign("Test", "1")
+    var activeCampaign = Campaign("Test Campaign", "1")
 
     private val _changes = MutableSharedFlow<Unit>(
         replay = 1,
@@ -17,6 +17,10 @@ class CampaignRepository {
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val changes: SharedFlow<Unit> = _changes.asSharedFlow()
+
+    init {
+        activeCampaign.addCharacter(PlayerCharacter(name="Bob McTest"))
+    }
 
     fun addCharacterToCampaign(character: PlayerCharacter) {
         activeCampaign.addCharacter(character)
