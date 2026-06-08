@@ -11,7 +11,7 @@ import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CampaignScreen(campaignUiState: CampaignUiState) {
+fun CampaignScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> Unit) {
     val campaign = campaignUiState.campaign
     Column {
         Text(
@@ -26,7 +26,7 @@ fun CampaignScreen(campaignUiState: CampaignUiState) {
             Text("${row.ownerName} — ${row.characterName}")
         }
         Button(
-            onClick = {}
+            onClick = onEncountersClicked
         ) {
             Text("Encounters")
         }
@@ -38,6 +38,6 @@ fun CampaignScreen(campaignUiState: CampaignUiState) {
 fun CampaignScreenPreview() {
     val campaign = Campaign("Demo", "1")
     FalloutAppTheme {
-        CampaignScreen(CampaignUiState(campaign))
+        CampaignScreen(CampaignUiState(campaign), onEncountersClicked = {})
     }
 }

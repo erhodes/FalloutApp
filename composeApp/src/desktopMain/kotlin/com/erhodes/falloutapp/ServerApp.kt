@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -28,12 +29,14 @@ import com.erhodes.falloutapp.presentation.EncounterViewModel
 import com.erhodes.falloutapp.presentation.UserViewModel
 import com.erhodes.falloutapp.ui.AddEnemyScreen
 import com.erhodes.falloutapp.ui.CampaignScreen
+import com.erhodes.falloutapp.ui.EncounterListScreen
 import com.erhodes.falloutapp.ui.EncounterScreen
 import com.erhodes.falloutapp.ui.UserListScreen
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_enemy
 import falloutapp.composeapp.generated.resources.back_button
 import falloutapp.composeapp.generated.resources.campaign
+import falloutapp.composeapp.generated.resources.encounter_list
 import falloutapp.composeapp.generated.resources.encounters
 import falloutapp.composeapp.generated.resources.user_list
 import org.jetbrains.compose.resources.StringResource
@@ -44,7 +47,8 @@ enum class ServerScreen(val title: StringResource) {
     UserListScreen(title = Res.string.user_list),
     EncounterScreen(title = Res.string.encounters),
     AddEnemyScreen(title = Res.string.add_enemy),
-    CampaignScreen(title = Res.string.campaign)
+    CampaignScreen(title = Res.string.campaign),
+    EncounterListScreen(title = Res.string.encounter_list)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,19 +103,39 @@ fun ServerApp(
                     onRepair = { index, amount -> encounterViewModel.onRepairArmor(index, amount) },
                     onRemoveEnemy = { index -> encounterViewModel.onRemoveEnemy(index) },
                     onRenameEnemy = { index, newName -> encounterViewModel.onRenameEnemy(index, newName) },
+                    onRenameEncounter = { newName -> encounterViewModel.onRenameEncounter(newName) },
+                    onSaveClicked = { encounterViewModel.onSaveEncounter() },
                 )
             }
             composable(route = ServerScreen.AddEnemyScreen.name) {
                 AddEnemyScreen(
                     onEnemySelected = {
                         encounterViewModel.onAddEnemy(it)
-                        navController.navigate(ServerScreen.EncounterScreen.name)
+                        navController.popBackStack()
                     }
                 )
             }
             composable(route = ServerScreen.CampaignScreen.name) {
                 val campaignState by campaignViewModel.activeCampaignState.collectAsState()
-                CampaignScreen(campaignState)
+                CampaignScreen(
+                    campaignState,
+                    onEncountersClicked = { navController.navigate(ServerScreen.EncounterListScreen.name) }
+                )
+            }
+            composable(route = ServerScreen.EncounterListScreen.name) {
+                val encounters by encounterViewModel.savedEncounters.collectAsState()
+                LaunchedEffect(Unit) { encounterViewModel.loadSavedEncounters() }
+                EncounterListScreen(
+                    encounters = encounters,
+                    onSelect = { encounter ->
+                        encounterViewModel.onSelectEncounter(encounter)
+                        navController.navigate(ServerScreen.EncounterScreen.name)
+                    },
+                    onNewEncounter = {
+                        encounterViewModel.onNewEncounter()
+                        navController.navigate(ServerScreen.EncounterScreen.name)
+                    }
+                )
             }
         }
     }

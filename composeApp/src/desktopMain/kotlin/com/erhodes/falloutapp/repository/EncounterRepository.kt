@@ -1,14 +1,22 @@
 package com.erhodes.falloutapp.repository
 
+import com.erhodes.falloutapp.data.EncounterDataSource
 import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Encounter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 
-class EncounterRepository {
+class EncounterRepository(
+    private val dataSource: EncounterDataSource
+) {
+    private val scope = CoroutineScope(Dispatchers.IO)
+
     var activeEncounter = Encounter("Test Encounter")
         private set
 
@@ -55,6 +63,25 @@ class EncounterRepository {
 
     fun removeCharacter(index: Int) {
         activeEncounter.removeCharacter(index)
+        notifyChanged()
+    }
+
+    /** Persist the active encounter to the database (PlayerCharacters are filtered out by the data source). */
+    fun saveActiveEncounter() {
+        scope.launch { dataSource.save(activeEncounter) }
+    }
+
+    suspend fun loadEncounter(id: String): Encounter? = dataSource.load(id)
+
+    suspend fun loadAllEncounters(): List<Encounter> = dataSource.loadAll()
+
+    fun deleteEncounter(id: String) {
+        scope.launch { dataSource.delete(id) }
+    }
+
+    /** Swap in a loaded encounter as the active one and notify observers. */
+    fun setActiveEncounter(encounter: Encounter) {
+        activeEncounter = encounter
         notifyChanged()
     }
 

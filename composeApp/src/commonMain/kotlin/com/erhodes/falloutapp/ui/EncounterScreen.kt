@@ -49,14 +49,52 @@ fun EncounterScreen(
     onRepair: (enemyIndex: Int, amount: Int) -> Unit,
     onRemoveEnemy: (enemyIndex: Int) -> Unit,
     onRenameEnemy: (enemyIndex: Int, newName: String) -> Unit,
+    onRenameEncounter: (newName: String) -> Unit,
+    onSaveClicked: () -> Unit,
 ) {
+    var showEditNameDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier.padding(start = Dimens.paddingMedium)
     ) {
-        Text(
-            text = state.name,
-            style = MaterialTheme.typography.headlineMedium
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = state.name,
+                style = MaterialTheme.typography.headlineMedium
+            )
+            IconButton(onClick = { showEditNameDialog = true }) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Rename encounter"
+                )
+            }
+        }
+        if (showEditNameDialog) {
+            var newName by remember { mutableStateOf(state.name) }
+            AlertDialog(
+                onDismissRequest = { showEditNameDialog = false },
+                title = { Text("Edit Encounter Name") },
+                text = {
+                    OutlinedTextField(
+                        value = newName,
+                        onValueChange = { newName = it },
+                        label = { Text("Name") }
+                    )
+                },
+                confirmButton = {
+                    TextButton(onClick = {
+                        onRenameEncounter(newName)
+                        showEditNameDialog = false
+                    }) {
+                        Text("Save")
+                    }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showEditNameDialog = false }) {
+                        Text("Cancel")
+                    }
+                }
+            )
+        }
         Text(
             text = "Characters:",
             style = MaterialTheme.typography.headlineSmall
@@ -80,6 +118,11 @@ fun EncounterScreen(
             onClick = onAddEnemyClicked
         ) {
             Text("Add Enemy")
+        }
+        Button(
+            onClick = onSaveClicked
+        ) {
+            Text("Save Encounter")
         }
     }
 }
@@ -220,6 +263,8 @@ fun EncounterScreenPreview() {
             onRepair = { _, _ -> },
             onRemoveEnemy = {},
             onRenameEnemy = { _, _ -> },
+            onRenameEncounter = {},
+            onSaveClicked = {},
         )
     }
 }

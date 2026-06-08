@@ -1,10 +1,14 @@
 package com.erhodes.falloutapp.model
 
 import kotlinx.serialization.Serializable
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Serializable
 class Encounter(
-    val name: String
+    var name: String,
+    val id: String = Uuid.random().toString()
 ) {
     val characters: MutableList<Character> = mutableListOf()
 

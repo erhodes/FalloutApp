@@ -19,13 +19,15 @@ class EncounterViewModel(
 ): ViewModel(), KoinComponent {
     private val repo: EncounterRepository by inject()
 
-    private var activeEncounter = Encounter("Test Encounter")
+    private var activeEncounter: Encounter = repo.activeEncounter
 
     private val _activeEncounterState = MutableStateFlow(buildState())
     val activeEncounterState = _activeEncounterState.asStateFlow()
 
+    private val _savedEncounters = MutableStateFlow<List<Encounter>>(emptyList())
+    val savedEncounters = _savedEncounters.asStateFlow()
+
     init {
-        activeEncounter = repo.activeEncounter
         publishState() // eager initial state; the collector below runs async
         scope.launch {
             repo.changes.collect { publishState() }
@@ -46,6 +48,25 @@ class EncounterViewModel(
         repo.addCharacterToEncounter(newEnemy)
     }
 
+    fun loadSavedEncounters() {
+        scope.launch { _savedEncounters.update { repo.loadAllEncounters() } }
+    }
+
+    fun onSelectEncounter(encounter: Encounter) {
+        repo.setActiveEncounter(encounter)
+        activeEncounter = encounter // keep the VM's field in sync with the repo swap
+        publishState()
+    }
+
+    fun onNewEncounter() {
+        val encounter = Encounter("New Encounter")
+        repo.setActiveEncounter(encounter)
+        activeEncounter = encounter // keep the VM's field in sync with the repo swap
+        publishState()
+    }
+
+    fun onSaveEncounter() = repo.saveActiveEncounter()
+
     fun onTakeDamage(enemyIndex: Int, amount: Int) = repo.damageCharacter(enemyIndex, amount)
 
     fun onHealDamage(enemyIndex: Int, amount: Int) = repo.healCharacter(enemyIndex, amount)
@@ -57,6 +78,11 @@ class EncounterViewModel(
             it.name = newName
             publishState()
         }
+    }
+
+    fun onRenameEncounter(newName: String) {
+        activeEncounter.name = newName
+        publishState()
     }
 
     fun onRemoveEnemy(enemyIndex: Int) {
