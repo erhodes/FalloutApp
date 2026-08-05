@@ -76,6 +76,7 @@ fun Application.falloutModule(
         }
         route("/encounters") {
             get {
+                AppLogger.d("Eric", "GET active encounter")
                 call.respond(encounterRepository.activeEncounter)
             }
             post {

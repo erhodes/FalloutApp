@@ -40,17 +40,22 @@ import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/**
+ * @param readOnly when true the encounter is owned elsewhere (e.g. fetched from the server), so
+ * every control that would mutate it is hidden and the encounter is only displayed.
+ */
 @Composable
 fun EncounterScreen(
     state: EncounterUiState,
-    onAddEnemyClicked: () -> Unit,
-    onTakeDamage: (enemyIndex: Int, amount: Int) -> Unit,
-    onHealDamage: (enemyIndex: Int, amount: Int) -> Unit,
-    onRepair: (enemyIndex: Int, amount: Int) -> Unit,
-    onRemoveEnemy: (enemyIndex: Int) -> Unit,
-    onRenameEnemy: (enemyIndex: Int, newName: String) -> Unit,
-    onRenameEncounter: (newName: String) -> Unit,
-    onSaveClicked: () -> Unit,
+    onAddEnemyClicked: () -> Unit = {},
+    onTakeDamage: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
+    onHealDamage: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
+    onRepair: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
+    onRemoveEnemy: (enemyIndex: Int) -> Unit = {},
+    onRenameEnemy: (enemyIndex: Int, newName: String) -> Unit = { _, _ -> },
+    onRenameEncounter: (newName: String) -> Unit = {},
+    onSaveClicked: () -> Unit = {},
+    readOnly: Boolean = false,
 ) {
     var showEditNameDialog by remember { mutableStateOf(false) }
     Column(
@@ -61,11 +66,13 @@ fun EncounterScreen(
                 text = state.name,
                 style = MaterialTheme.typography.headlineMedium
             )
-            IconButton(onClick = { showEditNameDialog = true }) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = "Rename encounter"
-                )
+            if (!readOnly) {
+                IconButton(onClick = { showEditNameDialog = true }) {
+                    Icon(
+                        imageVector = Icons.Filled.Edit,
+                        contentDescription = "Rename encounter"
+                    )
+                }
             }
         }
         if (showEditNameDialog) {
@@ -112,17 +119,20 @@ fun EncounterScreen(
                 onRepair = { onRepair(enemy.index, it) },
                 onRemove = { onRemoveEnemy(enemy.index) },
                 onRename = { onRenameEnemy(enemy.index, it) },
+                readOnly = readOnly,
             )
         }
-        Button(
-            onClick = onAddEnemyClicked
-        ) {
-            Text("Add Enemy")
-        }
-        Button(
-            onClick = onSaveClicked
-        ) {
-            Text("Save Encounter")
+        if (!readOnly) {
+            Button(
+                onClick = onAddEnemyClicked
+            ) {
+                Text("Add Enemy")
+            }
+            Button(
+                onClick = onSaveClicked
+            ) {
+                Text("Save Encounter")
+            }
         }
     }
 }
@@ -137,6 +147,7 @@ private fun EnemyRow(
     onRepair: (Int) -> Unit,
     onRemove: () -> Unit,
     onRename: (String) -> Unit,
+    readOnly: Boolean,
 ) {
     val enemy = enemyUiState.character
     var amount by remember { mutableStateOf("1") }
@@ -163,52 +174,54 @@ private fun EnemyRow(
             }
         )
         Text("Armor(${enemy.getArmorToughness()}) ${enemy.getArmorDamage()}/${enemy.getArmorDurability()}")
-        Spacer(Modifier.width(4.dp))
-        OutlinedTextField(
-            value = amount,
-            onValueChange = { amount = it },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.width(64.dp)
-        )
-        Button(
-            onClick = {
-                onTakeDamage(amount.toIntOrNull() ?: 0)
-                amount = "1"
-            },
-            contentPadding = actionButtonPadding,
-        ) {
-            Text("D")
-        }
-        Button(
-            onClick = {
-                onHealDamage(amount.toIntOrNull() ?: 0)
-                amount = "1"
-            },
-            contentPadding = actionButtonPadding,
-        ) {
-            Text("H")
-        }
-        Button(
-            onClick = {
-                onRepair(amount.toIntOrNull() ?: 0)
-                amount = "1"
-            },
-            contentPadding = actionButtonPadding,
-        ) {
-            Text("R")
-        }
-        Spacer(Modifier.weight(1f))
-        IconButton(onClick = { showEditNameDialog = true }) {
-            Icon(
-                imageVector = Icons.Filled.Edit,
-                contentDescription = "Rename ${enemy.name}"
+        if (!readOnly) {
+            Spacer(Modifier.width(4.dp))
+            OutlinedTextField(
+                value = amount,
+                onValueChange = { amount = it },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                modifier = Modifier.width(64.dp)
             )
-        }
-        IconButton(onClick = onRemove) {
-            Icon(
-                imageVector = Icons.Filled.Delete,
-                contentDescription = "Remove ${enemy.name}"
-            )
+            Button(
+                onClick = {
+                    onTakeDamage(amount.toIntOrNull() ?: 0)
+                    amount = "1"
+                },
+                contentPadding = actionButtonPadding,
+            ) {
+                Text("D")
+            }
+            Button(
+                onClick = {
+                    onHealDamage(amount.toIntOrNull() ?: 0)
+                    amount = "1"
+                },
+                contentPadding = actionButtonPadding,
+            ) {
+                Text("H")
+            }
+            Button(
+                onClick = {
+                    onRepair(amount.toIntOrNull() ?: 0)
+                    amount = "1"
+                },
+                contentPadding = actionButtonPadding,
+            ) {
+                Text("R")
+            }
+            Spacer(Modifier.weight(1f))
+            IconButton(onClick = { showEditNameDialog = true }) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Rename ${enemy.name}"
+                )
+            }
+            IconButton(onClick = onRemove) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Remove ${enemy.name}"
+                )
+            }
         }
     }
     if (expanded) {

@@ -33,7 +33,8 @@ enum class FalloutScreen(val title: StringResource) {
     PerkSelectScreen(title = Res.string.select_perk),
     LearnRecipeScreen(title = Res.string.learn_recipe),
     ManageConditionsScreen(title = Res.string.manage_conditions),
-    Login(title = Res.string.login)
+    Login(title = Res.string.login),
+    EncounterScreen(title = Res.string.encounters)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,6 +66,7 @@ fun FalloutApp(
     creationViewModel: CharacterCreationViewModel = viewModel { CharacterCreationViewModel() },
     loginStateViewModel: LoginStateViewModel = viewModel { LoginStateViewModel() },
     conditionsViewModel: ConditionsViewModel = viewModel { ConditionsViewModel() },
+    remoteEncounterViewModel: RemoteEncounterViewModel = viewModel { RemoteEncounterViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     // Get current back stack entry
@@ -240,8 +242,17 @@ fun FalloutApp(
                         loginStateViewModel.joinCampaign(character)
                     },
                     onGetEncounter = {
-                        loginStateViewModel.getActiveEncounter()
+                        loginStateViewModel.getActiveEncounter {
+                            navController.navigate(FalloutScreen.EncounterScreen.name)
+                        }
                     }
+                )
+            }
+            composable(route = FalloutScreen.EncounterScreen.name) {
+                val encounterState by remoteEncounterViewModel.activeEncounterState.collectAsState()
+                EncounterScreen(
+                    state = encounterState,
+                    readOnly = true
                 )
             }
         }

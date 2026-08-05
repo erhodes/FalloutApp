@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LoginRepository
+import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -36,9 +37,15 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun getActiveEncounter() {
+    /** [onLoaded] runs on the main thread once the encounter is in the repository. */
+    fun getActiveEncounter(onLoaded: () -> Unit = {}) {
         viewModelScope.launch {
-            repo.getActiveEncounter()
+            try {
+                repo.getActiveEncounter()
+                onLoaded()
+            } catch (e: Exception) {
+                AppLogger.d("Eric", "failed to get active encounter: ${e.message}")
+            }
         }
     }
 }
