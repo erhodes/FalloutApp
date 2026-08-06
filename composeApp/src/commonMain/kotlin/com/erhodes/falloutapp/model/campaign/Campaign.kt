@@ -1,4 +1,6 @@
-package com.erhodes.falloutapp.model
+package com.erhodes.falloutapp.model.campaign
+
+import com.erhodes.falloutapp.model.PlayerCharacter
 
 class Campaign(
     val name: String,

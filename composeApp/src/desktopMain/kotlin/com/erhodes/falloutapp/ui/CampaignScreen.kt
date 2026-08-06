@@ -5,13 +5,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.runtime.Composable
-import com.erhodes.falloutapp.model.Campaign
+import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.presentation.CampaignUiState
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CampaignScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> Unit) {
+fun CampaignScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> Unit, onLocationsClicked: () -> Unit) {
     val campaign = campaignUiState.campaign
     Column {
         Text(
@@ -30,6 +30,11 @@ fun CampaignScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> 
         ) {
             Text("Encounters")
         }
+        Button(
+            onClick = onLocationsClicked
+        ) {
+            Text("Locations")
+        }
     }
 }
 
@@ -38,6 +43,6 @@ fun CampaignScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> 
 fun CampaignScreenPreview() {
     val campaign = Campaign("Demo", "1")
     FalloutAppTheme {
-        CampaignScreen(CampaignUiState(campaign), onEncountersClicked = {})
+        CampaignScreen(CampaignUiState(campaign), onEncountersClicked = {}, onLocationsClicked = {})
     }
 }

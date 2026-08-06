@@ -16,21 +16,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.erhodes.falloutapp.model.campaign.Settlement
 import com.erhodes.falloutapp.presentation.CampaignViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.EncounterViewModel
+import com.erhodes.falloutapp.presentation.LocationViewModel
 import com.erhodes.falloutapp.presentation.UserViewModel
 import com.erhodes.falloutapp.ui.AddEnemyScreen
 import com.erhodes.falloutapp.ui.CampaignScreen
 import com.erhodes.falloutapp.ui.EncounterListScreen
 import com.erhodes.falloutapp.ui.EncounterScreen
+import com.erhodes.falloutapp.ui.LocationListScreen
+import com.erhodes.falloutapp.ui.LocationScreen
+import com.erhodes.falloutapp.ui.SettlementScreen
 import com.erhodes.falloutapp.ui.UserListScreen
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_enemy
@@ -38,6 +42,8 @@ import falloutapp.composeapp.generated.resources.back_button
 import falloutapp.composeapp.generated.resources.campaign
 import falloutapp.composeapp.generated.resources.encounter_list
 import falloutapp.composeapp.generated.resources.encounters
+import falloutapp.composeapp.generated.resources.location
+import falloutapp.composeapp.generated.resources.locations
 import falloutapp.composeapp.generated.resources.user_list
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -48,7 +54,9 @@ enum class ServerScreen(val title: StringResource) {
     EncounterScreen(title = Res.string.encounters),
     AddEnemyScreen(title = Res.string.add_enemy),
     CampaignScreen(title = Res.string.campaign),
-    EncounterListScreen(title = Res.string.encounter_list)
+    EncounterListScreen(title = Res.string.encounter_list),
+    LocationListScreen(title = Res.string.locations),
+    LocationScreen(title = Res.string.location)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,6 +65,7 @@ fun ServerApp(
     userViewModel: UserViewModel = viewModel { UserViewModel() },
     characterViewModel: CharacterViewModel = viewModel { CharacterViewModel() },
     encounterViewModel: EncounterViewModel = viewModel { EncounterViewModel() },
+    locationViewModel: LocationViewModel = viewModel { LocationViewModel() },
     campaignViewModel: CampaignViewModel = viewModel { CampaignViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
@@ -119,7 +128,8 @@ fun ServerApp(
                 val campaignState by campaignViewModel.activeCampaignState.collectAsState()
                 CampaignScreen(
                     campaignState,
-                    onEncountersClicked = { navController.navigate(ServerScreen.EncounterListScreen.name) }
+                    onEncountersClicked = { navController.navigate(ServerScreen.EncounterListScreen.name) },
+                    onLocationsClicked = { navController.navigate(ServerScreen.LocationListScreen.name) }
                 )
             }
             composable(route = ServerScreen.EncounterListScreen.name) {
@@ -136,6 +146,30 @@ fun ServerApp(
                         navController.navigate(ServerScreen.EncounterScreen.name)
                     }
                 )
+            }
+            composable(route = ServerScreen.LocationListScreen.name) {
+                val locations by locationViewModel.savedLocations.collectAsState()
+                LaunchedEffect(Unit) { locationViewModel.loadSavedLocations() }
+                LocationListScreen(
+                    locations = locations,
+                    onSelect = { location ->
+                        locationViewModel.onSelectLocation(location)
+                        navController.navigate(ServerScreen.LocationScreen.name)
+                    },
+                    onNewLocation = {}
+                )
+            }
+            composable(route = ServerScreen.LocationScreen.name) {
+                val location by locationViewModel.activeLocationState.collectAsState()
+                if (location is Settlement) {
+                    SettlementScreen(
+                        settlement = location as Settlement
+                    )
+                } else {
+                    LocationScreen(
+                        location = location
+                    )
+                }
             }
         }
     }

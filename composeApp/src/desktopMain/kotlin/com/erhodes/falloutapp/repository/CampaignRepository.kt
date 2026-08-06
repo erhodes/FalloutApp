@@ -1,6 +1,6 @@
 package com.erhodes.falloutapp.repository
 
-import com.erhodes.falloutapp.model.Campaign
+import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.PlayerCharacter
 import kotlinx.coroutines.channels.BufferOverflow

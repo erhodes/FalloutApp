@@ -1,6 +1,6 @@
 package com.erhodes.falloutapp.presentation
 
-import com.erhodes.falloutapp.model.Campaign
+import com.erhodes.falloutapp.model.campaign.Campaign
 
 data class CampaignPlayerRow(
     val ownerName: String,

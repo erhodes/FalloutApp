@@ -1,7 +1,7 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
-import com.erhodes.falloutapp.model.Campaign
+import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import kotlinx.coroutines.CoroutineScope
