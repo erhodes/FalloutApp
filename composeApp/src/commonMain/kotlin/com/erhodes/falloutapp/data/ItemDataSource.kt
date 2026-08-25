@@ -408,9 +408,9 @@ object ItemDataSource {
             load = 5,
             tier = 1,
             id = 1001,
-            durability = 4,
-            toughness = 1,
-            abilities = listOf(Powered(), Loud(2), Complicated(2))
+            durability = 5,
+            toughness = 0,
+            abilities = listOf(Powered(), Loud(2))
         )
         itemMap[1002] = ArmorTemplate(
             name = "Combat Armor",
@@ -418,8 +418,8 @@ object ItemDataSource {
             load = 2,
             tier = 2,
             id = 1002,
-            durability = 4,
-            toughness = 1
+            durability = 5,
+            toughness = 0
         )
         itemMap[1003] = ArmorTemplate(
             name = "T-45 Power Armor",
@@ -428,7 +428,7 @@ object ItemDataSource {
             tier = 2,
             id = 1003,
             durability = 5,
-            toughness = 2,
+            toughness = 1,
             abilities = listOf(Powered(), RadResistant(2), Loud(2), Complicated(2))
         )
 
