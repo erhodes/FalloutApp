@@ -29,7 +29,7 @@ import com.erhodes.falloutapp.presentation.EncounterViewModel
 import com.erhodes.falloutapp.presentation.LocationViewModel
 import com.erhodes.falloutapp.presentation.UserViewModel
 import com.erhodes.falloutapp.ui.AddEnemyScreen
-import com.erhodes.falloutapp.ui.CampaignScreen
+import com.erhodes.falloutapp.ui.CampaignManagementScreen
 import com.erhodes.falloutapp.ui.EncounterListScreen
 import com.erhodes.falloutapp.ui.EncounterScreen
 import com.erhodes.falloutapp.ui.LocationListScreen
@@ -126,7 +126,7 @@ fun ServerApp(
             }
             composable(route = ServerScreen.CampaignScreen.name) {
                 val campaignState by campaignViewModel.activeCampaignState.collectAsState()
-                CampaignScreen(
+                CampaignManagementScreen(
                     campaignState,
                     onEncountersClicked = { navController.navigate(ServerScreen.EncounterListScreen.name) },
                     onLocationsClicked = { navController.navigate(ServerScreen.LocationListScreen.name) }

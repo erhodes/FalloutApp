@@ -3,6 +3,8 @@ package com.erhodes.falloutapp.network
 import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
+import com.erhodes.falloutapp.model.campaign.Campaign
+import com.erhodes.falloutapp.model.campaign.CampaignSummary
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -50,6 +52,20 @@ class UserApi(private val httpClient: HttpClient) {
         }
         AppLogger.d("Eric"," got response $httpResponse")
         return httpResponse.status.value in 200..299
+    }
+
+    suspend fun getCampaignData(): Campaign {
+        val httpResponse = httpClient.get("/campaign") {
+            contentType(ContentType.Application.Json)
+        }
+        AppLogger.d("Eric"," got response $httpResponse")
+        if (httpResponse.status.value in 200..299) {
+            val campaign = httpResponse.body<CampaignSummary>()
+
+            return Campaign(campaign.name, campaign.id)
+        } else {
+            return Campaign("ERROR", "")
+        }
     }
 
     suspend fun getActiveEncounter(): Encounter {

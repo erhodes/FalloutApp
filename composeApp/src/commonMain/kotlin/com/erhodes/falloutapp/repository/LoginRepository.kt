@@ -5,11 +5,13 @@ import com.erhodes.falloutapp.data.NetworkDataSource
 import com.erhodes.falloutapp.data.localIdStore
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
+import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
@@ -43,9 +45,13 @@ class LoginRepository(
     private val _savedServerAddress = MutableStateFlow("")
     val savedServerAddress = _savedServerAddress.asStateFlow()
 
+    private val _campaignFlow = MutableStateFlow(Campaign("Loading", ""))
+    val campaignFlow = _campaignFlow.asStateFlow()
+
     private var serverAddress: String = ""
 
     init {
+        AppLogger.d("Eric", "initing login repo")
         scope.launch {
             var uuid = localIdStore.get() ?: ""
             if (uuid.isEmpty()) {
@@ -84,6 +90,14 @@ class LoginRepository(
 
     suspend fun joinCampaign(character: PlayerCharacter) {
         dataSource.joinCampaign(character, serverAddress)
+    }
+
+    fun getCampaignData() {
+        scope.launch {
+            _campaignFlow.update {
+                dataSource.getCampaignState(serverAddress)
+            }
+        }
     }
 
     suspend fun getActiveEncounter() {

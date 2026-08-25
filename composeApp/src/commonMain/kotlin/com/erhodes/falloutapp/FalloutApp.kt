@@ -34,7 +34,8 @@ enum class FalloutScreen(val title: StringResource) {
     LearnRecipeScreen(title = Res.string.learn_recipe),
     ManageConditionsScreen(title = Res.string.manage_conditions),
     Login(title = Res.string.login),
-    EncounterScreen(title = Res.string.encounters)
+    EncounterScreen(title = Res.string.encounters),
+    CampaignScreen(title = Res.string.campaign_screen)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -100,16 +101,16 @@ fun FalloutApp(
                         characterViewModel.setActiveCharacter(it)
                         navController.navigate(FalloutScreen.CharacterScreen.name)
                     },
-                    onSelectRemote = {
-                        characterViewModel.setActiveCharacter(it)
-                        navController.navigate(FalloutScreen.CharacterScreen.name)
-                    },
                     onDeleteClicked = { characterViewModel.onDeleteCharacterClicked(it) },
                     onNewCharacter = {
                         creationViewModel.startNewCreation()
                         navController.navigate(FalloutScreen.CharacterCreation.name)
                     },
-                    onLogin = { navController.navigate(FalloutScreen.Login.name) }
+                    onLogin = { navController.navigate(FalloutScreen.Login.name) },
+                    onCampaignClicked = {
+                        loginStateViewModel.syncCampaign()
+                        navController.navigate(FalloutScreen.CampaignScreen.name)
+                    }
                 )
             }
             composable(route = FalloutScreen.CharacterCreation.name) {
@@ -253,6 +254,14 @@ fun FalloutApp(
                 EncounterScreen(
                     state = encounterState,
                     readOnly = true
+                )
+            }
+            composable(route = FalloutScreen.CampaignScreen.name) {
+                val campaign by loginStateViewModel.campaignFlow.collectAsState()
+                CampaignScreen(
+                    campaign = campaign,
+                    onActiveEncounterClicked = {},
+                    onActiveLocationClicked = {}
                 )
             }
         }

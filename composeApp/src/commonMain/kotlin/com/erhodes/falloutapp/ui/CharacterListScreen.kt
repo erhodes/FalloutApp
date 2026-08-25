@@ -28,10 +28,10 @@ fun CharacterListScreen(
     characters: List<PlayerCharacter>,
     remoteCharacters: List<PlayerCharacter>,
     onSelect: (PlayerCharacter) -> Unit,
-    onSelectRemote: (PlayerCharacter) -> Unit,
     onNewCharacter: () -> Unit,
     onDeleteClicked: (PlayerCharacter) -> Unit,
-    onLogin: () -> Unit
+    onLogin: () -> Unit,
+    onCampaignClicked: () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 10.dp)
@@ -40,6 +40,11 @@ fun CharacterListScreen(
             onClick = onLogin
         ) {
             Text("Login")
+        }
+        Button(
+            onClick = onCampaignClicked
+        ) {
+            Text("Campaign")
         }
 
         val greeting = Greeting().greet()
@@ -131,7 +136,7 @@ fun CharacterListScreenPreview() {
             characters = listOf(character1, character2),
             remoteCharacters = listOf(remoteCharacter1),
             {},
-            onSelectRemote = {},
+            {},
             {},
             {},
             {}

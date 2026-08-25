@@ -11,4 +11,8 @@ class Campaign(
     fun addCharacter(character: PlayerCharacter) {
         activePlayers.add(character)
     }
+
+    fun summarize(): CampaignSummary {
+        return CampaignSummary(name, id)
+    }
 }

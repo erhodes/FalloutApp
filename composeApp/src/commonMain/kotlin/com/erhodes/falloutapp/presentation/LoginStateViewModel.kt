@@ -18,6 +18,8 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
     val savedUsername = repo.savedUsername
     val savedServerAddress = repo.savedServerAddress
 
+    val campaignFlow = repo.campaignFlow
+
     fun login(name: String, address: String) {
         viewModelScope.launch {
             repo.login(name, address)
@@ -35,6 +37,10 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             repo.joinCampaign(character)
         }
+    }
+
+    fun syncCampaign() {
+        repo.getCampaignData()
     }
 
     /** [onLoaded] runs on the main thread once the encounter is in the repository. */

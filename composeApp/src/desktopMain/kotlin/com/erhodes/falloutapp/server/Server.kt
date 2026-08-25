@@ -94,6 +94,10 @@ fun Application.falloutModule(
                 campaignRepository.addCharacterToCampaign(character)
                 call.respond(HttpStatusCode.OK)
             }
+            get {
+                AppLogger.d("Eric", "got campaign data request")
+                call.respond(campaignRepository.activeCampaign.summarize())
+            }
         }
     }
 }

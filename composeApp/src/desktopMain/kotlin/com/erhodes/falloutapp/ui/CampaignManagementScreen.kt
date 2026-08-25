@@ -11,7 +11,7 @@ import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CampaignScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> Unit, onLocationsClicked: () -> Unit) {
+fun CampaignManagementScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> Unit, onLocationsClicked: () -> Unit) {
     val campaign = campaignUiState.campaign
     Column {
         Text(
@@ -40,9 +40,9 @@ fun CampaignScreen(campaignUiState: CampaignUiState, onEncountersClicked: () -> 
 
 @Preview
 @Composable
-fun CampaignScreenPreview() {
+fun CampaignManagementScreenPreview() {
     val campaign = Campaign("Demo", "1")
     FalloutAppTheme {
-        CampaignScreen(CampaignUiState(campaign), onEncountersClicked = {}, onLocationsClicked = {})
+        CampaignManagementScreen(CampaignUiState(campaign), onEncountersClicked = {}, onLocationsClicked = {})
     }
 }
