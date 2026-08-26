@@ -20,6 +20,12 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
 
     val campaignFlow = repo.campaignFlow
 
+    fun automaticLogin() {
+        viewModelScope.launch {
+            repo.automaticLogin()
+        }
+    }
+
     fun login(name: String, address: String) {
         viewModelScope.launch {
             repo.login(name, address)

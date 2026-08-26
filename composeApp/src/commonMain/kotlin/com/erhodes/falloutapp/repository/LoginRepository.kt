@@ -7,6 +7,7 @@ import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.util.AppLogger
+import io.ktor.client.network.sockets.SocketTimeoutException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,16 +68,30 @@ class LoginRepository(
         }
     }
 
+    /**
+     * Intended to be called at app launch to establish a connection to a known server.
+     */
+    suspend fun automaticLogin() {
+        if (!_loggedIn.value && _savedUsername.value.isNotEmpty() && _savedServerAddress.value.isNotEmpty()) {
+            login (_savedUsername.value, _savedServerAddress.value)
+        }
+    }
+
     suspend fun login(username: String, address: String) {
 //        val uuid = userIdReady.await()
-        val success = dataSource.submitLoginRequest(User(userId, username), address)
-        if (success) {
-            serverAddress = address
-            _savedUsername.value = username
-            _savedServerAddress.value = address
-            localDataSource.updateLoginInfo(username, address)
+        try {
+            val success = dataSource.submitLoginRequest(User(userId, username), address)
+            if (success) {
+                serverAddress = address
+                _savedUsername.value = username
+                _savedServerAddress.value = address
+                localDataSource.updateLoginInfo(username, address)
+            }
+            _loggedIn.value = success
+        } catch (_: SocketTimeoutException) {
+            _loggedIn.value = false
         }
-        _loggedIn.value = success
+
     }
 
     suspend fun syncCharacters(characters: List<PlayerCharacter>) {

@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -75,6 +76,9 @@ fun FalloutApp(
     // Get the name of the current screen
     val currentScreen = FalloutScreen.entries.firstOrNull { it.name == backStackEntry?.destination?.route } ?: FalloutScreen.CharacterScreen
 
+    LaunchedEffect(Unit) {
+        loginStateViewModel.automaticLogin()
+    }
     Scaffold(
         topBar = {
             FalloutAppBar(
@@ -94,9 +98,11 @@ fun FalloutApp(
             composable(route = FalloutScreen.CharacterList.name) {
                 val characterList = remember { characterViewModel.characters }
                 val remoteCharacterList = remember { characterViewModel.remoteCharacters }
+                val connected by loginStateViewModel.loginState.collectAsState()
                 CharacterListScreen(
                     characters = characterList,
                     remoteCharacters = remoteCharacterList,
+                    connected = connected,
                     onSelect = {
                         characterViewModel.setActiveCharacter(it)
                         navController.navigate(FalloutScreen.CharacterScreen.name)

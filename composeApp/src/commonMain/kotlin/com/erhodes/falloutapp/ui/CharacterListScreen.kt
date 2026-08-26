@@ -1,19 +1,18 @@
 package com.erhodes.falloutapp.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-
 import com.erhodes.falloutapp.Greeting
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.ui.theme.Dimens
@@ -27,6 +26,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun CharacterListScreen(
     characters: List<PlayerCharacter>,
     remoteCharacters: List<PlayerCharacter>,
+    connected: Boolean,
     onSelect: (PlayerCharacter) -> Unit,
     onNewCharacter: () -> Unit,
     onDeleteClicked: (PlayerCharacter) -> Unit,
@@ -36,10 +36,15 @@ fun CharacterListScreen(
     Column(
         modifier = Modifier.padding(horizontal = 10.dp)
     ) {
-        Button(
-            onClick = onLogin
-        ) {
-            Text("Login")
+        Row {
+            Button(
+                onClick = onLogin
+            ) {
+                Text("Login")
+            }
+            Text(
+                text = if (connected) "Connected" else "Not Connected"
+            )
         }
         Button(
             onClick = onCampaignClicked
@@ -135,6 +140,7 @@ fun CharacterListScreenPreview() {
         CharacterListScreen(
             characters = listOf(character1, character2),
             remoteCharacters = listOf(remoteCharacter1),
+            connected = false,
             {},
             {},
             {},
