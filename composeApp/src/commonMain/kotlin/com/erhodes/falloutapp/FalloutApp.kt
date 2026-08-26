@@ -36,6 +36,7 @@ enum class FalloutScreen(val title: StringResource) {
     ManageConditionsScreen(title = Res.string.manage_conditions),
     Login(title = Res.string.login),
     EncounterScreen(title = Res.string.encounters),
+    LocationScreen(title = Res.string.location_screen),
     CampaignScreen(title = Res.string.campaign_screen)
 }
 
@@ -69,6 +70,7 @@ fun FalloutApp(
     loginStateViewModel: LoginStateViewModel = viewModel { LoginStateViewModel() },
     conditionsViewModel: ConditionsViewModel = viewModel { ConditionsViewModel() },
     remoteEncounterViewModel: RemoteEncounterViewModel = viewModel { RemoteEncounterViewModel() },
+    remoteLocationViewModel: RemoteLocationViewModel = viewModel { RemoteLocationViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     // Get current back stack entry
@@ -115,6 +117,8 @@ fun FalloutApp(
                     onLogin = { navController.navigate(FalloutScreen.Login.name) },
                     onCampaignClicked = {
                         loginStateViewModel.syncCampaign()
+                        loginStateViewModel.getActiveEncounter()
+                        loginStateViewModel.getActiveLocation()
                         navController.navigate(FalloutScreen.CampaignScreen.name)
                     }
                 )
@@ -247,11 +251,6 @@ fun FalloutApp(
                     },
                     onJoinCampaign = { character ->
                         loginStateViewModel.joinCampaign(character)
-                    },
-                    onGetEncounter = {
-                        loginStateViewModel.getActiveEncounter {
-                            navController.navigate(FalloutScreen.EncounterScreen.name)
-                        }
                     }
                 )
             }
@@ -262,12 +261,18 @@ fun FalloutApp(
                     readOnly = true
                 )
             }
+            composable(route = FalloutScreen.LocationScreen.name) {
+                val locationState by remoteLocationViewModel.activeLocationState.collectAsState()
+                LocationScreen(
+                    location = locationState
+                )
+            }
             composable(route = FalloutScreen.CampaignScreen.name) {
                 val campaign by loginStateViewModel.campaignFlow.collectAsState()
                 CampaignScreen(
                     campaign = campaign,
-                    onActiveEncounterClicked = {},
-                    onActiveLocationClicked = {}
+                    onActiveEncounterClicked = { navController.navigate(FalloutScreen.EncounterScreen.name) },
+                    onActiveLocationClicked = { navController.navigate(FalloutScreen.LocationScreen.name) }
                 )
             }
         }

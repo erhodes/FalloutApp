@@ -34,7 +34,6 @@ fun LoginScreen(
     initialAddress: String,
     onLogin: (String, String) -> Unit,
     onJoinCampaign: (PlayerCharacter) -> Unit,
-    onGetEncounter: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var name by remember(initialName) { mutableStateOf(initialName) }
@@ -113,11 +112,6 @@ fun LoginScreen(
         ) {
             Text("Join Campaign")
         }
-        Button(
-            onClick = { onGetEncounter() }
-        ) {
-            Text("Get Encounter")
-        }
     }
 }
 
@@ -131,8 +125,7 @@ fun LoginScreenPreview() {
             initialName = "",
             initialAddress = "",
             onLogin = { a, b -> },
-            onJoinCampaign = {},
-            onGetEncounter = {}
+            onJoinCampaign = {}
         )
     }
 }

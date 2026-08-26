@@ -5,6 +5,7 @@ import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.model.campaign.CampaignSummary
+import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -82,6 +83,23 @@ class UserApi(private val httpClient: HttpClient) {
             return encounter
         } else {
             return Encounter("ERROR")
+        }
+    }
+
+    suspend fun getActiveLocation(): Location {
+        AppLogger.d("Eric","getting active location")
+
+        val httpResponse = httpClient.get("/campaign/location") {
+            contentType(ContentType.Application.Json)
+        }
+
+        AppLogger.d("Eric", "got response $httpResponse")
+        if (httpResponse.status.value in 200..299) {
+            val location = httpResponse.body<Location>()
+
+            return location
+        } else {
+            return Location("ERROR")
         }
     }
 }

@@ -60,4 +60,14 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
             }
         }
     }
+
+    fun getActiveLocation() {
+        viewModelScope.launch {
+            try {
+                repo.getActiveLocation()
+            } catch (e: Exception) {
+                AppLogger.d("Eric", "failed to get active location: ${e.message}")
+            }
+        }
+    }
 }

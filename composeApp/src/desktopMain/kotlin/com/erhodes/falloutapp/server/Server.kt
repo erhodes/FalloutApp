@@ -13,6 +13,7 @@ import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.EncounterRepository
+import com.erhodes.falloutapp.repository.LocationRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.http.ContentType.Application.Json
@@ -40,6 +41,7 @@ fun Application.falloutModule(
     userRepository: UserRepository,
     characterRepository: CharacterRepository,
     encounterRepository: EncounterRepository,
+    locationRepository: LocationRepository,
     campaignRepository: CampaignRepository
     ) {
     install(ContentNegotiation) {
@@ -98,6 +100,9 @@ fun Application.falloutModule(
                 AppLogger.d("Eric", "got campaign data request")
                 call.respond(campaignRepository.activeCampaign.summarize())
             }
+            get("/location") {
+                call.respond(locationRepository.activeLocation)
+            }
         }
     }
 }
@@ -106,10 +111,11 @@ fun startEmbeddedServer(
     userRepository: UserRepository,
     characterRepository: CharacterRepository,
     encounterRepository: EncounterRepository,
+    locationRepository: LocationRepository,
     campaignRepository: CampaignRepository,
     port: Int = 8080
 ): EmbeddedServer<NettyApplicationEngine, NettyApplicationEngine.Configuration> {
     return embeddedServer(Netty, port = port, host = "0.0.0.0") {
-        falloutModule(userRepository, characterRepository, encounterRepository, campaignRepository)
+        falloutModule(userRepository, characterRepository, encounterRepository, locationRepository, campaignRepository)
     }.start(wait = false)
 }

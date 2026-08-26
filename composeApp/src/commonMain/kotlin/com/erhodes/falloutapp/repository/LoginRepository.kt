@@ -25,6 +25,7 @@ import kotlin.uuid.Uuid
 class LoginRepository(
     private val characterRepository: CharacterRepository,
     private val encounterRepository: RemoteEncounterRepository,
+    private val locationRepository: RemoteLocationRepository,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
     val dataSource = NetworkDataSource(characterRepository)
@@ -118,6 +119,10 @@ class LoginRepository(
     suspend fun getActiveEncounter() {
         val remoteEncounter = dataSource.getActiveEncounter(serverAddress)
         encounterRepository.setActiveEncounter(remoteEncounter)
+    }
 
+    suspend fun getActiveLocation() {
+        val remoteLocation = dataSource.getActiveLocation(serverAddress)
+        locationRepository.setActiveLocation(remoteLocation)
     }
 }
