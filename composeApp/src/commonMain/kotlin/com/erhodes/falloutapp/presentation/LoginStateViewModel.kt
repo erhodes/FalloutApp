@@ -28,7 +28,7 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
 
     fun login(name: String, address: String) {
         viewModelScope.launch {
-            repo.login(name, address)
+            repo.manualLogin(name, address)
         }
     }
 

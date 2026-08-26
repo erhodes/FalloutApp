@@ -28,7 +28,7 @@ class LoginRepository(
     private val locationRepository: RemoteLocationRepository,
     private val scope: CoroutineScope = CoroutineScope(Dispatchers.Default)
 ) {
-    val dataSource = NetworkDataSource(characterRepository)
+    lateinit var dataSource: NetworkDataSource
     val localDataSource = LocalDataSource()
 
     var userId: String = ""
@@ -66,6 +66,8 @@ class LoginRepository(
 
             _savedUsername.value = localDataSource.getUsername()
             _savedServerAddress.value = localDataSource.getAddress()
+
+            dataSource = NetworkDataSource(_savedServerAddress.value)
         }
     }
 
@@ -78,10 +80,15 @@ class LoginRepository(
         }
     }
 
-    suspend fun login(username: String, address: String) {
+    suspend fun manualLogin(username: String, address: String) {
+        dataSource.newServerAddress(address)
+        login(username, address)
+    }
+
+    private suspend fun login(username: String, address: String) {
 //        val uuid = userIdReady.await()
         try {
-            val success = dataSource.submitLoginRequest(User(userId, username), address)
+            val success = dataSource.submitLoginRequest(User(userId, username))
             if (success) {
                 serverAddress = address
                 _savedUsername.value = username
@@ -92,11 +99,10 @@ class LoginRepository(
         } catch (_: SocketTimeoutException) {
             _loggedIn.value = false
         }
-
     }
 
     suspend fun syncCharacters(characters: List<PlayerCharacter>) {
-        val remoteCharacters = dataSource.syncCharacters(characters, serverAddress)
+        val remoteCharacters = dataSource.syncCharacters(characters)
         // any characters we own should be excluded as they are not remote
         val filteredList = remoteCharacters.filter { it.ownerId != userId }
         if (filteredList.isNotEmpty()) {
@@ -105,24 +111,24 @@ class LoginRepository(
     }
 
     suspend fun joinCampaign(character: PlayerCharacter) {
-        dataSource.joinCampaign(character, serverAddress)
+        dataSource.joinCampaign(character)
     }
 
     fun getCampaignData() {
         scope.launch {
             _campaignFlow.update {
-                dataSource.getCampaignState(serverAddress)
+                dataSource.getCampaignState()
             }
         }
     }
 
     suspend fun getActiveEncounter() {
-        val remoteEncounter = dataSource.getActiveEncounter(serverAddress)
+        val remoteEncounter = dataSource.getActiveEncounter()
         encounterRepository.setActiveEncounter(remoteEncounter)
     }
 
     suspend fun getActiveLocation() {
-        val remoteLocation = dataSource.getActiveLocation(serverAddress)
+        val remoteLocation = dataSource.getActiveLocation()
         locationRepository.setActiveLocation(remoteLocation)
     }
 }

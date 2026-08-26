@@ -1,41 +1,30 @@
 package com.erhodes.falloutapp.server
 
 import com.erhodes.falloutapp.data.DataManager
-import com.erhodes.falloutapp.data.ItemTemplateSerializer
-import com.erhodes.falloutapp.data.PerkSerializer
-import com.erhodes.falloutapp.model.Armor
-import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.PlayerCharacter
-import com.erhodes.falloutapp.model.Item
-import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.User
-import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.LocationRepository
 import com.erhodes.falloutapp.repository.UserRepository
 import com.erhodes.falloutapp.util.AppLogger
-import io.ktor.http.ContentType.Application.Json
 import io.ktor.http.HttpStatusCode
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.engine.EmbeddedServer
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import io.ktor.server.netty.NettyApplicationEngine
+import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.request.receive
-import io.ktor.server.request.receiveText
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
+import io.ktor.server.response.respond
+import io.ktor.server.routing.get
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
+import io.ktor.server.routing.routing
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.modules.SerializersModule
-import kotlinx.serialization.modules.contextual
-import kotlinx.serialization.modules.polymorphic
-import kotlinx.serialization.modules.subclass
-
-@Serializable
-data class HealthStatus(val status: String = "ok")
 
 fun Application.falloutModule(
     userRepository: UserRepository,
@@ -53,12 +42,6 @@ fun Application.falloutModule(
     }
 
     routing {
-        get("/health") {
-            call.respond(HealthStatus())
-        }
-        get("/characters") {
-            call.respond("Work in progress")
-        }
         route("/users") {
             post {
                 val string = call.receive<User>()

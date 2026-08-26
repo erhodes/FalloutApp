@@ -5,48 +5,70 @@ import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.model.campaign.Location
-import com.erhodes.falloutapp.network.UserApi
-import com.erhodes.falloutapp.network.createHttpClient
-import com.erhodes.falloutapp.repository.CharacterRepository
+import com.erhodes.falloutapp.network.ClientApi
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 // This class is going to have some server calls in it. They might make more sense elsewhere.
-class NetworkDataSource(private val characterRepository: CharacterRepository) {
+class NetworkDataSource(address: String) {
 
-    suspend fun submitLoginRequest(user: User, address: String): Boolean {
-        val client = createHttpClient(address)
+    var client: HttpClient
+    var clientApi: ClientApi
 
-        val userApi = UserApi(client)
-
-        return userApi.login(user)
+    init {
+        client = createHttpClient(address)
+        clientApi = ClientApi(client)
     }
 
-    suspend fun syncCharacters(characters: List<PlayerCharacter>, address: String): List<PlayerCharacter> {
-        val client = createHttpClient(address)
-        val userApi = UserApi(client)
-        return userApi.syncCharacters(characters)
+    fun newServerAddress(hostAddress: String) {
+        client = createHttpClient(hostAddress)
+        clientApi = ClientApi(client)
     }
 
-    suspend fun joinCampaign(character: PlayerCharacter, address: String): Boolean {
-        val client = createHttpClient(address)
-        val userApi = UserApi(client)
-        return userApi.joinCampaign(character)
+    private fun createHttpClient(hostAddress: String) = HttpClient {
+        install(ContentNegotiation) {
+            json(Json {
+                encodeDefaults = true
+                isLenient = true
+                coerceInputValues = true
+                ignoreUnknownKeys = true
+                serializersModule = DataManager.serializerModule
+            })
+        }
+        install(HttpTimeout) {
+            requestTimeoutMillis = 1000
+        }
+        defaultRequest {
+            host = hostAddress
+            port = 8080
+        }
     }
 
-    suspend fun getCampaignState(address: String): Campaign {
-        val client = createHttpClient(address)
-        val userApi = UserApi(client)
-        return userApi.getCampaignData()
+    suspend fun submitLoginRequest(user: User): Boolean {
+        return clientApi.login(user)
     }
 
-    suspend fun getActiveEncounter(address: String): Encounter {
-        val client = createHttpClient(address)
-        val userApi = UserApi(client)
-        return userApi.getActiveEncounter()
+    suspend fun syncCharacters(characters: List<PlayerCharacter>): List<PlayerCharacter> {
+        return clientApi.syncCharacters(characters)
     }
 
-    suspend fun getActiveLocation(address: String): Location {
-        val client = createHttpClient(address)
-        val userApi = UserApi(client)
-        return userApi.getActiveLocation()
+    suspend fun joinCampaign(character: PlayerCharacter): Boolean {
+        return clientApi.joinCampaign(character)
+    }
+
+    suspend fun getCampaignState(): Campaign {
+        return clientApi.getCampaignData()
+    }
+
+    suspend fun getActiveEncounter(): Encounter {
+        return clientApi.getActiveEncounter()
+    }
+
+    suspend fun getActiveLocation(): Location {
+        return clientApi.getActiveLocation()
     }
 }
