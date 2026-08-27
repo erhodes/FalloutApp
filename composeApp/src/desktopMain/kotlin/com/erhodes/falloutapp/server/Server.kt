@@ -41,13 +41,19 @@ fun Application.falloutModule(
         )
     }
 
+    /**
+     * There needs to be 2 different connection endpoints. One is the user connecting. This just establishes that the connection works and in the future opens a websocket.
+     * Two is the user registering a character for a campaign. This needs to add the character to the campaign and also save the character.
+     *
+     */
+
     routing {
         route("/users") {
             post {
                 val string = call.receive<User>()
                 AppLogger.d("Eric", "new user $string")
                 userRepository.addUser(string)
-                call.respond("success")
+                call.respond(HttpStatusCode.OK)
             }
         }
         route("/characters") {

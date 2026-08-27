@@ -36,10 +36,10 @@ class CampaignViewModel(
 
     private fun buildState() = CampaignUiState(
         campaign = activeCampaign,
-        players = activeCampaign.activePlayers.map { player ->
+        players = activeCampaign.playerCharacters.map { entry ->
             CampaignPlayerRow(
-                ownerName = userRepository.findUserById(player.ownerId)?.name ?: "Unknown",
-                characterName = player.name,
+                ownerName = userRepository.findUserById(entry.value.ownerId)?.name ?: "Unknown",
+                characterName = entry.value.name,
             )
         }
     )

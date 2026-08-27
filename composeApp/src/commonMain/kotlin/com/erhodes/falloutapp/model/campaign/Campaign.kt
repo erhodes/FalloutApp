@@ -6,10 +6,10 @@ class Campaign(
     val name: String,
     val id: String
 ) {
-    val activePlayers = ArrayList<PlayerCharacter>()
+    val playerCharacters = HashMap<String, PlayerCharacter>()
 
     fun addCharacter(character: PlayerCharacter) {
-        activePlayers.add(character)
+        playerCharacters[character.ownerId] = character
     }
 
     fun summarize(): CampaignSummary {
