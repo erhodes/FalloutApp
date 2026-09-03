@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class RemoteLocationRepository {
 
     // there's an alternative approach in the RemoteEncounterRepository
-    private val _activeLocation = MutableStateFlow(Location("PENDING"))
+    private val _activeLocation = MutableStateFlow(Location(-1, "PENDING"))
     val activeLocation = _activeLocation.asStateFlow()
 
     fun setActiveLocation(location: Location) {

@@ -6,7 +6,7 @@ import com.erhodes.falloutapp.model.campaign.Settlement
 
 class LocationRepository {
 
-    var activeLocation = Location("Test Location")
+    var activeLocation = Location(0, "Test Location")
         private set
 
     init {
@@ -14,11 +14,16 @@ class LocationRepository {
 
     }
 
+    /** Swap in the given location as the active one. */
+    fun setActiveLocation(location: Location) {
+        activeLocation = location
+    }
+
     fun loadAllLocations(): List<Location> {
         val result = ArrayList<Location>()
 
-        result.add(Location("The Wastes"))
-        result.add(Settlement("Honeywell"))
+        result.add(Location(0, "The Wastes"))
+        result.add(Settlement(1, "Honeywell"))
         return result
     }
 }

@@ -3,5 +3,5 @@ package com.erhodes.falloutapp.model.campaign
 import kotlinx.serialization.Serializable
 
 @Serializable
-open class Location(val name: String) {
+open class Location(val id: Int, val name: String) {
 }

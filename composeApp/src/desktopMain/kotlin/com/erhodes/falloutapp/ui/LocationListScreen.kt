@@ -21,7 +21,9 @@ import kotlin.collections.forEach
 @Composable
 fun LocationListScreen(
     locations: List<Location>,
+    activeLocation: Location?,
     onSelect: (Location) -> Unit,
+    onSetActive: (Location) -> Unit,
     onNewLocation: () -> Unit
 ) {
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -35,15 +37,24 @@ fun LocationListScreen(
         if (locations.isEmpty()) {
             Text("No saved locations.")
         }
-        locations.forEach { encounter ->
+        locations.forEach { location ->
+            val isActive = location.id == activeLocation?.id
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(encounter.name)
-                Button(onClick = { onSelect(encounter) }) {
-                    Text("Select")
+                Text(location.name)
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(onClick = { onSelect(location) }) {
+                        Text("Select")
+                    }
+                    Button(
+                        onClick = { onSetActive(location) },
+                        enabled = !isActive
+                    ) {
+                        Text(if (isActive) "Active" else "Set Active")
+                    }
                 }
             }
         }
@@ -53,12 +64,15 @@ fun LocationListScreen(
 @Preview
 @Composable
 fun LocationListScreenPreview() {
+    val ruins = Location(1, "Ruins")
     LocationListScreen(
         locations = listOf(
-            Settlement("Stillwater"),
-            Location("Ruins")
+            Settlement(0, "Stillwater"),
+            ruins
         ),
+        activeLocation = ruins,
         onSelect = {},
+        onSetActive = {},
         onNewLocation = {}
     )
 }

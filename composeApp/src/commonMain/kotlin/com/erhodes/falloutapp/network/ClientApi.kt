@@ -102,7 +102,7 @@ class ClientApi(private val httpClient: HttpClient) {
 
             return location
         } else {
-            return Location("ERROR")
+            return Location(-1, "ERROR")
         }
     }
 }

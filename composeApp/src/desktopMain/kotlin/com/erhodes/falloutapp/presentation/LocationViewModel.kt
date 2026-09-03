@@ -22,7 +22,7 @@ class LocationViewModel(
     private var activeLocation: Location = repo.activeLocation
 
     //todo finish building this out. See EncounterViewModel for an example
-    private val _activeLocationState = MutableStateFlow(Location(""))
+    private val _activeLocationState = MutableStateFlow(repo.activeLocation)
     val activeLocationState = _activeLocationState.asStateFlow()
 
     private val _savedLocations = MutableStateFlow<List<Location>>(emptyList())
@@ -35,6 +35,12 @@ class LocationViewModel(
         scope.launch { _activeLocationState.update { activeLocation } }
 //        activeEncounter = encounter // keep the VM's field in sync with the repo swap
 //        publishState()
+    }
+
+    fun onSetActiveLocation(location: Location) {
+        repo.setActiveLocation(location)
+        activeLocation = location
+        scope.launch { _activeLocationState.update { activeLocation } }
     }
 
     fun loadSavedLocations() {

@@ -37,7 +37,7 @@ fun SettlementScreen(settlement: Settlement) {
 @Composable
 fun LocationScreenPreview() {
     FalloutAppTheme {
-        val location = Location("The Wastes")
+        val location = Location(0, "The Wastes")
         LocationScreen(location)
     }
 }
@@ -46,7 +46,7 @@ fun LocationScreenPreview() {
 @Composable
 fun SettlementScreenPreview() {
     FalloutAppTheme {
-        val location = Settlement("Honeywell")
+        val location = Settlement(1, "Honeywell")
         SettlementScreen(location)
     }
 }
