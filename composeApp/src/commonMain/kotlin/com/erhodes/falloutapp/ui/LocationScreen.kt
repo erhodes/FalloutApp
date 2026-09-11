@@ -1,55 +1,142 @@
 package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.erhodes.falloutapp.model.campaign.Location
-import com.erhodes.falloutapp.model.campaign.Settlement
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import com.erhodes.falloutapp.presentation.BasicLocationUiState
+import com.erhodes.falloutapp.presentation.LocationUiState
+import com.erhodes.falloutapp.presentation.SettlementUiState
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
+/**
+ * @param readOnly when true the location is owned elsewhere (e.g. fetched from the server), so
+ * every control that would mutate it is hidden and the location is only displayed.
+ */
 @Composable
-fun LocationScreen(location: Location) {
-    Column(
-        modifier = Modifier.padding(horizontal = 5.dp)
-    ) {
-        Text(
-            text = location.name,
-            style = MaterialTheme.typography.displaySmall
+fun LocationScreen(
+    state: LocationUiState,
+    onEditLocation: (name: String, description: String) -> Unit = { _, _ -> },
+    onSaveClicked: () -> Unit = {},
+    readOnly: Boolean = false,
+) {
+    Column {
+        LocationHeader(
+            state = state,
+            onEditLocation = onEditLocation,
+            readOnly = readOnly
         )
-        if (location.description.isNotBlank()) {
-            Text(
-                text = location.description,
-                style = MaterialTheme.typography.bodyMedium
-            )
+        if (!readOnly) {
+            Button(onClick = onSaveClicked) {
+                Text("Save Location")
+            }
         }
     }
 }
 
 @Composable
-fun SettlementScreen(settlement: Settlement) {
-    Column(
-        modifier = Modifier.padding(horizontal = 5.dp)
-    ) {
+fun SettlementScreen(
+    state: SettlementUiState,
+    onEditLocation: (name: String, description: String) -> Unit = { _, _ -> },
+    onSaveClicked: () -> Unit = {},
+    readOnly: Boolean = false,
+) {
+    Column {
+        LocationHeader(
+            state = state,
+            onEditLocation = onEditLocation,
+            readOnly = readOnly
+        )
         Text(
-            text = settlement.name,
+            text = "Population ${state.population}"
+        )
+        Text(
+            text = "Food ${state.food}"
+        )
+        if (!readOnly) {
+            Button(onClick = onSaveClicked) {
+                Text("Save Location")
+            }
+        }
+    }
+}
+
+/** Name and description, plus the edit control that changes them. */
+@Composable
+private fun LocationHeader(
+    state: LocationUiState,
+    onEditLocation: (name: String, description: String) -> Unit,
+    readOnly: Boolean,
+) {
+    var showEditDialog by remember { mutableStateOf(false) }
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Text(
+            text = state.name,
             style = MaterialTheme.typography.displaySmall
         )
-        if (settlement.description.isNotBlank()) {
-            Text(
-                text = settlement.description,
-                style = MaterialTheme.typography.bodyMedium
-            )
+        if (!readOnly) {
+            IconButton(onClick = { showEditDialog = true }) {
+                Icon(
+                    imageVector = Icons.Filled.Edit,
+                    contentDescription = "Edit location"
+                )
+            }
         }
+    }
+    if (state.description.isNotBlank()) {
         Text(
-            text = "Population ${settlement.population}"
+            text = state.description,
+            style = MaterialTheme.typography.bodyMedium
         )
-        Text(
-            text = "Food ${settlement.food}"
+    }
+    if (showEditDialog) {
+        var newName by remember { mutableStateOf(state.name) }
+        var newDescription by remember { mutableStateOf(state.description) }
+        AlertDialog(
+            onDismissRequest = { showEditDialog = false },
+            title = { Text("Edit Location") },
+            text = {
+                Column {
+                    OutlinedTextField(
+                        value = newName,
+                        onValueChange = { newName = it },
+                        label = { Text("Name") }
+                    )
+                    OutlinedTextField(
+                        value = newDescription,
+                        onValueChange = { newDescription = it },
+                        label = { Text("Description") }
+                    )
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onEditLocation(newName, newDescription)
+                    showEditDialog = false
+                }) {
+                    Text("Save")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showEditDialog = false }) {
+                    Text("Cancel")
+                }
+            }
         )
     }
 }
@@ -58,8 +145,13 @@ fun SettlementScreen(settlement: Settlement) {
 @Composable
 fun LocationScreenPreview() {
     FalloutAppTheme {
-        val location = Location(0, "The Wastes", "Irradiated scrubland stretching to the horizon.")
-        LocationScreen(location)
+        LocationScreen(
+            state = BasicLocationUiState(
+                id = 0,
+                name = "The Wastes",
+                description = "Irradiated scrubland stretching to the horizon."
+            )
+        )
     }
 }
 
@@ -67,7 +159,14 @@ fun LocationScreenPreview() {
 @Composable
 fun SettlementScreenPreview() {
     FalloutAppTheme {
-        val location = Settlement(1, "Honeywell", "A walled farming town built around an old water plant.")
-        SettlementScreen(location)
+        SettlementScreen(
+            state = SettlementUiState(
+                id = 1,
+                name = "Honeywell",
+                description = "A walled farming town built around an old water plant.",
+                population = 1,
+                food = 1
+            )
+        )
     }
 }

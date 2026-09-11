@@ -264,7 +264,8 @@ fun FalloutApp(
             composable(route = FalloutScreen.LocationScreen.name) {
                 val locationState by remoteLocationViewModel.activeLocationState.collectAsState()
                 LocationScreen(
-                    location = locationState
+                    state = locationState,
+                    readOnly = true
                 )
             }
             composable(route = FalloutScreen.CampaignScreen.name) {

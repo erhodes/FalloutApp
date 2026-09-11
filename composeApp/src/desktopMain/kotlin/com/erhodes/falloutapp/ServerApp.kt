@@ -22,11 +22,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.erhodes.falloutapp.model.campaign.Settlement
 import com.erhodes.falloutapp.presentation.CampaignViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.EncounterViewModel
 import com.erhodes.falloutapp.presentation.LocationViewModel
+import com.erhodes.falloutapp.presentation.SettlementUiState
 import com.erhodes.falloutapp.presentation.UserViewModel
 import com.erhodes.falloutapp.ui.AddEnemyScreen
 import com.erhodes.falloutapp.ui.CampaignManagementScreen
@@ -149,28 +149,40 @@ fun ServerApp(
             }
             composable(route = ServerScreen.LocationListScreen.name) {
                 val locations by locationViewModel.savedLocations.collectAsState()
-                val activeLocation by locationViewModel.activeLocationState.collectAsState()
+                val activeLocationState by locationViewModel.activeLocationState.collectAsState()
                 LaunchedEffect(Unit) { locationViewModel.loadSavedLocations() }
                 LocationListScreen(
                     locations = locations,
-                    activeLocation = activeLocation,
+                    activeLocationId = activeLocationState.id,
                     onSelect = { location ->
                         locationViewModel.onSelectLocation(location)
                         navController.navigate(ServerScreen.LocationScreen.name)
                     },
                     onSetActive = { location -> locationViewModel.onSetActiveLocation(location) },
-                    onNewLocation = {}
+                    onNewLocation = {
+                        locationViewModel.onNewLocation()
+                        navController.navigate(ServerScreen.LocationScreen.name)
+                    }
                 )
             }
             composable(route = ServerScreen.LocationScreen.name) {
-                val location by locationViewModel.activeLocationState.collectAsState()
-                if (location is Settlement) {
+                val locationState by locationViewModel.activeLocationState.collectAsState()
+                val state = locationState
+                if (state is SettlementUiState) {
                     SettlementScreen(
-                        settlement = location as Settlement
+                        state = state,
+                        onEditLocation = { name, description ->
+                            locationViewModel.onEditLocation(name, description)
+                        },
+                        onSaveClicked = { locationViewModel.onSaveLocation() }
                     )
                 } else {
                     LocationScreen(
-                        location = location
+                        state = state,
+                        onEditLocation = { name, description ->
+                            locationViewModel.onEditLocation(name, description)
+                        },
+                        onSaveClicked = { locationViewModel.onSaveLocation() }
                     )
                 }
             }

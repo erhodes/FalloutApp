@@ -1,7 +1,6 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
-import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.repository.LocationRepository
 import kotlinx.coroutines.CoroutineScope
@@ -21,8 +20,7 @@ class LocationViewModel(
 
     private var activeLocation: Location = repo.activeLocation
 
-    //todo finish building this out. See EncounterViewModel for an example
-    private val _activeLocationState = MutableStateFlow(repo.activeLocation)
+    private val _activeLocationState = MutableStateFlow(buildState())
     val activeLocationState = _activeLocationState.asStateFlow()
 
     private val _savedLocations = MutableStateFlow<List<Location>>(emptyList())
@@ -32,18 +30,37 @@ class LocationViewModel(
 //        repo.setActiveEncounter(encounter)
 
         activeLocation = location
-        scope.launch { _activeLocationState.update { activeLocation } }
-//        activeEncounter = encounter // keep the VM's field in sync with the repo swap
-//        publishState()
+        publishState()
+    }
+
+    fun onNewLocation() {
+        activeLocation = repo.createLocation()
+        publishState()
+    }
+
+    fun onEditLocation(name: String, description: String) {
+        activeLocation.name = name
+        activeLocation.description = description
+        publishState()
+    }
+
+    fun onSaveLocation() {
+        // todo persist the active location. See EncounterViewModel.onSaveEncounter for an example
     }
 
     fun onSetActiveLocation(location: Location) {
         repo.setActiveLocation(location)
         activeLocation = location
-        scope.launch { _activeLocationState.update { activeLocation } }
+        publishState()
     }
 
     fun loadSavedLocations() {
         scope.launch { _savedLocations.update { repo.loadAllLocations() } }
+    }
+
+    private fun buildState() = LocationUiState.from(activeLocation)
+
+    private fun publishState() {
+        scope.launch { _activeLocationState.update { buildState() } }
     }
 }

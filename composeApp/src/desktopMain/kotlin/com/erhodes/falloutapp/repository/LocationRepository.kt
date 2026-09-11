@@ -9,10 +9,16 @@ class LocationRepository {
     var activeLocation = Location(0, "Test Location")
         private set
 
+    // todo temporary, until locations are persisted and ids come from the data source
+    private var nextId = 2
+
     init {
         // todo temporary data set
 
     }
+
+    /** Build a blank location with a fresh id. It is not saved until the caller saves it. */
+    fun createLocation(): Location = Location(nextId++, "New Location")
 
     /** Swap in the given location as the active one. */
     fun setActiveLocation(location: Location) {
