@@ -22,8 +22,8 @@ class LocationRepository {
     fun loadAllLocations(): List<Location> {
         val result = ArrayList<Location>()
 
-        result.add(Location(0, "The Wastes"))
-        result.add(Settlement(1, "Honeywell"))
+        result.add(Location(0, "The Wastes", "Irradiated scrubland stretching to the horizon."))
+        result.add(Settlement(1, "Honeywell", "A walled farming town built around an old water plant."))
         return result
     }
 }
