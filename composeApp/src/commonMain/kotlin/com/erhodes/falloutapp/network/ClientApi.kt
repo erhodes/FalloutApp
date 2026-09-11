@@ -5,6 +5,7 @@ import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.model.campaign.CampaignSummary
+import com.erhodes.falloutapp.model.campaign.BasicLocation
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.client.HttpClient
@@ -102,7 +103,7 @@ class ClientApi(private val httpClient: HttpClient) {
 
             return location
         } else {
-            return Location(-1, "ERROR")
+            return BasicLocation("ERROR")
         }
     }
 }

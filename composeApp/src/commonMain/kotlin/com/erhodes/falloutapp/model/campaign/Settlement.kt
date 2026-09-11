@@ -1,6 +1,17 @@
 package com.erhodes.falloutapp.model.campaign
 
-class Settlement(id: Int, name: String, description: String = ""): Location(id, name, description) {
-    var food: Int = 1
-    var population: Int = 1
-}
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
+@OptIn(ExperimentalUuidApi::class)
+@Serializable
+@SerialName("settlement")
+class Settlement(
+    override var name: String,
+    override var description: String = "",
+    var food: Int = 1,
+    var population: Int = 1,
+    override val id: String = Uuid.random().toString()
+) : Location()

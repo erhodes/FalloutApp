@@ -1,7 +1,6 @@
 package com.erhodes.falloutapp.repository
 
 import com.erhodes.falloutapp.data.EncounterDataSource
-import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Encounter
 import kotlinx.coroutines.CoroutineScope
@@ -26,14 +25,6 @@ class EncounterRepository(
         onBufferOverflow = BufferOverflow.DROP_OLDEST
     )
     val changes: SharedFlow<Unit> = _changes.asSharedFlow()
-
-    init {
-        // todo temporary test data
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderShotgunner())
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderPsycho())
-        activeEncounter.addCharacter(EnemyDataSource.createRaiderLieutenant())
-        notifyChanged()
-    }
 
     fun addCharacterToEncounter(character: Character) {
         activeEncounter.addCharacter(character)

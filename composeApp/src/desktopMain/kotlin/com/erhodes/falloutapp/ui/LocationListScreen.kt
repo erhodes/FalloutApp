@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Encounter
+import com.erhodes.falloutapp.model.campaign.BasicLocation
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.model.campaign.Settlement
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -21,7 +22,7 @@ import kotlin.collections.forEach
 @Composable
 fun LocationListScreen(
     locations: List<Location>,
-    activeLocationId: Int?,
+    activeLocationId: String?,
     onSelect: (Location) -> Unit,
     onSetActive: (Location) -> Unit,
     onNewLocation: () -> Unit
@@ -64,10 +65,10 @@ fun LocationListScreen(
 @Preview
 @Composable
 fun LocationListScreenPreview() {
-    val ruins = Location(1, "Ruins")
+    val ruins = BasicLocation("Ruins")
     LocationListScreen(
         locations = listOf(
-            Settlement(0, "Stillwater"),
+            Settlement("Stillwater"),
             ruins
         ),
         activeLocationId = ruins.id,

@@ -173,16 +173,14 @@ fun ServerApp(
                         state = state,
                         onEditLocation = { name, description ->
                             locationViewModel.onEditLocation(name, description)
-                        },
-                        onSaveClicked = { locationViewModel.onSaveLocation() }
+                        }
                     )
                 } else {
                     LocationScreen(
                         state = state,
                         onEditLocation = { name, description ->
                             locationViewModel.onEditLocation(name, description)
-                        },
-                        onSaveClicked = { locationViewModel.onSaveLocation() }
+                        }
                     )
                 }
             }

@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.di
 
 import com.erhodes.falloutapp.data.CampaignDataSource
 import com.erhodes.falloutapp.data.EncounterDataSource
+import com.erhodes.falloutapp.data.LocationDataSource
 import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.EncounterRepository
 import com.erhodes.falloutapp.repository.LocationRepository
@@ -13,7 +14,8 @@ private val desktopModule = module {
     single { UserRepository() }
     single { EncounterDataSource() }
     single { EncounterRepository(get()) }
-    single { LocationRepository() }
+    single { LocationDataSource() }
+    single { LocationRepository(get()) }
     single { CampaignDataSource() }
     single { CampaignRepository(get()) }
 }

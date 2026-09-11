@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +24,9 @@ import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
+ * Editing happens entirely in the edit dialog, whose Save button commits the change through
+ * [onEditLocation] — there is no separate save step.
+ *
  * @param readOnly when true the location is owned elsewhere (e.g. fetched from the server), so
  * every control that would mutate it is hidden and the location is only displayed.
  */
@@ -32,7 +34,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun LocationScreen(
     state: LocationUiState,
     onEditLocation: (name: String, description: String) -> Unit = { _, _ -> },
-    onSaveClicked: () -> Unit = {},
     readOnly: Boolean = false,
 ) {
     Column {
@@ -41,11 +42,6 @@ fun LocationScreen(
             onEditLocation = onEditLocation,
             readOnly = readOnly
         )
-        if (!readOnly) {
-            Button(onClick = onSaveClicked) {
-                Text("Save Location")
-            }
-        }
     }
 }
 
@@ -53,7 +49,6 @@ fun LocationScreen(
 fun SettlementScreen(
     state: SettlementUiState,
     onEditLocation: (name: String, description: String) -> Unit = { _, _ -> },
-    onSaveClicked: () -> Unit = {},
     readOnly: Boolean = false,
 ) {
     Column {
@@ -68,11 +63,6 @@ fun SettlementScreen(
         Text(
             text = "Food ${state.food}"
         )
-        if (!readOnly) {
-            Button(onClick = onSaveClicked) {
-                Text("Save Location")
-            }
-        }
     }
 }
 
@@ -147,7 +137,7 @@ fun LocationScreenPreview() {
     FalloutAppTheme {
         LocationScreen(
             state = BasicLocationUiState(
-                id = 0,
+                id = "preview-wastes",
                 name = "The Wastes",
                 description = "Irradiated scrubland stretching to the horizon."
             )
@@ -161,7 +151,7 @@ fun SettlementScreenPreview() {
     FalloutAppTheme {
         SettlementScreen(
             state = SettlementUiState(
-                id = 1,
+                id = "preview-honeywell",
                 name = "Honeywell",
                 description = "A walled farming town built around an old water plant.",
                 population = 1,

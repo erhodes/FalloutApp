@@ -1,35 +1,28 @@
 package com.erhodes.falloutapp.repository
 
-import com.erhodes.falloutapp.model.Encounter
+import com.erhodes.falloutapp.data.LocationDataSource
+import com.erhodes.falloutapp.model.campaign.BasicLocation
 import com.erhodes.falloutapp.model.campaign.Location
-import com.erhodes.falloutapp.model.campaign.Settlement
 
-class LocationRepository {
+class LocationRepository(
+    private val dataSource: LocationDataSource
+) {
 
-    var activeLocation = Location(0, "Test Location")
+    // Declared as Location, not BasicLocation: Server.kt responds with this property and Ktor
+    // serializes the reified static type, so a narrower type would drop the "type" discriminator.
+    var activeLocation: Location = BasicLocation("Test Location")
         private set
 
-    // todo temporary, until locations are persisted and ids come from the data source
-    private var nextId = 2
+    suspend fun saveLocation(location: Location) = dataSource.save(location)
 
-    init {
-        // todo temporary data set
+    suspend fun loadLocation(id: String): Location? = dataSource.load(id)
 
-    }
+    suspend fun loadAllLocations(): List<Location> = dataSource.loadAll()
 
-    /** Build a blank location with a fresh id. It is not saved until the caller saves it. */
-    fun createLocation(): Location = Location(nextId++, "New Location")
+    suspend fun deleteLocation(id: String) = dataSource.delete(id)
 
     /** Swap in the given location as the active one. */
     fun setActiveLocation(location: Location) {
         activeLocation = location
-    }
-
-    fun loadAllLocations(): List<Location> {
-        val result = ArrayList<Location>()
-
-        result.add(Location(0, "The Wastes", "Irradiated scrubland stretching to the horizon."))
-        result.add(Settlement(1, "Honeywell", "A walled farming town built around an old water plant."))
-        return result
     }
 }

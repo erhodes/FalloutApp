@@ -1,6 +1,7 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
+import com.erhodes.falloutapp.model.campaign.BasicLocation
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.repository.LocationRepository
 import kotlinx.coroutines.CoroutineScope
@@ -34,18 +35,23 @@ class LocationViewModel(
     }
 
     fun onNewLocation() {
-        activeLocation = repo.createLocation()
+        activeLocation = BasicLocation("New Location")
         publishState()
     }
 
+    /**
+     * Applies the edit and persists it. The edit dialog is the only thing that mutates a location,
+     * so committing here means the screen can never show unsaved changes.
+     */
     fun onEditLocation(name: String, description: String) {
         activeLocation.name = name
         activeLocation.description = description
         publishState()
-    }
-
-    fun onSaveLocation() {
-        // todo persist the active location. See EncounterViewModel.onSaveEncounter for an example
+        scope.launch {
+            repo.saveLocation(activeLocation)
+            // Refresh in the same coroutine so the list can't be re-read before the write commits.
+            _savedLocations.update { repo.loadAllLocations() }
+        }
     }
 
     fun onSetActiveLocation(location: Location) {
