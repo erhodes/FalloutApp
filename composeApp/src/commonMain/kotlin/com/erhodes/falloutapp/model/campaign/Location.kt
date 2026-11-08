@@ -10,6 +10,12 @@ sealed class Location {
     abstract val id: String
     abstract var name: String
     abstract var description: String
+
+    /**
+     * The [Feature]s this location contains. A `val` holding a mutable list: features are added to
+     * and removed from the list in place, the property itself is never reassigned.
+     */
+    abstract val features: MutableList<Feature>
 }
 
 /** A location with no special campaign mechanics attached to it. */
@@ -19,5 +25,6 @@ sealed class Location {
 class BasicLocation(
     override var name: String,
     override var description: String = "",
-    override val id: String = Uuid.random().toString()
+    override val id: String = Uuid.random().toString(),
+    override val features: MutableList<Feature> = mutableListOf()
 ) : Location()

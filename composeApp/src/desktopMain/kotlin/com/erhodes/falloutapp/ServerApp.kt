@@ -173,14 +173,22 @@ fun ServerApp(
                         state = state,
                         onEditLocation = { name, description ->
                             locationViewModel.onEditLocation(name, description)
-                        }
+                        },
+                        onAddFeature = { type, name, description ->
+                            locationViewModel.onAddFeature(type, name, description)
+                        },
+                        onRemoveFeature = { id -> locationViewModel.onRemoveFeature(id) }
                     )
                 } else {
                     LocationScreen(
                         state = state,
                         onEditLocation = { name, description ->
                             locationViewModel.onEditLocation(name, description)
-                        }
+                        },
+                        onAddFeature = { type, name, description ->
+                            locationViewModel.onAddFeature(type, name, description)
+                        },
+                        onRemoveFeature = { id -> locationViewModel.onRemoveFeature(id) }
                     )
                 }
             }

@@ -13,5 +13,6 @@ class Settlement(
     override var description: String = "",
     var food: Int = 1,
     var population: Int = 1,
-    override val id: String = Uuid.random().toString()
+    override val id: String = Uuid.random().toString(),
+    override val features: MutableList<Feature> = mutableListOf()
 ) : Location()

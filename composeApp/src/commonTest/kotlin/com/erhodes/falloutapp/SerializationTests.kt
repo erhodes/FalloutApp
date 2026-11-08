@@ -7,8 +7,10 @@ import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.model.condition.ConditionTemplate
 import com.erhodes.falloutapp.model.condition.ScalableCondition
+import com.erhodes.falloutapp.model.campaign.BasicFeature
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.model.campaign.Settlement
+import com.erhodes.falloutapp.model.campaign.Store
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -69,5 +71,49 @@ class SerializationTests {
         assertEquals("A walled farming town.", deserialized.description)
         assertEquals(4, deserialized.food)
         assertEquals(12, deserialized.population)
+    }
+
+    /**
+     * Features live inside the location blob, so each one has to carry its own "type" discriminator
+     * and come back as its own subclass.
+     */
+    @Test
+    fun serializeLocationFeatures() {
+        val well = BasicFeature(name = "Water Well", description = "Hand-cranked, brackish.")
+        val trader = Store(name = "Mo's Trading Post", description = "Buys scrap, sells ammo.")
+        val settlement = Settlement(
+            name = "Honeywell",
+            description = "A walled farming town.",
+            features = mutableListOf(well, trader)
+        )
+
+        val jsonString = json.encodeToString<Location>(settlement)
+        println(jsonString)
+
+        val deserialized = json.decodeFromString<Location>(jsonString)
+        assertIs<Settlement>(deserialized)
+        assertEquals(2, deserialized.features.size)
+
+        val deserializedWell = deserialized.features[0]
+        assertIs<BasicFeature>(deserializedWell)
+        assertEquals(well.id, deserializedWell.id)
+        assertEquals("Water Well", deserializedWell.name)
+        assertEquals("Hand-cranked, brackish.", deserializedWell.description)
+
+        val deserializedTrader = deserialized.features[1]
+        assertIs<Store>(deserializedTrader)
+        assertEquals(trader.id, deserializedTrader.id)
+        assertEquals("Mo's Trading Post", deserializedTrader.name)
+    }
+
+    /** Rows written before features existed have no "features" key; they must still decode. */
+    @Test
+    fun deserializeLocationWithoutFeatures() {
+        val legacy = """{"type":"settlement","name":"Stillwater","description":"","food":2,"population":3,"id":"legacy-stillwater"}"""
+
+        val deserialized = json.decodeFromString<Location>(legacy)
+        assertIs<Settlement>(deserialized)
+        assertEquals("Stillwater", deserialized.name)
+        assertEquals(0, deserialized.features.size)
     }
 }
