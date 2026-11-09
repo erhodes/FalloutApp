@@ -19,11 +19,7 @@ sealed interface FeatureUiState {
 
     companion object {
         fun from(feature: Feature): FeatureUiState = when (feature) {
-            is Store -> StoreUiState(
-                id = feature.id,
-                name = feature.name,
-                description = feature.description
-            )
+            is Store -> StoreUiState.from(feature)
             is BasicFeature -> BasicFeatureUiState(
                 id = feature.id,
                 name = feature.name,
@@ -55,6 +51,47 @@ data class StoreUiState(
     override val id: String,
     override val name: String,
     override val description: String,
+    val stock: List<StockEntryUiState> = emptyList(),
 ) : FeatureUiState {
     override val type = FeatureType.STORE
+
+    companion object {
+        fun from(store: Store): StoreUiState = StoreUiState(
+            id = store.id,
+            name = store.name,
+            description = store.description,
+            stock = store.stock.map {
+                StockEntryUiState(
+                    templateId = it.template.id,
+                    name = it.template.name,
+                    quantity = it.quantity,
+                    price = it.price
+                )
+            }
+        )
+    }
 }
+
+/**
+ * One line of a store's stock, flattened for display.
+ *
+ * A [com.erhodes.falloutapp.model.campaign.StockEntry] has no id of its own, so the screen addresses
+ * an entry by its position in [StoreUiState.stock] - the same index-as-handle convention
+ * `EncounterScreen` uses for enemies. The indices line up with the model list because this state is
+ * rebuilt from it after every mutation.
+ */
+data class StockEntryUiState(
+    val templateId: Int,
+    val name: String,
+    val quantity: Int,
+    val price: Int,
+)
+
+/**
+ * A character who can buy from a store, addressed by position the same way stock entries are.
+ * [caps] is what they currently hold, so the screen can disable a purchase it knows will fail.
+ */
+data class BuyerUiState(
+    val name: String,
+    val caps: Int,
+)

@@ -25,6 +25,7 @@ import androidx.navigation.compose.rememberNavController
 import com.erhodes.falloutapp.presentation.CampaignViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
 import com.erhodes.falloutapp.presentation.EncounterViewModel
+import com.erhodes.falloutapp.presentation.ItemViewModel
 import com.erhodes.falloutapp.presentation.LocationViewModel
 import com.erhodes.falloutapp.presentation.SettlementUiState
 import com.erhodes.falloutapp.presentation.UserViewModel
@@ -35,6 +36,7 @@ import com.erhodes.falloutapp.ui.EncounterScreen
 import com.erhodes.falloutapp.ui.LocationListScreen
 import com.erhodes.falloutapp.ui.LocationScreen
 import com.erhodes.falloutapp.ui.SettlementScreen
+import com.erhodes.falloutapp.ui.StoreScreen
 import com.erhodes.falloutapp.ui.UserListScreen
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.add_enemy
@@ -44,6 +46,7 @@ import falloutapp.composeapp.generated.resources.encounter_list
 import falloutapp.composeapp.generated.resources.encounters
 import falloutapp.composeapp.generated.resources.location
 import falloutapp.composeapp.generated.resources.locations
+import falloutapp.composeapp.generated.resources.store
 import falloutapp.composeapp.generated.resources.user_list
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
@@ -56,7 +59,8 @@ enum class ServerScreen(val title: StringResource) {
     CampaignScreen(title = Res.string.campaign),
     EncounterListScreen(title = Res.string.encounter_list),
     LocationListScreen(title = Res.string.locations),
-    LocationScreen(title = Res.string.location)
+    LocationScreen(title = Res.string.location),
+    StoreScreen(title = Res.string.store)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,6 +71,7 @@ fun ServerApp(
     encounterViewModel: EncounterViewModel = viewModel { EncounterViewModel() },
     locationViewModel: LocationViewModel = viewModel { LocationViewModel() },
     campaignViewModel: CampaignViewModel = viewModel { CampaignViewModel() },
+    itemViewModel: ItemViewModel = viewModel { ItemViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -177,7 +182,11 @@ fun ServerApp(
                         onAddFeature = { type, name, description ->
                             locationViewModel.onAddFeature(type, name, description)
                         },
-                        onRemoveFeature = { id -> locationViewModel.onRemoveFeature(id) }
+                        onRemoveFeature = { id -> locationViewModel.onRemoveFeature(id) },
+                        onOpenStore = { id ->
+                            locationViewModel.onOpenStore(id)
+                            navController.navigate(ServerScreen.StoreScreen.name)
+                        }
                     )
                 } else {
                     LocationScreen(
@@ -188,7 +197,42 @@ fun ServerApp(
                         onAddFeature = { type, name, description ->
                             locationViewModel.onAddFeature(type, name, description)
                         },
-                        onRemoveFeature = { id -> locationViewModel.onRemoveFeature(id) }
+                        onRemoveFeature = { id -> locationViewModel.onRemoveFeature(id) },
+                        onOpenStore = { id ->
+                            locationViewModel.onOpenStore(id)
+                            navController.navigate(ServerScreen.StoreScreen.name)
+                        }
+                    )
+                }
+            }
+            composable(route = ServerScreen.StoreScreen.name) {
+                val storeState by locationViewModel.activeStoreState.collectAsState()
+                val buyers by locationViewModel.buyers.collectAsState()
+                val message by locationViewModel.purchaseMessage.collectAsState()
+                val state = storeState
+                // The store can go away under the back stack - deleted from the location screen, or
+                // a different location selected - so this route has to cope with nothing to show.
+                if (state == null) {
+                    Text("No store selected.")
+                } else {
+                    StoreScreen(
+                        state = state,
+                        buyers = buyers,
+                        templates = itemViewModel.getAvailableItems(),
+                        message = message,
+                        onDismissMessage = { locationViewModel.onDismissPurchaseMessage() },
+                        onBuy = { entryIndex, buyerIndex ->
+                            locationViewModel.onBuy(entryIndex, buyerIndex)
+                        },
+                        onAddStock = { templateId, quantity, price ->
+                            locationViewModel.onAddStock(templateId, quantity, price)
+                        },
+                        onEditStock = { entryIndex, quantity, price ->
+                            locationViewModel.onEditStock(entryIndex, quantity, price)
+                        },
+                        onRemoveStock = { entryIndex ->
+                            locationViewModel.onRemoveStock(entryIndex)
+                        }
                     )
                 }
             }

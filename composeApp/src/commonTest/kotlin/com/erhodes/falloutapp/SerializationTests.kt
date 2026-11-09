@@ -2,6 +2,7 @@ package com.erhodes.falloutapp
 
 import com.erhodes.falloutapp.data.DataManager
 import com.erhodes.falloutapp.data.EnemyDataSource
+import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.condition.Condition
@@ -10,6 +11,7 @@ import com.erhodes.falloutapp.model.condition.ScalableCondition
 import com.erhodes.falloutapp.model.campaign.BasicFeature
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.model.campaign.Settlement
+import com.erhodes.falloutapp.model.campaign.StockEntry
 import com.erhodes.falloutapp.model.campaign.Store
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
@@ -115,5 +117,50 @@ class SerializationTests {
         assertIs<Settlement>(deserialized)
         assertEquals("Stillwater", deserialized.name)
         assertEquals(0, deserialized.features.size)
+    }
+
+    /**
+     * A Store's stock is persisted inside the location blob, and an ItemTemplate serializes as its
+     * catalog id, so the stock has to come back pointing at the same templates with its numbers
+     * intact.
+     */
+    @Test
+    fun serializeStoreStock() {
+        val store = Store(name = "Mo's Trading Post")
+        store.stock.add(
+            StockEntry(
+                template = ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE),
+                quantity = 3,
+                price = 120
+            )
+        )
+        store.stock.add(
+            StockEntry(
+                template = ItemDataSource.getItemTemplateById(ItemDataSource.ID_CAPS),
+                quantity = 0,
+                price = 1
+            )
+        )
+        val settlement = Settlement(name = "Honeywell", features = mutableListOf(store))
+
+        val jsonString = json.encodeToString<Location>(settlement)
+        println(jsonString)
+
+        val deserialized = json.decodeFromString<Location>(jsonString)
+        assertIs<Settlement>(deserialized)
+        val deserializedStore = deserialized.features.single()
+        assertIs<Store>(deserializedStore)
+        assertEquals(2, deserializedStore.stock.size)
+
+        val rifle = deserializedStore.stock[0]
+        assertEquals(ItemDataSource.ID_ASSAULT_RIFLE, rifle.template.id)
+        assertEquals(3, rifle.quantity)
+        assertEquals(120, rifle.price)
+
+        // An entry sold out to zero is kept, so the store still lists what it carries.
+        val caps = deserializedStore.stock[1]
+        assertEquals(ItemDataSource.ID_CAPS, caps.template.id)
+        assertEquals(0, caps.quantity)
+        assertEquals(1, caps.price)
     }
 }

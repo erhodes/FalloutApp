@@ -50,6 +50,7 @@ fun LocationScreen(
     onEditLocation: (name: String, description: String) -> Unit = { _, _ -> },
     onAddFeature: (type: FeatureType, name: String, description: String) -> Unit = { _, _, _ -> },
     onRemoveFeature: (id: String) -> Unit = {},
+    onOpenStore: (id: String) -> Unit = {},
     readOnly: Boolean = false,
 ) {
     Column {
@@ -62,6 +63,7 @@ fun LocationScreen(
             features = state.features,
             onAddFeature = onAddFeature,
             onRemoveFeature = onRemoveFeature,
+            onOpenStore = onOpenStore,
             readOnly = readOnly
         )
     }
@@ -73,6 +75,7 @@ fun SettlementScreen(
     onEditLocation: (name: String, description: String) -> Unit = { _, _ -> },
     onAddFeature: (type: FeatureType, name: String, description: String) -> Unit = { _, _, _ -> },
     onRemoveFeature: (id: String) -> Unit = {},
+    onOpenStore: (id: String) -> Unit = {},
     readOnly: Boolean = false,
 ) {
     Column {
@@ -91,6 +94,7 @@ fun SettlementScreen(
             features = state.features,
             onAddFeature = onAddFeature,
             onRemoveFeature = onRemoveFeature,
+            onOpenStore = onOpenStore,
             readOnly = readOnly
         )
     }
@@ -169,6 +173,7 @@ private fun FeatureSection(
     features: List<FeatureUiState>,
     onAddFeature: (type: FeatureType, name: String, description: String) -> Unit,
     onRemoveFeature: (id: String) -> Unit,
+    onOpenStore: (id: String) -> Unit,
     readOnly: Boolean,
 ) {
     var showAddDialog by remember { mutableStateOf(false) }
@@ -197,6 +202,7 @@ private fun FeatureSection(
             FeatureRow(
                 feature = feature,
                 onRemoveFeature = onRemoveFeature,
+                onOpenStore = onOpenStore,
                 readOnly = readOnly
             )
         }
@@ -216,6 +222,7 @@ private fun FeatureSection(
 private fun FeatureRow(
     feature: FeatureUiState,
     onRemoveFeature: (id: String) -> Unit,
+    onOpenStore: (id: String) -> Unit,
     readOnly: Boolean,
 ) {
     Row(
@@ -245,6 +252,13 @@ private fun FeatureRow(
             text = feature.type.label,
             style = MaterialTheme.typography.labelMedium
         )
+        // Only a store has a screen of its own so far, and only an owner can act on it - a read-only
+        // location is just being displayed, so there is nothing to open into.
+        if (feature.type == FeatureType.STORE && !readOnly) {
+            TextButton(onClick = { onOpenStore(feature.id) }) {
+                Text("Open")
+            }
+        }
         if (!readOnly) {
             IconButton(onClick = { onRemoveFeature(feature.id) }) {
                 Icon(

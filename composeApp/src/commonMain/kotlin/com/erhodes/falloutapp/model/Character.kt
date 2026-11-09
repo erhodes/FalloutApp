@@ -7,6 +7,7 @@ import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.math.max
+import kotlin.math.min
 
 @Serializable
 sealed class Character {
@@ -186,6 +187,37 @@ sealed class Character {
                 recalculateLoadoutWeight()
             }
         }
+    }
+
+    /**
+     * Total count of [templateId] held across inventory and loadout. A character can hold several
+     * stacks of the same template, so the quantity of anything spendable is a sum, never one stack.
+     */
+    fun countStackable(templateId: Int): Int =
+        (inventory + loadout)
+            .filterIsInstance<StackableItem>()
+            .filter { it.template.id == templateId }
+            .sumOf { it.count }
+
+    /**
+     * Drains [amount] of [templateId] across however many stacks it takes. Returns false and
+     * changes nothing when the character is short, so a caller can treat it as the whole
+     * transaction rather than checking first and hoping nothing moved in between.
+     */
+    fun consumeStackable(templateId: Int, amount: Int): Boolean {
+        if (countStackable(templateId) < amount) return false
+        var remaining = amount
+        // Snapshot before draining: decreaseStackCountForItem mutates the stacks we're walking.
+        val stacks = (inventory + loadout)
+            .filterIsInstance<StackableItem>()
+            .filter { it.template.id == templateId }
+        for (stack in stacks) {
+            if (remaining <= 0) break
+            val take = min(stack.count, remaining)
+            decreaseStackCountForItem(stack, take)
+            remaining -= take
+        }
+        return true
     }
 
     private fun recalculateLoadoutWeight() {

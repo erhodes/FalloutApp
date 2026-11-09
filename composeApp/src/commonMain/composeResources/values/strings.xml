@@ -102,6 +102,7 @@
     <string name="add_enemy">Add Enemy</string>
     <string name="locations">Locations</string>
     <string name="location">Location</string>
+    <string name="store">Store</string>
 
     <string name="campaign">Campaign</string>
 </resources>

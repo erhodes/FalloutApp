@@ -2,18 +2,16 @@ package com.erhodes.falloutapp.repository
 
 import androidx.compose.runtime.mutableStateListOf
 import com.erhodes.falloutapp.data.CharacterDataSource
-import com.erhodes.falloutapp.model.Armor
-import com.erhodes.falloutapp.model.ArmorTemplate
-import com.erhodes.falloutapp.model.BasicItem
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.Recipe
-import com.erhodes.falloutapp.model.StackableItem
-import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.Weapon
-import com.erhodes.falloutapp.model.WeaponTemplate
+import com.erhodes.falloutapp.model.createItem
+import com.erhodes.falloutapp.model.campaign.PurchaseResult
+import com.erhodes.falloutapp.model.campaign.StockEntry
+import com.erhodes.falloutapp.model.campaign.Store
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.model.condition.ScalableCondition
 import kotlinx.coroutines.CoroutineScope
@@ -128,17 +126,26 @@ class CharacterRepository(
         saveCharacters()
     }
 
-    fun addNewItemToCharacter(newItem: ItemTemplate, character: PlayerCharacter) {
-        if (newItem is ArmorTemplate) {
-            character.addItemToInventory(Armor(newItem, 0))
-        } else if (newItem is WeaponTemplate) {
-            character.addItemToInventory(Weapon(newItem, 0))
-        } else if (newItem is StackableItemTemplate) {
-            character.addItemToInventory(StackableItem(newItem, 1))
-        } else {
-            character.addItemToInventory(BasicItem(newItem))
-        }
+    /**
+     * Buys one of [entry] from [store] for [character], persisting the character when the sale goes
+     * through. [Store.sellTo] leaves both sides untouched when it fails, so nothing is written then.
+     *
+     * The sale also decrements the store's stock, and a store belongs to a location that persists
+     * through a different repository. This one owns only the character half: a caller holding the
+     * location must save it too when this returns [PurchaseResult.Success].
+     */
+    fun purchaseFromStore(
+        store: Store,
+        entry: StockEntry,
+        character: PlayerCharacter
+    ): PurchaseResult {
+        val result = store.sellTo(character, entry)
+        if (result is PurchaseResult.Success) saveCharacters()
+        return result
+    }
 
+    fun addNewItemToCharacter(newItem: ItemTemplate, character: PlayerCharacter) {
+        character.addItemToInventory(newItem.createItem())
         saveCharacters()
     }
 
