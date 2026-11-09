@@ -8,9 +8,30 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Serializable
 sealed class Character {
+
+    /**
+     * Stable identity for this character, following the same convention as [Encounter],
+     * `Location` and `Feature`.
+     *
+     * It lives on the base class, not on the subclasses, because the lists that most need to
+     * address one element are typed against [Character] - `Encounter.characters` holds both
+     * [PlayerCharacter]s and [Enemy]s, and addresses them by list position today.
+     *
+     * `ownerId` can't serve this purpose: it identifies the *player*, not the character, it is empty
+     * until a login completes, and [Enemy] never sets it at all - so every enemy shares the same
+     * blank one, and two of the same enemy type are otherwise identical in every field.
+     *
+     * Declared in the body rather than the constructor so neither subclass has to thread it through;
+     * kotlinx-serialization still writes and restores it, via the synthetic constructor it generates
+     * for deserialization.
+     */
+    val id: String = Uuid.random().toString()
 
     abstract var name: String
     abstract val ownerId: String

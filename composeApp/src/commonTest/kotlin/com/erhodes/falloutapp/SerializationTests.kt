@@ -3,7 +3,9 @@ package com.erhodes.falloutapp
 import com.erhodes.falloutapp.data.DataManager
 import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.data.ItemDataSource
+import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Encounter
+import com.erhodes.falloutapp.model.Enemy
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.condition.Condition
@@ -21,6 +23,7 @@ import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 
 class SerializationTests {
@@ -167,6 +170,53 @@ class SerializationTests {
         assertEquals(ItemDataSource.ID_CAPS, caps.template.id)
         assertEquals(0, caps.quantity)
         assertEquals(1, caps.price)
+    }
+
+    /**
+     * A character's id has to survive the trip, not be re-minted on arrival. The default is
+     * `Uuid.random()`, so a decode that failed to read the stored value would still produce a
+     * perfectly valid-looking id - just a different one every load. Asserting equality with the
+     * original is the only thing that catches that.
+     */
+    @Test
+    fun serializeCharacterId() {
+        val bob = PlayerCharacter("Bob")
+        val psycho = EnemyDataSource.createRaiderPsycho()
+
+        val bobJson = json.encodeToString<Character>(bob)
+        println(bobJson)
+        val decodedBob = json.decodeFromString<Character>(bobJson)
+        assertIs<PlayerCharacter>(decodedBob)
+        assertEquals(bob.id, decodedBob.id)
+
+        // Enemies are the case the id exists for: ownerId is blank for every one of them.
+        val psychoJson = json.encodeToString<Character>(psycho)
+        val decodedPsycho = json.decodeFromString<Character>(psychoJson)
+        assertIs<Enemy>(decodedPsycho)
+        assertEquals(psycho.id, decodedPsycho.id)
+        assertEquals("", decodedPsycho.ownerId)
+    }
+
+    /**
+     * Two enemies built from the same factory are identical in every other field, so distinct ids
+     * are the whole point - and they have to stay distinct through an encounter round trip.
+     */
+    @Test
+    fun identicalEnemiesKeepDistinctIds() {
+        val first = EnemyDataSource.createRaiderPsycho()
+        val second = EnemyDataSource.createRaiderPsycho()
+        assertNotEquals(first.id, second.id)
+        assertEquals(first.name, second.name)
+
+        val encounter = Encounter("Ambush")
+        encounter.addCharacter(first)
+        encounter.addCharacter(second)
+
+        val deserialized = json.decodeFromString<Encounter>(json.encodeToString(encounter))
+        assertEquals(2, deserialized.characters.size)
+        assertEquals(first.id, deserialized.characters[0].id)
+        assertEquals(second.id, deserialized.characters[1].id)
+        assertNotEquals(deserialized.characters[0].id, deserialized.characters[1].id)
     }
 
     /**
