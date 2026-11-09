@@ -5,6 +5,7 @@ import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.PlayerCharacter
+import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.model.condition.ConditionTemplate
 import com.erhodes.falloutapp.model.condition.ScalableCondition
@@ -13,10 +14,14 @@ import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.model.campaign.Settlement
 import com.erhodes.falloutapp.model.campaign.StockEntry
 import com.erhodes.falloutapp.model.campaign.Store
+import com.erhodes.falloutapp.network.StorePurchaseOutcome
+import com.erhodes.falloutapp.network.StorePurchaseRequest
+import com.erhodes.falloutapp.network.StorePurchaseResponse
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
+import kotlin.test.assertNull
 
 class SerializationTests {
     val json: Json = Json {
@@ -162,5 +167,86 @@ class SerializationTests {
         assertEquals(ItemDataSource.ID_CAPS, caps.template.id)
         assertEquals(0, caps.quantity)
         assertEquals(1, caps.price)
+    }
+
+    /**
+     * A player's purchase request carries their whole character over the wire, so the character has
+     * to survive the trip - including the caps stack the server is about to spend from.
+     */
+    @Test
+    fun serializeStorePurchaseRequest() {
+        val bob = PlayerCharacter("Bob")
+        bob.addItemToInventory(
+            StackableItem(ItemDataSource.getItemTemplateById(ItemDataSource.ID_CAPS), 40)
+        )
+        val request = StorePurchaseRequest(
+            storeId = "store-mo",
+            entryIndex = 2,
+            character = bob
+        )
+
+        val jsonString = json.encodeToString(request)
+        println(jsonString)
+
+        val deserialized = json.decodeFromString<StorePurchaseRequest>(jsonString)
+        assertEquals("store-mo", deserialized.storeId)
+        assertEquals(2, deserialized.entryIndex)
+        assertEquals("Bob", deserialized.character.name)
+        assertEquals(40, deserialized.character.countStackable(ItemDataSource.ID_CAPS))
+    }
+
+    /**
+     * The response carries the location back so the player sees the decremented stock. It is typed
+     * as the sealed base, so it needs its "type" discriminator the same way a stored location does.
+     */
+    @Test
+    fun serializeStorePurchaseResponse() {
+        val store = Store(name = "Mo's Trading Post")
+        store.stock.add(
+            StockEntry(
+                template = ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE),
+                quantity = 2,
+                price = 120
+            )
+        )
+        val response = StorePurchaseResponse(
+            outcome = StorePurchaseOutcome.SUCCESS,
+            message = "Bought Assault Rifle for 120 caps.",
+            templateId = ItemDataSource.ID_ASSAULT_RIFLE,
+            price = 120,
+            location = Settlement(name = "Honeywell", features = mutableListOf(store))
+        )
+
+        val jsonString = json.encodeToString(response)
+        println(jsonString)
+
+        val deserialized = json.decodeFromString<StorePurchaseResponse>(jsonString)
+        assertEquals(StorePurchaseOutcome.SUCCESS, deserialized.outcome)
+        assertEquals("Bought Assault Rifle for 120 caps.", deserialized.message)
+        assertEquals(ItemDataSource.ID_ASSAULT_RIFLE, deserialized.templateId)
+        assertEquals(120, deserialized.price)
+
+        val location = deserialized.location
+        assertIs<Settlement>(location)
+        val deserializedStore = location.features.single()
+        assertIs<Store>(deserializedStore)
+        assertEquals(2, deserializedStore.stock.single().quantity)
+    }
+
+    /** A refusal carries no item and no location, so the optional fields must decode as absent. */
+    @Test
+    fun serializeStorePurchaseRefusal() {
+        val response = StorePurchaseResponse(
+            outcome = StorePurchaseOutcome.INSUFFICIENT_CAPS,
+            message = "Assault Rifle costs 120 caps, and you have 40."
+        )
+
+        val jsonString = json.encodeToString(response)
+        println(jsonString)
+
+        val deserialized = json.decodeFromString<StorePurchaseResponse>(jsonString)
+        assertEquals(StorePurchaseOutcome.INSUFFICIENT_CAPS, deserialized.outcome)
+        assertEquals("Assault Rifle costs 120 caps, and you have 40.", deserialized.message)
+        assertNull(deserialized.location)
     }
 }

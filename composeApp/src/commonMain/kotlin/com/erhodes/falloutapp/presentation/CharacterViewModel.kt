@@ -33,7 +33,9 @@ class CharacterViewModel(
     val characters = repo.characters
     val remoteCharacters = repo.remoteCharacters
 
-    private var activeCharacter = PlayerCharacter("empty")
+    // Held by the repository, not here: the store flow has to sell to the same character this
+    // screen is editing, and it reaches it through the repository.
+    private val activeCharacter get() = repo.activeCharacter
 
     private val _activeCharacterState = MutableStateFlow(CharacterUiState(activeCharacter))
     val activeCharacterState = _activeCharacterState.asStateFlow()
@@ -45,7 +47,7 @@ class CharacterViewModel(
     //TODO add DI and move this logic to the creation view model
 
     fun setActiveCharacter(character: PlayerCharacter) {
-        activeCharacter = character
+        repo.setActiveCharacter(character)
         scope.launch {
             //todo the ownerId = uuid thing didn't work well on web for some reason. Fix that in the future.
             _activeCharacterState.update{ CharacterUiState(activeCharacter, true) }

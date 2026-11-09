@@ -55,8 +55,12 @@ private const val MAX_TEMPLATE_MATCHES = 40
  * [StockEntryUiState] for why - and every control commits immediately through its callback, the same
  * way [LocationScreen]'s feature controls do.
  *
- * @param readOnly when true the store is owned elsewhere (e.g. fetched from the server), so the
- * stock is displayed with no way to buy from it or edit it.
+ * The two permissions are separate because the two users of this screen differ: a GM can do both,
+ * while a player can buy from a store they are visiting but not change what it carries. Both default
+ * to false, so a caller that passes neither gets a display-only store.
+ *
+ * @param canBuy whether the Buy controls and the buyer picker are shown.
+ * @param canEditStock whether the stock can be added to, re-priced or removed.
  */
 @Composable
 fun StoreScreen(
@@ -69,7 +73,8 @@ fun StoreScreen(
     onAddStock: (templateId: Int, quantity: Int, price: Int) -> Unit = { _, _, _ -> },
     onEditStock: (entryIndex: Int, quantity: Int, price: Int) -> Unit = { _, _, _ -> },
     onRemoveStock: (entryIndex: Int) -> Unit = {},
-    readOnly: Boolean = false,
+    canBuy: Boolean = false,
+    canEditStock: Boolean = false,
 ) {
     var selectedBuyer by remember { mutableStateOf(0) }
     var showAddDialog by remember { mutableStateOf(false) }
@@ -90,7 +95,7 @@ fun StoreScreen(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-        if (!readOnly) {
+        if (canBuy) {
             BuyerPicker(
                 buyers = buyers,
                 selected = buyer,
@@ -117,7 +122,7 @@ fun StoreScreen(
                 text = "Stock",
                 style = MaterialTheme.typography.titleLarge
             )
-            if (!readOnly) {
+            if (canEditStock) {
                 IconButton(onClick = { showAddDialog = true }) {
                     Icon(
                         imageVector = Icons.Filled.Add,
@@ -140,7 +145,8 @@ fun StoreScreen(
                     onBuy = { onBuy(index, buyerIndex) },
                     onEdit = { editingIndex = index },
                     onRemove = { onRemoveStock(index) },
-                    readOnly = readOnly
+                    canBuy = canBuy,
+                    canEditStock = canEditStock
                 )
             }
         }
@@ -168,7 +174,12 @@ fun StoreScreen(
     }
 }
 
-/** Chooses which character the Buy buttons sell to, showing what each can currently afford. */
+/**
+ * Chooses which character the Buy buttons sell to, showing what each can currently afford.
+ *
+ * A player only ever has one character to buy with, so a single buyer is stated rather than offered
+ * as a choice of one.
+ */
 @Composable
 private fun BuyerPicker(
     buyers: List<BuyerUiState>,
@@ -180,6 +191,14 @@ private fun BuyerPicker(
         Text(
             text = "No characters available to buy.",
             style = MaterialTheme.typography.bodyMedium
+        )
+        return
+    }
+    if (buyers.size == 1) {
+        val only = buyers.first()
+        Text(
+            text = "Buying as ${only.name} - ${only.caps} caps",
+            style = MaterialTheme.typography.bodyLarge
         )
         return
     }
@@ -219,7 +238,8 @@ private fun StockRow(
     onBuy: () -> Unit,
     onEdit: () -> Unit,
     onRemove: () -> Unit,
-    readOnly: Boolean,
+    canBuy: Boolean,
+    canEditStock: Boolean,
 ) {
     Row(
         modifier = Modifier
@@ -243,7 +263,7 @@ private fun StockRow(
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-        if (!readOnly) {
+        if (canBuy) {
             Button(
                 onClick = onBuy,
                 // Both conditions are re-checked by the model; disabling just avoids a pointless
@@ -252,6 +272,8 @@ private fun StockRow(
             ) {
                 Text("Buy")
             }
+        }
+        if (canEditStock) {
             IconButton(onClick = onEdit) {
                 Icon(
                     imageVector = Icons.Filled.Edit,
@@ -437,7 +459,9 @@ fun StoreScreenPreview() {
             buyers = listOf(
                 BuyerUiState(name = "Bob", caps = 130),
                 BuyerUiState(name = "Nadine", caps = 12)
-            )
+            ),
+            canBuy = true,
+            canEditStock = true
         )
     }
 }

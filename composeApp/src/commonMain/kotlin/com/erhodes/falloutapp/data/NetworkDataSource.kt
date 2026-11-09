@@ -6,6 +6,8 @@ import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.campaign.Campaign
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.network.ClientApi
+import com.erhodes.falloutapp.network.StorePurchaseRequest
+import com.erhodes.falloutapp.network.StorePurchaseResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -70,5 +72,9 @@ class NetworkDataSource(address: String) {
 
     suspend fun getActiveLocation(): Location {
         return clientApi.getActiveLocation()
+    }
+
+    suspend fun purchaseFromStore(request: StorePurchaseRequest): StorePurchaseResponse {
+        return clientApi.purchaseFromStore(request)
     }
 }

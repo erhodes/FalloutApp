@@ -90,6 +90,31 @@ class ClientApi(private val httpClient: HttpClient) {
         }
     }
 
+    /**
+     * Asks the server to sell the player one of a store's stock entries.
+     *
+     * Anything short of a 2xx is reported as [StorePurchaseOutcome.ERROR] rather than thrown: the
+     * player hasn't been charged in that case, since the server only persists a sale it completed.
+     */
+    suspend fun purchaseFromStore(request: StorePurchaseRequest): StorePurchaseResponse {
+        AppLogger.d("Eric", "buying entry ${request.entryIndex} from store ${request.storeId}")
+
+        val httpResponse = httpClient.post("/campaign/store/purchase") {
+            contentType(ContentType.Application.Json)
+            setBody(request)
+        }
+
+        AppLogger.d("Eric", "got response $httpResponse")
+        return if (httpResponse.status.value in 200..299) {
+            httpResponse.body<StorePurchaseResponse>()
+        } else {
+            StorePurchaseResponse(
+                outcome = StorePurchaseOutcome.ERROR,
+                message = "The store didn't answer."
+            )
+        }
+    }
+
     suspend fun getActiveLocation(): Location {
         AppLogger.d("Eric","getting active location")
 

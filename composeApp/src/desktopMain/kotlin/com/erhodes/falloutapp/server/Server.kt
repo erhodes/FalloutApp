@@ -3,6 +3,11 @@ package com.erhodes.falloutapp.server
 import com.erhodes.falloutapp.data.DataManager
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
+import com.erhodes.falloutapp.model.campaign.PurchaseResult
+import com.erhodes.falloutapp.model.campaign.Store
+import com.erhodes.falloutapp.network.StorePurchaseOutcome
+import com.erhodes.falloutapp.network.StorePurchaseRequest
+import com.erhodes.falloutapp.network.StorePurchaseResponse
 import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.EncounterRepository
@@ -91,6 +96,78 @@ fun Application.falloutModule(
             }
             get("/location") {
                 call.respond(locationRepository.activeLocation)
+            }
+            /**
+             * Sells a player one of the active location's store stock. The server owns the stock, so
+             * it is the one that decides: it adopts the character the player sent (they own that),
+             * runs the sale, and persists the location only if the sale actually happened.
+             */
+            post("/store/purchase") {
+                val request = call.receive<StorePurchaseRequest>()
+                AppLogger.d(
+                    "Eric",
+                    "purchase: ${request.character.name} wants entry ${request.entryIndex} " +
+                        "from store ${request.storeId}"
+                )
+                // Adopt the player's copy first. Ours may be stale from the last sync, and spending
+                // from a stale copy could hand out caps the player has already spent elsewhere.
+                characterRepository.addCharacters(listOf(request.character))
+                val character = request.character
+
+                val location = locationRepository.activeLocation
+                val store = location.features
+                    .filterIsInstance<Store>()
+                    .firstOrNull { it.id == request.storeId }
+                if (store == null) {
+                    call.respond(
+                        StorePurchaseResponse(
+                            outcome = StorePurchaseOutcome.STORE_NOT_FOUND,
+                            message = "That store isn't here any more."
+                        )
+                    )
+                    return@post
+                }
+
+                val entry = store.stock.getOrNull(request.entryIndex)
+                if (entry == null) {
+                    call.respond(
+                        StorePurchaseResponse(
+                            outcome = StorePurchaseOutcome.OUT_OF_STOCK,
+                            message = "That item isn't stocked any more."
+                        )
+                    )
+                    return@post
+                }
+
+                // Read both before the sale: it decrements the entry we're about to report on.
+                val itemName = entry.template.name
+                val templateId = entry.template.id
+                val price = entry.price
+
+                val response = when (
+                    val result = characterRepository.purchaseFromStore(store, entry, character)
+                ) {
+                    is PurchaseResult.Success -> {
+                        locationRepository.saveLocation(location)
+                        StorePurchaseResponse(
+                            outcome = StorePurchaseOutcome.SUCCESS,
+                            message = "Bought $itemName for $price caps.",
+                            templateId = templateId,
+                            price = price,
+                            location = location
+                        )
+                    }
+                    is PurchaseResult.InsufficientCaps -> StorePurchaseResponse(
+                        outcome = StorePurchaseOutcome.INSUFFICIENT_CAPS,
+                        message = "$itemName costs ${result.required} caps, " +
+                            "and you have ${result.available}."
+                    )
+                    PurchaseResult.OutOfStock -> StorePurchaseResponse(
+                        outcome = StorePurchaseOutcome.OUT_OF_STOCK,
+                        message = "$itemName is out of stock."
+                    )
+                }
+                call.respond(response)
             }
         }
     }

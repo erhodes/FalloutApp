@@ -6,8 +6,12 @@ import com.erhodes.falloutapp.data.localIdStore
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
 import com.erhodes.falloutapp.model.campaign.Campaign
+import com.erhodes.falloutapp.network.StorePurchaseOutcome
+import com.erhodes.falloutapp.network.StorePurchaseRequest
+import com.erhodes.falloutapp.network.StorePurchaseResponse
 import com.erhodes.falloutapp.util.AppLogger
 import io.ktor.client.network.sockets.SocketTimeoutException
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -130,5 +134,35 @@ class LoginRepository(
     suspend fun getActiveLocation() {
         val remoteLocation = dataSource.getActiveLocation()
         locationRepository.setActiveLocation(remoteLocation)
+    }
+
+    /**
+     * Buys one of a store's stock entries for [character].
+     *
+     * The server decides the sale, since it owns the stock. Only once it says the sale happened is
+     * the spend replayed on the player's own character, and the location it sends back replaces the
+     * cached one so the screen shows the stock it just decremented. A timeout or an unreachable
+     * server leaves the character untouched, which is the right side to fail on: the server only
+     * persists a sale it completed.
+     */
+    suspend fun purchaseFromStore(
+        storeId: String,
+        entryIndex: Int,
+        character: PlayerCharacter
+    ): StorePurchaseResponse {
+        val response = try {
+            dataSource.purchaseFromStore(StorePurchaseRequest(storeId, entryIndex, character))
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            // Covers a timeout, a dead connection, and never having logged in at all - in every
+            // case nothing was bought, and the player should be told rather than shown a crash.
+            StorePurchaseResponse(StorePurchaseOutcome.ERROR, "The store didn't answer.")
+        }
+        if (response.outcome == StorePurchaseOutcome.SUCCESS) {
+            characterRepository.applyPurchase(character, response.templateId, response.price)
+            response.location?.let { locationRepository.setActiveLocation(it) }
+        }
+        return response
     }
 }

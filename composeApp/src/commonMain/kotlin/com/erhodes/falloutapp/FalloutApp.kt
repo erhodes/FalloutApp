@@ -37,6 +37,7 @@ enum class FalloutScreen(val title: StringResource) {
     Login(title = Res.string.login),
     EncounterScreen(title = Res.string.encounters),
     LocationScreen(title = Res.string.location_screen),
+    StoreScreen(title = Res.string.store),
     CampaignScreen(title = Res.string.campaign_screen)
 }
 
@@ -265,8 +266,33 @@ fun FalloutApp(
                 val locationState by remoteLocationViewModel.activeLocationState.collectAsState()
                 LocationScreen(
                     state = locationState,
+                    // The GM owns the location, so nothing here is editable - but a store in it can
+                    // still be opened and bought from.
+                    onOpenStore = { id ->
+                        remoteLocationViewModel.onOpenStore(id)
+                        navController.navigate(FalloutScreen.StoreScreen.name)
+                    },
                     readOnly = true
                 )
+            }
+            composable(route = FalloutScreen.StoreScreen.name) {
+                val storeState by remoteLocationViewModel.activeStoreState.collectAsState()
+                val buyers by remoteLocationViewModel.buyers.collectAsState()
+                val message by remoteLocationViewModel.purchaseMessage.collectAsState()
+                val state = storeState
+                // The GM can delete the store or move the party on while this screen is open.
+                if (state == null) {
+                    Text("This store is no longer here.")
+                } else {
+                    StoreScreen(
+                        state = state,
+                        buyers = buyers,
+                        message = message,
+                        onDismissMessage = { remoteLocationViewModel.onDismissPurchaseMessage() },
+                        onBuy = { entryIndex, _ -> remoteLocationViewModel.onBuy(entryIndex) },
+                        canBuy = true
+                    )
+                }
             }
             composable(route = FalloutScreen.CampaignScreen.name) {
                 val campaign by loginStateViewModel.campaignFlow.collectAsState()

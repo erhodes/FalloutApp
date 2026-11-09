@@ -232,7 +232,9 @@ fun ServerApp(
                         },
                         onRemoveStock = { entryIndex ->
                             locationViewModel.onRemoveStock(entryIndex)
-                        }
+                        },
+                        canBuy = true,
+                        canEditStock = true
                     )
                 }
             }

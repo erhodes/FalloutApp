@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.repository
 
 import androidx.compose.runtime.mutableStateListOf
 import com.erhodes.falloutapp.data.CharacterDataSource
+import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.model.Item
 import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.Perk
@@ -33,6 +34,14 @@ class CharacterRepository(
 
     val remoteCharacters = mutableStateListOf<PlayerCharacter>()
 
+    /**
+     * The character the player is currently playing, the way the desktop `LocationRepository` holds
+     * the active location. It lives here rather than in one ViewModel because more than one acts on
+     * it - the character screen edits it, and a store sells to it.
+     */
+    var activeCharacter: PlayerCharacter = PlayerCharacter("empty")
+        private set
+
     val dataSource = CharacterDataSource()
 
 	init {
@@ -40,6 +49,10 @@ class CharacterRepository(
             characters.addAll(dataSource.loadCharacters())
         }
 	}
+
+    fun setActiveCharacter(character: PlayerCharacter) {
+        activeCharacter = character
+    }
 
 	fun add(character: PlayerCharacter) {
 		characters.add(character)
@@ -142,6 +155,22 @@ class CharacterRepository(
         val result = store.sellTo(character, entry)
         if (result is PurchaseResult.Success) saveCharacters()
         return result
+    }
+
+    /**
+     * Applies a purchase the server has already settled: pays [price] in caps and hands [character]
+     * one of [templateId].
+     *
+     * The decision was [Store.sellTo]'s on the server, against the server's copy of the store and of
+     * this character; this only replays the agreed spend on the player's own copy, so the two stay
+     * in step without the character having to round-trip. Returns false without changing anything if
+     * the caps aren't there, which would mean the two copies had already drifted.
+     */
+    fun applyPurchase(character: PlayerCharacter, templateId: Int, price: Int): Boolean {
+        if (!character.consumeStackable(ItemDataSource.ID_CAPS, price)) return false
+        character.addItemToInventory(ItemDataSource.getItemTemplateById(templateId).createItem())
+        saveCharacters()
+        return true
     }
 
     fun addNewItemToCharacter(newItem: ItemTemplate, character: PlayerCharacter) {
