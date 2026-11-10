@@ -95,7 +95,7 @@ fun Application.falloutModule(
                 call.respond(campaignRepository.activeCampaign.summarize())
             }
             get("/location") {
-                call.respond(locationRepository.activeLocation)
+                call.respond(campaignRepository.activeCampaign.currentLocation)
             }
             /**
              * Sells a player one of the active location's store stock. The server owns the stock, so
@@ -114,7 +114,7 @@ fun Application.falloutModule(
                 characterRepository.addCharacters(listOf(request.character))
                 val character = request.character
 
-                val location = locationRepository.activeLocation
+                val location = campaignRepository.activeCampaign.currentLocation
                 val store = location.features
                     .filterIsInstance<Store>()
                     .firstOrNull { it.id == request.storeId }

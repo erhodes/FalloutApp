@@ -154,16 +154,16 @@ fun ServerApp(
             }
             composable(route = ServerScreen.LocationListScreen.name) {
                 val locations by locationViewModel.savedLocations.collectAsState()
-                val activeLocationState by locationViewModel.activeLocationState.collectAsState()
+                val currentLocationId by locationViewModel.currentLocationId.collectAsState()
                 LaunchedEffect(Unit) { locationViewModel.loadSavedLocations() }
                 LocationListScreen(
                     locations = locations,
-                    activeLocationId = activeLocationState.id,
+                    currentLocationId = currentLocationId,
                     onSelect = { location ->
                         locationViewModel.onSelectLocation(location)
                         navController.navigate(ServerScreen.LocationScreen.name)
                     },
-                    onSetActive = { location -> locationViewModel.onSetActiveLocation(location) },
+                    onSetCurrent = { location -> locationViewModel.onSetCurrentCampaignLocation(location) },
                     onNewLocation = {
                         locationViewModel.onNewLocation()
                         navController.navigate(ServerScreen.LocationScreen.name)

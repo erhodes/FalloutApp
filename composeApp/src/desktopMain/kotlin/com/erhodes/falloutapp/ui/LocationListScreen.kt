@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.campaign.BasicLocation
 import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.model.campaign.Settlement
@@ -22,9 +21,9 @@ import kotlin.collections.forEach
 @Composable
 fun LocationListScreen(
     locations: List<Location>,
-    activeLocationId: String?,
+    currentLocationId: String?,
     onSelect: (Location) -> Unit,
-    onSetActive: (Location) -> Unit,
+    onSetCurrent: (Location) -> Unit,
     onNewLocation: () -> Unit
 ) {
     Column(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -39,7 +38,7 @@ fun LocationListScreen(
             Text("No saved locations.")
         }
         locations.forEach { location ->
-            val isActive = location.id == activeLocationId
+            val isCurrent = location.id == currentLocationId
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -51,10 +50,10 @@ fun LocationListScreen(
                         Text("Select")
                     }
                     Button(
-                        onClick = { onSetActive(location) },
-                        enabled = !isActive
+                        onClick = { onSetCurrent(location) },
+                        enabled = !isCurrent
                     ) {
-                        Text(if (isActive) "Active" else "Set Active")
+                        Text(if (isCurrent) "Current" else "Set Current")
                     }
                 }
             }
@@ -71,9 +70,9 @@ fun LocationListScreenPreview() {
             Settlement("Stillwater"),
             ruins
         ),
-        activeLocationId = ruins.id,
+        currentLocationId = ruins.id,
         onSelect = {},
-        onSetActive = {},
+        onSetCurrent = {},
         onNewLocation = {}
     )
 }

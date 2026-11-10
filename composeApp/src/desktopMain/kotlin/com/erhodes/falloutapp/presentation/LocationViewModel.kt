@@ -8,6 +8,7 @@ import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.model.campaign.PurchaseResult
 import com.erhodes.falloutapp.model.campaign.StockEntry
 import com.erhodes.falloutapp.model.campaign.Store
+import com.erhodes.falloutapp.repository.CampaignRepository
 import com.erhodes.falloutapp.repository.CharacterRepository
 import com.erhodes.falloutapp.repository.LocationRepository
 import kotlinx.coroutines.CoroutineScope
@@ -29,7 +30,14 @@ class LocationViewModel(
     // different repositories, so this ViewModel is where the two halves are driven together.
     private val characterRepo: CharacterRepository by inject()
 
+    private val campaignRepo: CampaignRepository by inject()
+
+    /** The location the GM is viewing/editing. Not necessarily where the players are. */
     private var activeLocation: Location = repo.activeLocation
+
+    /** Id of the active campaign's current location, i.e. where the players are. */
+    private val _currentLocationId = MutableStateFlow(campaignRepo.activeCampaign.currentLocation.id)
+    val currentLocationId = _currentLocationId.asStateFlow()
 
     /** Which of the location's stores the store screen is showing, if any. */
     private var activeStoreId: String? = null
@@ -51,8 +59,7 @@ class LocationViewModel(
     val savedLocations = _savedLocations.asStateFlow()
 
     fun onSelectLocation(location: Location) {
-//        repo.setActiveEncounter(encounter)
-
+        repo.setActiveLocation(location)
         activeLocation = location
         activeStoreId = null
         publishState()
@@ -60,6 +67,7 @@ class LocationViewModel(
 
     fun onNewLocation() {
         activeLocation = BasicLocation("New Location")
+        repo.setActiveLocation(activeLocation)
         activeStoreId = null
         publishState()
     }
@@ -154,10 +162,10 @@ class LocationViewModel(
         _purchaseMessage.value = null
     }
 
-    fun onSetActiveLocation(location: Location) {
-        repo.setActiveLocation(location)
-        activeLocation = location
-        activeStoreId = null
+    /** Moves the players to [location] and switches the GM's view to it as well. */
+    fun onSetCurrentCampaignLocation(location: Location) {
+        campaignRepo.setCurrentLocation(location)
+        _currentLocationId.value = location.id
         publishState()
     }
 

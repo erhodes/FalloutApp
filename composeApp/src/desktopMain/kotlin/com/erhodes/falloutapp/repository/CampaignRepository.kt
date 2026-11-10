@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.repository
 
 import com.erhodes.falloutapp.data.CampaignDataSource
 import com.erhodes.falloutapp.model.campaign.Campaign
+import com.erhodes.falloutapp.model.campaign.Location
 import com.erhodes.falloutapp.model.PlayerCharacter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +37,12 @@ class CampaignRepository(
     fun addCharacterToCampaign(character: PlayerCharacter) {
         activeCampaign.addCharacter(character)
         scope.launch { dataSource.saveCharacter(activeCampaign.id, character) }
+        notifyChanged()
+    }
+
+    /** Moves the players of the active campaign to [location]. */
+    fun setCurrentLocation(location: Location) {
+        activeCampaign.currentLocation = location
         notifyChanged()
     }
 
