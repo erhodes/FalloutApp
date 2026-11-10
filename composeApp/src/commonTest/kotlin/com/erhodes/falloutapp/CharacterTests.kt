@@ -51,7 +51,7 @@ class CharacterTests {
     @Test
     fun takeDamageWithToughArmor() {
         val character = PlayerCharacter("Bob")
-        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_T45), 0)
 
         assertEquals(0, armor.damageTaken)
         assertEquals(0, character.damageTaken)
@@ -73,8 +73,8 @@ class CharacterTests {
         assertEquals(2, armor.damageTaken)
         assertEquals(0, character.damageTaken)
 
-        character.takeDamage(4)
-        assertEquals(4, armor.damageTaken)
+        character.takeDamage(5)
+        assertEquals(5, armor.damageTaken)
         assertEquals(1, character.damageTaken)
     }
 
@@ -223,7 +223,7 @@ class CharacterTests {
     @Test
     fun addFear() {
         val character = PlayerCharacter("Bob")
-        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_RAIDER), 0)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ItemDataSource.ID_PA_T45), 0)
 
         assertEquals(0, character.fear)
         assertEquals(FearLevel.STEADY, character.getFearLevel())

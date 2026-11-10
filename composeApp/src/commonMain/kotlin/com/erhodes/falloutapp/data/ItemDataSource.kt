@@ -39,6 +39,7 @@ object ItemDataSource {
     // for testing purposes, a few template IDs are listed here
     const val ID_ARMOR_LEATHER = 1000
     const val ID_PA_RAIDER = 1001
+    const val ID_PA_T45 = 1003
     const val ID_BATTLE_STANDARD = 3000
     const val ID_ASSAULT_RIFLE = 0
     const val ID_FRAG_GRENADE = 1
