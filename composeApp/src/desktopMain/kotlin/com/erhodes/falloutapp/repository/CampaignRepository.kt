@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 class CampaignRepository(
-    private val dataSource: CampaignDataSource
+    private val dataSource: CampaignDataSource,
+    private val locationRepository: LocationRepository
 ) {
     private val scope = CoroutineScope(Dispatchers.IO)
 
@@ -27,8 +28,12 @@ class CampaignRepository(
     val changes: SharedFlow<Unit> = _changes.asSharedFlow()
 
     init {
-        // Characters are loaded asynchronously; observers pick them up via the changes flow.
+        // The campaign is loaded asynchronously; observers pick it up via the changes flow.
         scope.launch {
+            // A location that has since been deleted leaves the placeholder in place.
+            dataSource.loadCampaignRecord(activeCampaign.id)?.currentLocationId
+                ?.let { locationRepository.loadLocation(it) }
+                ?.let { activeCampaign.currentLocation = it }
             dataSource.loadCharacters(activeCampaign.id).forEach { activeCampaign.addCharacter(it) }
             notifyChanged()
         }
@@ -43,6 +48,7 @@ class CampaignRepository(
     /** Moves the players of the active campaign to [location]. */
     fun setCurrentLocation(location: Location) {
         activeCampaign.currentLocation = location
+        scope.launch { dataSource.saveCampaign(activeCampaign) }
         notifyChanged()
     }
 

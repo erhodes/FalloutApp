@@ -17,7 +17,7 @@ private val desktopModule = module {
     single { LocationDataSource() }
     single { LocationRepository(get()) }
     single { CampaignDataSource() }
-    single { CampaignRepository(get()) }
+    single { CampaignRepository(get(), get()) }
 }
 
 /**

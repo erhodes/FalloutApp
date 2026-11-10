@@ -58,6 +58,16 @@ class LocationViewModel(
     private val _savedLocations = MutableStateFlow<List<Location>>(emptyList())
     val savedLocations = _savedLocations.asStateFlow()
 
+    init {
+        // The campaign (and its current location) loads asynchronously, so follow its changes
+        // rather than trusting the value seen at construction.
+        scope.launch {
+            campaignRepo.changes.collect {
+                _currentLocationId.value = campaignRepo.activeCampaign.currentLocation.id
+            }
+        }
+    }
+
     fun onSelectLocation(location: Location) {
         repo.setActiveLocation(location)
         activeLocation = location
@@ -165,7 +175,6 @@ class LocationViewModel(
     /** Moves the players to [location] and switches the GM's view to it as well. */
     fun onSetCurrentCampaignLocation(location: Location) {
         campaignRepo.setCurrentLocation(location)
-        _currentLocationId.value = location.id
         publishState()
     }
 

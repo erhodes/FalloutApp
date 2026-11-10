@@ -38,6 +38,21 @@ class CampaignDataSource {
         override val primaryKey = PrimaryKey(ownerId, campaignId)
     }
 
+    /**
+     * One row per campaign. The current location is stored by id only: the location itself lives
+     * in [LocationDataSource], which is the authority for its contents (stock, features, ...), so a
+     * copy here would go stale.
+     */
+    private object Campaigns : Table("campaigns") {
+        val id = varchar("id", 64)
+        val name = text("name")
+        val currentLocationId = varchar("current_location_id", 64).nullable()
+        override val primaryKey = PrimaryKey(id)
+    }
+
+    /** A campaign row as stored; the repository resolves [currentLocationId] into a Location. */
+    data class CampaignRecord(val id: String, val name: String, val currentLocationId: String?)
+
     private val json: Json = Json {
         serializersModule = DataManager.serializerModule
         ignoreUnknownKeys = true
@@ -56,8 +71,37 @@ class CampaignDataSource {
             url = "jdbc:sqlite:$homeDir/.falloutapp/campaign.db",
             driver = "org.sqlite.JDBC"
         )
-        transaction(db) { SchemaUtils.create(CampaignCharacters) }
+        transaction(db) { SchemaUtils.create(CampaignCharacters, Campaigns) }
         return db
+    }
+
+    /** Persist the campaign's own fields (not its characters, which are saved individually). */
+    suspend fun saveCampaign(campaign: Campaign) = withContext(Dispatchers.IO) {
+        transaction(database) {
+            // Upsert via delete + insert keyed on the campaign id.
+            Campaigns.deleteWhere { Campaigns.id eq campaign.id }
+            Campaigns.insert {
+                it[id] = campaign.id
+                it[name] = campaign.name
+                it[currentLocationId] = campaign.currentLocation.id
+            }
+        }
+        Unit
+    }
+
+    suspend fun loadCampaignRecord(id: String): CampaignRecord? = withContext(Dispatchers.IO) {
+        transaction(database) {
+            Campaigns.selectAll()
+                .where { Campaigns.id eq id }
+                .singleOrNull()
+                ?.let {
+                    CampaignRecord(
+                        id = it[Campaigns.id],
+                        name = it[Campaigns.name],
+                        currentLocationId = it[Campaigns.currentLocationId]
+                    )
+                }
+        }
     }
 
     /** Persist [character] as the entry for its owner in the campaign identified by [campaignId]. */
