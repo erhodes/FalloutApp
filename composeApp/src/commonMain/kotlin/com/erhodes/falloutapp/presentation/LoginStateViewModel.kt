@@ -32,13 +32,6 @@ class LoginStateViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun sync() {
-        viewModelScope.launch {
-            val characters = characterRepo.characters
-            repo.syncCharacters(characters)
-        }
-    }
-
     fun joinCampaign(character: PlayerCharacter) {
         viewModelScope.launch {
             repo.joinCampaign(character)

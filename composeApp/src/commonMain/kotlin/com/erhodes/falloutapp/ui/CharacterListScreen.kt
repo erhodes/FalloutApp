@@ -2,20 +2,23 @@ package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.Greeting
 import com.erhodes.falloutapp.model.PlayerCharacter
-import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 import falloutapp.composeapp.generated.resources.Res
 import falloutapp.composeapp.generated.resources.delete
@@ -25,7 +28,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun CharacterListScreen(
     characters: List<PlayerCharacter>,
-    remoteCharacters: List<PlayerCharacter>,
     connected: Boolean,
     onSelect: (PlayerCharacter) -> Unit,
     onNewCharacter: () -> Unit,
@@ -72,23 +74,37 @@ fun CharacterListScreen(
         ) {
             Text("New")
         }
-
-        Spacer(modifier = Modifier.height(Dimens.paddingSmall))
-        Text(
-            text = "Other Characters",
-            style = MaterialTheme.typography.displaySmall
-        )
-        remoteCharacters.forEach {
-            RemoteCharacterSelector(
-                character = it,
-                onSelect = { onSelect(it) }
-            )
-        }
     }
 }
 
 @Composable
 fun CharacterSelector(character: PlayerCharacter, onSelect: () -> Unit, onDeleteClicked: () -> Unit, modifier: Modifier = Modifier) {
+    var showDeleteConfirmation by remember { mutableStateOf(false) }
+
+    if (showDeleteConfirmation) {
+        AlertDialog(
+            onDismissRequest = { showDeleteConfirmation = false },
+            title = { Text("Delete ${character.name}?") },
+            text = { Text("This character will be permanently deleted. This cannot be undone.") },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteConfirmation = false
+                        onDeleteClicked()
+                    },
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) {
+                    Text(stringResource(Res.string.delete))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteConfirmation = false }) {
+                    Text("Cancel")
+                }
+            }
+        )
+    }
+
     Row(
         modifier = modifier
     ) {
@@ -103,7 +119,7 @@ fun CharacterSelector(character: PlayerCharacter, onSelect: () -> Unit, onDelete
             Text("Select")
         }
         Button(
-            onClick = onDeleteClicked,
+            onClick = { showDeleteConfirmation = true },
             colors = ButtonDefaults.buttonColors().copy(containerColor = MaterialTheme.colorScheme.errorContainer),
             modifier = Modifier.padding(start = 20.dp)
         ) {
@@ -136,10 +152,8 @@ fun CharacterListScreenPreview() {
     FalloutAppTheme {
         val character1 = PlayerCharacter("Tom")
         val character2 = PlayerCharacter("Jerry")
-        val remoteCharacter1 = PlayerCharacter("Sam", ownerId = "111")
         CharacterListScreen(
             characters = listOf(character1, character2),
-            remoteCharacters = listOf(remoteCharacter1),
             connected = false,
             {},
             {},

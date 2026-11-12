@@ -31,7 +31,6 @@ class CharacterViewModel(
     private val loginRepository: LoginRepository by inject()
 
     val characters = repo.characters
-    val remoteCharacters = repo.remoteCharacters
 
     // Held by the repository, not here: the store flow has to sell to the same character this
     // screen is editing, and it reaches it through the repository.

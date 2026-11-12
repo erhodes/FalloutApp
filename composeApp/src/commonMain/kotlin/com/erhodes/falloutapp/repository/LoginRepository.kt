@@ -105,15 +105,6 @@ class LoginRepository(
         }
     }
 
-    suspend fun syncCharacters(characters: List<PlayerCharacter>) {
-        val remoteCharacters = dataSource.syncCharacters(characters)
-        // any characters we own should be excluded as they are not remote
-        val filteredList = remoteCharacters.filter { it.ownerId != userId }
-        if (filteredList.isNotEmpty()) {
-            characterRepository.setRemoteCharacters(filteredList)
-        }
-    }
-
     suspend fun joinCampaign(character: PlayerCharacter) {
         dataSource.joinCampaign(character)
     }

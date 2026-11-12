@@ -100,11 +100,9 @@ fun FalloutApp(
         ) {
             composable(route = FalloutScreen.CharacterList.name) {
                 val characterList = remember { characterViewModel.characters }
-                val remoteCharacterList = remember { characterViewModel.remoteCharacters }
                 val connected by loginStateViewModel.loginState.collectAsState()
                 CharacterListScreen(
                     characters = characterList,
-                    remoteCharacters = remoteCharacterList,
                     connected = connected,
                     onSelect = {
                         characterViewModel.setActiveCharacter(it)

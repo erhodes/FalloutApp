@@ -32,8 +32,6 @@ class CharacterRepository(
 
 	val characters = mutableStateListOf<PlayerCharacter>()
 
-    val remoteCharacters = mutableStateListOf<PlayerCharacter>()
-
     /**
      * The character the player is currently playing, the way the desktop `LocationRepository` holds
      * the active location. It lives here rather than in one ViewModel because more than one acts on
@@ -75,12 +73,6 @@ class CharacterRepository(
     fun removeCharacter(character: PlayerCharacter) {
         characters.remove(character)
         saveCharacters()
-    }
-
-    fun setRemoteCharacters(characters: List<PlayerCharacter>) {
-        remoteCharacters.clear()
-        remoteCharacters.addAll(characters)
-        // no local storage for remote characters at the moment
     }
 
     fun increaseSkillsForCharacter(increases: List<Int>, character: PlayerCharacter, milestone: Boolean) {
