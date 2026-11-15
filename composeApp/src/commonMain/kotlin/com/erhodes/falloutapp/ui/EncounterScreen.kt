@@ -166,7 +166,7 @@ private fun EnemyRow(
             style = MaterialTheme.typography.titleMedium,
         )
         Text(
-            text = "${enemy.damageTaken}/${Character.MAX_HEALTH}",
+            text = "${enemy.damageTaken}/${enemy.health}",
             color = if (enemy.isBloodied()) {
                 MaterialTheme.colorScheme.error
             } else {

@@ -3,6 +3,7 @@ package com.erhodes.falloutapp
 import com.erhodes.falloutapp.data.ItemDataSource
 import com.erhodes.falloutapp.data.PerkDataSource
 import com.erhodes.falloutapp.model.Armor
+import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.FearLevel
 import com.erhodes.falloutapp.model.Skills
@@ -264,5 +265,44 @@ class CharacterTests {
         assertTrue(character.qualifiesForPerk(combust))
         character.skills[Skills.GUNS.ordinal] = 1
         assertTrue(character.qualifiesForPerk(combust))
+    }
+
+    @Test
+    fun gainMilestones() {
+        val character = PlayerCharacter("Bob")
+
+        assertEquals(1, character.level)
+        assertEquals(0, character.milestones)
+
+        character.gainMilestone()
+
+        assertEquals(1, character.level)
+        assertEquals(1, character.milestones)
+
+        character.gainMilestone()
+        character.gainMilestone()
+
+        assertEquals(2, character.level)
+        assertEquals(0, character.milestones)
+    }
+
+    @Test
+    fun gainLevels() {
+        val character = PlayerCharacter("Bob")
+
+        assertEquals(1, character.level)
+        assertEquals(Character.BASE_MAX_HEALTH, character.health)
+        assertEquals(5, character.getMaxSkillValue())
+
+        character.gainLevel()
+        assertEquals(2, character.level)
+        assertEquals(Character.BASE_MAX_HEALTH, character.health)
+        assertEquals(6, character.getMaxSkillValue())
+
+        character.gainLevel()
+        character.gainLevel()
+        assertEquals(4, character.level)
+        assertEquals(Character.BASE_MAX_HEALTH + 1, character.health)
+        assertEquals(7, character.getMaxSkillValue())
     }
 }

@@ -352,7 +352,7 @@ object ItemDataSource {
             id = 24,
             damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Ignite(3), Ignite(5)),
-            passive = listOf(Defensive(2)),
+            passive = listOf(Defensive(1)),
             range = 0,
             magazineSize = 0
         )
@@ -388,7 +388,7 @@ object ItemDataSource {
             id = 26,
             damage = listOf(2, 3, 4),
             ability = listOf(NoAbility, Shred(3), Shred(5)),
-            passive = listOf(Defensive(2)),
+            passive = listOf(Defensive(1)),
             range = 0,
             magazineSize = 0
         )

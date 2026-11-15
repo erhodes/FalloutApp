@@ -3,7 +3,6 @@ package com.erhodes.falloutapp.model
 import com.erhodes.falloutapp.model.action.Action
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.model.condition.ConditionTemplate
-import com.erhodes.falloutapp.util.AppLogger
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.math.max
@@ -45,10 +44,11 @@ sealed class Character {
     abstract val skills: ArrayList<Int>
 
     companion object {
-        const val MAX_HEALTH = 5
+        const val BASE_MAX_HEALTH = 5
     }
 
     var damageTaken = 0
+    var health = BASE_MAX_HEALTH
     var radiation = 0
     var fatigue = 0
     var fear = 0

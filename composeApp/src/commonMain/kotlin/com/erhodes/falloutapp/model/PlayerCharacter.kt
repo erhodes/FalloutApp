@@ -31,8 +31,15 @@ class PlayerCharacter(
     fun gainMilestone() {
         milestones++
         if (milestones >= 3) {
-            level++
+            gainLevel()
             milestones = 0
+        }
+    }
+
+    fun gainLevel() {
+        level++
+        if (level in setOf(4, 7, 10)) {
+            health++
         }
     }
 

@@ -108,7 +108,7 @@ fun PrimaryVitalsPanel(characterState: CharacterUiState,
     Column {
         Text("Speed: ${character.speed}")
         Text(
-            text = "Damage Taken ${character.damageTaken}/${Character.MAX_HEALTH}",
+            text = "Damage Taken ${character.damageTaken}/${character.health}",
             color = if (character.isBloodied()) {
                 MaterialTheme.colorScheme.error
             } else {

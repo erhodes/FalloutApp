@@ -267,10 +267,31 @@ object PerkDataSource {
         )
         perkMap[36] = Perk(
             name = "Riposte",
-            description = "If you take 0 damage from a melee attack made against you, you may suffer 2 Stress to make a melee attack with a Defensive weapon as a free Reaction.",
-            id = 35,
+            description = "After using the Parry ability, you may suffer 2 Stress to make a melee attack with a Defensive weapon as a free Reaction.",
+            id = 36,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.MELEE, 5))
+        )
+        perkMap[37] = Perk(
+            name = "Doom Speaker",
+            description = "Demoralize inflicts +1 Fear to targets with armor damage, or + CHA Fear instead if they have health damage.",
+            id = 37,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.CHARISMA, min = 2))
+        )
+        perkMap[38] = Perk(
+            name = "Cautious Advance",
+            description = "Dash, then Hunker Down",
+            id = 38,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, min = 3))
+        )
+        perkMap[39] = Perk(
+            name = "Assassin",
+            description = "Inflict +1 damage to enemies you are hidden from",
+            id =39,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 3), SkillRequirement(Skills.SNEAK, 7))
         )
     }
 }
