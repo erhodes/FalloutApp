@@ -57,7 +57,8 @@ sealed class Character {
     val loadoutLimit get() = strength + 4
     var equippedArmor: Armor? = null
 
-    var speed: Int = 6
+    val speed get() = agility + 4 + bonusSpeed
+    var bonusSpeed = 0
 
     var inventoryWeight = 0
     val inventoryLimit get() = strength + 15

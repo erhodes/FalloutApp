@@ -214,7 +214,9 @@ class CharacterTests {
 
     @Test
     fun applyPerk() {
-        val character = PlayerCharacter("Bob")
+        val character = PlayerCharacter("Bob", agility = 2)
+
+        assertEquals(2, character.agility)
 
         assertEquals(6, character.speed)
         character.gainPerk(PerkDataSource.getPerkById(12))
