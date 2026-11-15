@@ -115,7 +115,7 @@ fun PerkPanel(perk: Perk, buttonEnabled: Boolean, buttonLabel: String, onClick: 
 fun PerkPanelPreview() {
     FalloutAppTheme {
         PerkPanel(
-            perk = Perk("Hacker", "So good at hacking", 0),
+            perk = Perk("Hacker", "So good at hacking", 0, -1),
             buttonEnabled = true,
             showRequirements = true,
             buttonLabel = "Select",

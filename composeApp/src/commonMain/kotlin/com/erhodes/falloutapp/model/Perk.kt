@@ -10,6 +10,7 @@ class Perk(
     val name: String,
     val description: String,
     val id: Int,
+    val tier: Int,
     val effect: Effect? = null,
     vararg val requirements: Requirement
 ) {

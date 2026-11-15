@@ -18,12 +18,14 @@ object PerkDataSource {
             name = "Power Armor Training",
             description =  "You are able to properly use power armor",
             id = 0,
+            tier = 1,
             effect = null,
         )
         perkMap[1] = Perk(
             name = "Hacker",
             description =  "When hacking, you gain 1/3/5 guesses instead of 0/1/2",
             id = 1,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.SCIENCE, 5))
         )
@@ -31,6 +33,7 @@ object PerkDataSource {
             name = "Deadeye",
             description = "+0/0/1 damage when benefiting from Accurate.",
             id = 2,
+            tier = 2,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -38,6 +41,7 @@ object PerkDataSource {
             name = "Scavenger",
             description = "Add 1/1/2 to Scavenge rolls.",
             id = 3,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.PERCEPTION, 2), SkillRequirement(Skills.SURVIVAL, 5))
         )
@@ -45,6 +49,7 @@ object PerkDataSource {
             name = "Grenadier",
             description = "2 Stress: Add +1 to the radius of your next Blast attack.",
             id = 4,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -52,6 +57,7 @@ object PerkDataSource {
             name = "Trigger Discipline",
             description = "Lower the ammo cost of using Burst by 1.",
             id = 5,
+            tier = 2,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -59,6 +65,7 @@ object PerkDataSource {
             name = "Incinerator",
             description = "When an enemy within 20 would suffer Burn, it triggers twice instead.",
             id = 6,
+            tier = 2,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -66,6 +73,7 @@ object PerkDataSource {
             name = "Followup",
             description = "Move X after triggering Knockback X.",
             id = 7,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.MELEE, 5))
         )
@@ -73,6 +81,7 @@ object PerkDataSource {
             name = "Hindrance",
             description = "When a creature with Vulnerability attacks you, you may spend one stack to force them to reroll a successful die (once per die).",
             id = 8,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -80,6 +89,7 @@ object PerkDataSource {
             name = "Zephyr",
             description = "Increase the range of Storm weapons by 2.",
             id = 9,
+            tier = 2,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -87,6 +97,7 @@ object PerkDataSource {
             name = "Cover Fire",
             description = "After you Suppress one or more enemies, a ready ally within 10 may take their turn after yours.",
             id = 10,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -94,6 +105,7 @@ object PerkDataSource {
             name = "Going the Distance",
             description = "Move 2 extra spaces when charging with a Windup weapon.",
             id = 11,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.MELEE, 5))
         )
@@ -101,6 +113,7 @@ object PerkDataSource {
             name = "Sprinter",
             description = "Increase your speed by 2.",
             id = 12,
+            tier = 1,
             effect = SpeedEffect(),
             requirements = arrayOf(SkillRequirement(Skills.ATHLETICS, 5))
         )
@@ -108,6 +121,7 @@ object PerkDataSource {
             name = "Engineer",
             description = "2 Stress and 1 AP: You may immediately craft a gadget using parts from your inventory This chem expires at the end of your turn.",
             id = 13,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.ENGINEERING, 5))
         )
@@ -115,6 +129,7 @@ object PerkDataSource {
             name = "Field Surgeon",
             description = "When you perform the First Aid activity, you may spend up to 2/4/6 supplies, and you may split the healing among multiple patients.",
             id = 14,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.MEDICINE, 5))
         )
@@ -122,6 +137,7 @@ object PerkDataSource {
             name = "Locksmith",
             description = "When lockpicking, you have 1/3/5 guesses.",
             id = 15,
+            tier = -1,
             effect = null,
             requirements = arrayOf(SkillRequirement(Skills.SABOTAGE, 5))
         )
@@ -129,6 +145,7 @@ object PerkDataSource {
             name = "Chemist",
             description = "2 Stress and 1 AP: You may immediately craft a chem using supplies from your inventory. This chem expires at the end of your turn.",
             id = 16,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 2), SkillRequirement(Skills.SCIENCE, 5))
         )
@@ -136,6 +153,7 @@ object PerkDataSource {
             name = "Ghost",
             description = "Add 1/1/2 to Hide checks.",
             id = 17,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
@@ -143,6 +161,7 @@ object PerkDataSource {
             name = "Insightful",
             description = "After making a persuasion test against someone in which you scored at least 1 success, learn one of their motivations.",
             id = 18,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
         )
@@ -150,6 +169,7 @@ object PerkDataSource {
             name = "Pierce",
             description = "2 Stress: Attack, then remove 2 Shredded to give target -1 Toughness until the end of your next turn.",
             id = 19,
+            tier = 1,
             effect = null,
             requirements = arrayOf(VariableSkillRequirement(Skills.MELEE, Skills.GUNS, 5))
         )
@@ -157,13 +177,15 @@ object PerkDataSource {
             name = "Frequent Flyer",
             description = "Lower Fatigue inflicted by Chems by 1.",
             id = 20,
+            tier = 2,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.ENDURANCE, 2), SkillRequirement(Skills.SURVIVAL, 5))
+            requirements = arrayOf(StatRequirement(Stats.ENDURANCE, 3), SkillRequirement(Skills.SURVIVAL, 7))
         )
         perkMap[21] = Perk(
             name = "Lucky Find",
             description = "Add 1 to any Loot rolls.",
             id = 21,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.LUCK, 2))
         )
@@ -171,6 +193,7 @@ object PerkDataSource {
             name = "Day Tripper",
             description = "Chems in your system last twice as long as normal.",
             id = 22,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.ENDURANCE, 2), SkillRequirement(Skills.SURVIVAL, 5))
         )
@@ -178,6 +201,7 @@ object PerkDataSource {
             name = "Inspirational",
             description = "Spend 1AP: Until the start of your next turn, you may use Aid without spending a Reaction.",
             id = 23,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
         )
@@ -185,13 +209,15 @@ object PerkDataSource {
             name = "Wrecking Ball",
             description = "Deal +0/0/1 damage when charging with a Windup weapon.",
             id = 24,
+            tier = 2,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.MELEE, 5))
+            requirements = arrayOf(StatRequirement(Stats.STRENGTH, 3), SkillRequirement(Skills.MELEE, 7))
         )
         perkMap[25] = Perk(
             name = "Patient Shot",
             description = "2 Stress and 1AP: As a reaction to a creature ending an action, you can make a free Attack against any target. This attack benefits from Aim",
             id = 25,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.PERCEPTION, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -199,6 +225,7 @@ object PerkDataSource {
             name = "Bulletstorm",
             description = "2 Stress. As a reaction to a character ending their turn, make an Attack against them with a Burst weapon.",
             id = 26,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -206,6 +233,7 @@ object PerkDataSource {
             name = "Combust",
             description = "2 Stress and 1 AP: Make an Attack with an Ignite weapon. If the target has 5+ Burn at the end of the attack, consume 5 Burn to deal 3 damage to them.",
             id = 27,
+            tier = 1,
             effect = null,
             requirements = arrayOf(VariableSkillRequirement(Skills.GUNS, Skills.MELEE, 5))
         )
@@ -213,6 +241,7 @@ object PerkDataSource {
             name = "Power Slam",
             description = "2 Stress and 1 AP: Attack with +1 Knockback. If the Knockback is equal to the target's Strength, they are knocked prone.",
             id = 28,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), VariableSkillRequirement(Skills.GUNS, Skills.MELEE, 5))
         )
@@ -220,6 +249,7 @@ object PerkDataSource {
             name = "Tempest",
             description = "2 Stress and 1 AP: Make an Attack with a Storm weapon. This attack targets 1 additional creature within 3 of the primary target.",
             id = 29,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -227,6 +257,7 @@ object PerkDataSource {
             name = "Covering Fire",
             description = "2 Stress and 1 AP: Make an Attack with a Frighten weapon. This attack targets 1 additional creature, has -1 damage and +1 Frighten. A target who is Shaken after this attack cannot make Reactions this round.",
             id = 30,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
         )
@@ -234,6 +265,7 @@ object PerkDataSource {
             name = "Unstoppable",
             description = "2 Stress and 1 AP: Charge with +2 speed. During this charge, you can make a free Athletics to remove an obstacle by pushing it aside or smashing through it. Requires a Windup weapon.",
             id = 31,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.STRENGTH, 2), SkillRequirement(Skills.MELEE, 5))
         )
@@ -241,6 +273,7 @@ object PerkDataSource {
             name = "Teamwork",
             description = "1 Stress: As a reaction to an ally ending their turn, another ally may immediately take their turn (if they haven't already this round).",
             id = 32,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
         )
@@ -248,6 +281,7 @@ object PerkDataSource {
             name = "Silent Running",
             description = "Run becomes Silent.",
             id = 33,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
@@ -255,6 +289,7 @@ object PerkDataSource {
             name = "Just One More Thing",
             description = "After a character you are negotiating with reaches maximum Patience, you may spend 2 Stress to make one last check.",
             id = 34,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
@@ -262,6 +297,7 @@ object PerkDataSource {
             name = "Quick Trap",
             description = "2 Stress and 2 AP: Dash and Set a Trap, in any order.",
             id = 35,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.SNEAK, 5))
         )
@@ -269,6 +305,7 @@ object PerkDataSource {
             name = "Riposte",
             description = "After using the Parry ability, you may suffer 2 Stress to make a melee attack with a Defensive weapon as a free Reaction.",
             id = 36,
+            tier = 1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.MELEE, 5))
         )
@@ -276,20 +313,23 @@ object PerkDataSource {
             name = "Doom Speaker",
             description = "Demoralize inflicts +1 Fear to targets with armor damage, or + CHA Fear instead if they have health damage.",
             id = 37,
+            tier = 1,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.CHARISMA, min = 2))
+            requirements = arrayOf(StatRequirement(Stats.CHARISMA, min = 2), SkillRequirement(Skills.SPEECH, 5))
         )
         perkMap[38] = Perk(
             name = "Cautious Advance",
             description = "Dash, then Hunker Down",
             id = 38,
+            tier = -1,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, min = 3))
         )
         perkMap[39] = Perk(
             name = "Assassin",
             description = "Inflict +1 damage to enemies you are hidden from",
-            id =39,
+            id = 39,
+            tier = 2,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 3), SkillRequirement(Skills.SNEAK, 7))
         )
