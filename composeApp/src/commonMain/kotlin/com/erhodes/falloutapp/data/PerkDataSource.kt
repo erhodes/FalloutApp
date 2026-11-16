@@ -59,7 +59,7 @@ object PerkDataSource {
             id = 5,
             tier = 2,
             effect = null,
-            requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5))
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 3), SkillRequirement(Skills.GUNS, 7))
         )
         perkMap[6] = Perk(
             name = "Incinerator",

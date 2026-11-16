@@ -105,4 +105,12 @@
     <string name="store">Store</string>
 
     <string name="campaign">Campaign</string>
+
+    <string name="filter">Filter</string>
+    <string name="filter_perks">Filter Perks</string>
+    <string name="tier">Tier</string>
+    <string name="stats">Stats</string>
+    <string name="all">All</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
 </resources>
