@@ -12,6 +12,7 @@ import com.erhodes.falloutapp.model.requirement.VariableSkillRequirement
 enum class TierFilter(val tier: Int?) {
     ONE(1),
     TWO(2),
+    THREE(3),
     ALL(null)
 }
 

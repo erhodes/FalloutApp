@@ -119,7 +119,7 @@ object PerkDataSource {
         )
         perkMap[13] = Perk(
             name = "Engineer",
-            description = "2 Stress and 1 AP: You may immediately craft a gadget using parts from your inventory This chem expires at the end of your turn.",
+            description = "2 Stress and 1 AP: You may immediately craft a gadget using parts from your inventory This gadget expires at the end of your turn.",
             id = 13,
             tier = 1,
             effect = null,
@@ -332,6 +332,54 @@ object PerkDataSource {
             tier = 2,
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.AGILITY, 3), SkillRequirement(Skills.SNEAK, 7))
+        )
+        perkMap[40] = Perk(
+            name = "Go Go Go!",
+            description = "1 Stress and 1 AP: You and any number of allies within CHA may use their reaction to Dash.",
+            id = 40,
+            tier = 2,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.CHARISMA, 3), SkillRequirement(Skills.SPEECH, 7))
+        )
+        perkMap[41] = Perk(
+            name = "Open Fire!",
+            description = "1 Stress and 1 AP: You and any number of allies within CHA may use their reaction to Snapshot.",
+            id = 41,
+            tier = 3,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.CHARISMA, 4), SkillRequirement(Skills.SPEECH, 9))
+        )
+        perkMap[42] = Perk(
+            name = "Reassuring Presence",
+            description = "When you Rally, clear Fear equal to double your CHA instead.",
+            id = 42,
+            tier = 1,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.CHARISMA, 2), SkillRequirement(Skills.SPEECH, 5))
+        )
+        perkMap[43] = Perk(
+            name = "Ghost",
+            description = "Gain an additional Success when you Hide.",
+            id = 43,
+            tier = 2,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.AGILITY, 3), SkillRequirement(Skills.SPEECH, 7))
+        )
+        perkMap[44] = Perk(
+            name = "Stabilized",
+            description = "While wearing Power Armor, you may ignore the Heavy property of weapons.",
+            id = 44,
+            tier = 2,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.STRENGTH, 3), SkillRequirement(Skills.ATHLETICS, 7))
+        )
+        perkMap[45] = Perk(
+            name = "House Call",
+            description = "1AP: Dash and use a Chem.",
+            id = 45,
+            tier = 2,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 3), SkillRequirement(Skills.MEDICINE, 7))
         )
     }
 }

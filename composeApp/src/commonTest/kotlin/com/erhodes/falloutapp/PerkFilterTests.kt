@@ -16,6 +16,7 @@ class PerkFilterTests {
     private val hidden = Perk("Hidden", "", 100, tier = -1)
     private val tierOne = Perk("One", "", 101, tier = 1)
     private val tierTwo = Perk("Two", "", 102, tier = 2)
+    private val tierThree = Perk("Three", "", 111, tier = 3)
 
     private val agilityPerk = Perk("Agile", "", 103, tier = 1,
         requirements = arrayOf(StatRequirement(Stats.AGILITY, 2), SkillRequirement(Skills.GUNS, 5)))
@@ -40,12 +41,22 @@ class PerkFilterTests {
         val filter = PerkFilter(TierFilter.ONE)
         assertTrue(filter.matches(tierOne))
         assertFalse(filter.matches(tierTwo))
+        assertFalse(filter.matches(tierThree))
     }
 
     @Test
     fun tierTwoMatchesOnlyTierTwo() {
         val filter = PerkFilter(TierFilter.TWO)
         assertTrue(filter.matches(tierTwo))
+        assertFalse(filter.matches(tierOne))
+        assertFalse(filter.matches(tierThree))
+    }
+
+    @Test
+    fun tierThreeMatchesOnlyTierThree() {
+        val filter = PerkFilter(TierFilter.THREE)
+        assertTrue(filter.matches(tierThree))
+        assertFalse(filter.matches(tierTwo))
         assertFalse(filter.matches(tierOne))
     }
 
@@ -54,6 +65,7 @@ class PerkFilterTests {
         val filter = PerkFilter()
         assertTrue(filter.matches(tierOne))
         assertTrue(filter.matches(tierTwo))
+        assertTrue(filter.matches(tierThree))
     }
 
     @Test
