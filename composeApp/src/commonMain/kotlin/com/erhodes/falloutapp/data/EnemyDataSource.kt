@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.data
 
+import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_COMBAT
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_LEATHER
 import com.erhodes.falloutapp.data.ItemDataSource.ID_MINIGUN
 import com.erhodes.falloutapp.data.ItemDataSource.ID_PA_RAIDER
@@ -118,7 +119,7 @@ object EnemyDataSource {
         val laserPistol = Weapon(ItemDataSource.getItemTemplateById(12), 1)
         protectron.addItemToInventory(laserPistol)
         protectron.equipItem(laserPistol)
-        val armor = Armor(ItemDataSource.getItemTemplateById(1002), 0)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
         protectron.addItemToInventory(armor)
         protectron.equipItem(armor)
         protectron.actions.add(RangedAttack(laserPistol))
@@ -193,5 +194,89 @@ object EnemyDataSource {
         zapper.actions.add(RangedAttack(lightning))
         zapper.traits.add(TraitDataSource.getTraitById(2))
         return zapper
+    }
+
+    fun createSoldierRifleman(): Enemy {
+        // An assault rifle enemy specializing in inflictin Fear
+        val soldier = Enemy(
+            name = "Soldier Rifleman",
+            strength = 1,
+            perception = 2,
+            endurance = 2,
+            charisma = 3,
+            intelligence = 2,
+            agility = 3,
+            luck = 1,
+        )
+        soldier.skills[Skills.GUNS.ordinal] = 8
+        soldier.skills[Skills.MELEE.ordinal] = 6
+        soldier.health = 6
+        val assaultRifle = Weapon(ItemDataSource.getItemTemplateById(9), 1)
+        soldier.addItemToInventory(assaultRifle)
+        soldier.equipItem(assaultRifle)
+        val blade = Weapon(ItemDataSource.getItemTemplateById(21), 1)
+        soldier.addItemToInventory(blade)
+        soldier.equipItem(blade)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
+        soldier.addItemToInventory(armor)
+        soldier.equipItem(armor)
+        soldier.actions.add(RangedAttack(assaultRifle))
+        soldier.traits.add(TraitDataSource.getTraitById(10))
+        return soldier
+    }
+
+    fun createSoldierBrute(): Enemy {
+        // A shotgun and sledgehammer wielding enemy focusing on Knockback and protecting ranged allies.
+        val soldier = Enemy(
+            name = "Soldier Brute",
+            strength = 2,
+            perception = 2,
+            endurance = 2,
+            charisma = 3,
+            intelligence = 1,
+            agility = 3,
+            luck = 1,
+        )
+        soldier.skills[Skills.GUNS.ordinal] = 8
+        soldier.skills[Skills.MELEE.ordinal] = 6
+        soldier.health = 6
+        val shotgun = Weapon(ItemDataSource.getItemTemplateById(15), 1)
+        soldier.addItemToInventory(shotgun)
+        soldier.equipItem(shotgun)
+        val superSledge = Weapon(ItemDataSource.getItemTemplateById(16), 1)
+        soldier.addItemToInventory(superSledge)
+        soldier.equipItem(superSledge)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
+        soldier.addItemToInventory(armor)
+        soldier.equipItem(armor)
+        soldier.actions.add(RangedAttack(shotgun))
+//        should he have a trait? Is gear enough for human enemies?
+        return soldier
+    }
+
+    fun createSoldierSniper(): Enemy {
+        // A shotgun and sledgehammer wielding enemy focusing on Knockback and protecting ranged allies.
+        val soldier = Enemy(
+            name = "Soldier Sniper",
+            strength = 1,
+            perception = 2,
+            endurance = 2,
+            charisma = 3,
+            intelligence = 2,
+            agility = 3,
+            luck = 1,
+        )
+        soldier.skills[Skills.GUNS.ordinal] = 8
+        soldier.skills[Skills.MELEE.ordinal] = 6
+        soldier.health = 6
+        val sniper = Weapon(ItemDataSource.getItemTemplateById(11), 1)
+        soldier.addItemToInventory(sniper)
+        soldier.equipItem(sniper)
+        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
+        soldier.addItemToInventory(armor)
+        soldier.equipItem(armor)
+        soldier.actions.add(RangedAttack(sniper))
+//        should he have a trait? Is gear enough for human enemies?
+        return soldier
     }
 }

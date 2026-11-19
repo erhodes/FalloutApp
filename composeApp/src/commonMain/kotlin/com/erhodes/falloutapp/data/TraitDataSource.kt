@@ -58,5 +58,10 @@ object TraitDataSource {
             description = "Roll an additional dice when attacking creatures this creature is hidden from.",
             id = 9,
         )
+        traitMap[10] = Trait(
+            name = "Suppress",
+            description = "Inflict +1 Fear when using Burst.",
+            id = 9,
+        )
      }
 }

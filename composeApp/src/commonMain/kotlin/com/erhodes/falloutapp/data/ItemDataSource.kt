@@ -5,6 +5,7 @@ import com.erhodes.falloutapp.model.ItemTemplate
 import com.erhodes.falloutapp.model.StackableItemTemplate
 import com.erhodes.falloutapp.model.WeaponTemplate
 import com.erhodes.falloutapp.model.ability.Accurate
+import com.erhodes.falloutapp.model.ability.Arc
 import com.erhodes.falloutapp.model.ability.Blast
 import com.erhodes.falloutapp.model.ability.Burst
 import com.erhodes.falloutapp.model.ability.BurstOnly
@@ -26,6 +27,7 @@ import com.erhodes.falloutapp.model.ability.Shred
 import com.erhodes.falloutapp.model.ability.Storm
 import com.erhodes.falloutapp.model.ability.Frighten
 import com.erhodes.falloutapp.model.ability.Immobilize
+import com.erhodes.falloutapp.model.ability.Line
 import com.erhodes.falloutapp.model.ability.Trap
 import com.erhodes.falloutapp.model.ability.WindUp
 
@@ -39,6 +41,7 @@ object ItemDataSource {
     // for testing purposes, a few template IDs are listed here
     const val ID_ARMOR_LEATHER = 1000
     const val ID_PA_RAIDER = 1001
+    const val ID_ARMOR_COMBAT = 1002
     const val ID_PA_T45 = 1003
     const val ID_BATTLE_STANDARD = 3000
     const val ID_ASSAULT_RIFLE = 0
@@ -390,6 +393,30 @@ object ItemDataSource {
             ability = listOf(NoAbility, Shred(3), Shred(5)),
             passive = listOf(Defensive(1)),
             range = 0,
+            magazineSize = 0
+        )
+        itemMap[27] = WeaponTemplate(
+            name = "Flamer",
+            description = "For when you need to set someone on fire, but they're all the way over there.",
+            load = 3,
+            tier = 2,
+            id = 27,
+            damage = listOf(2, 3, 4),
+            ability = listOf(NoAbility, Ignite(4), Ignite(6)),
+            passive = listOf(Line(10), Storm()),
+            range = 10,
+            magazineSize = 0
+        )
+        itemMap[28] = WeaponTemplate(
+            name = "Tesla Rifle",
+            description = "Fires deadly arcs of electricity.",
+            load = 2,
+            tier = 2,
+            id = 28,
+            damage = listOf(2, 3, 4),
+            ability = listOf(NoAbility, Arc(1), Arc(2)),
+            passive = listOf(Burst()),
+            range = 15,
             magazineSize = 0
         )
 
@@ -864,6 +891,14 @@ object ItemDataSource {
             load = 1,
             tier = 1,
             id = 4014,
+            max = 10
+        )
+        itemMap[4015] = StackableItemTemplate(
+            name = "Fuel",
+            description = "Burn it to make things happen.",
+            load = 1,
+            tier = 1,
+            id = 4015,
             max = 10
         )
 
