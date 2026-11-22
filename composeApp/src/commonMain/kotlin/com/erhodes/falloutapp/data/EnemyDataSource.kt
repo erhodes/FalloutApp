@@ -3,12 +3,15 @@ package com.erhodes.falloutapp.data
 import com.erhodes.falloutapp.data.EnemyItemDataSource.ID_LIGHTNING_ARC
 import com.erhodes.falloutapp.data.EnemyItemDataSource.ID_RADIOACTIVE_FISTS
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_COMBAT
+import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_COMMANDO
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_LEATHER
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ASSAULT_RIFLE
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ASSAULT_RIFLE_MK2
 import com.erhodes.falloutapp.data.ItemDataSource.ID_BLADE_MK2
 import com.erhodes.falloutapp.data.ItemDataSource.ID_COMBAT_SHOTGUN
+import com.erhodes.falloutapp.data.ItemDataSource.ID_FLAMER
 import com.erhodes.falloutapp.data.ItemDataSource.ID_LASER_PISTOL_MK2
+import com.erhodes.falloutapp.data.ItemDataSource.ID_LASER_PISTOL_MK3
 import com.erhodes.falloutapp.data.ItemDataSource.ID_MINIGUN
 import com.erhodes.falloutapp.data.ItemDataSource.ID_PA_RAIDER
 import com.erhodes.falloutapp.data.ItemDataSource.ID_SHOTGUN
@@ -115,12 +118,22 @@ object EnemyDataSource {
         armorId = ID_ARMOR_COMBAT,
         traitIds = listOf(ID_INFLEXIBLE_PROGRAMMING),
     )
+    val ARMORED_PROTECTRON = EnemyTemplate(
+        id = "armored_protectron",
+        name = "Armored Protectron",
+        strength = 2, perception = 2, endurance = 4, charisma = 1, intelligence = 3, agility = 3, luck = 1,
+        skills = mapOf(Skills.GUNS to 10, Skills.MELEE to 8),
+        health = 6,
+        weapons = listOf(rangedAndMelee(ID_LASER_PISTOL_MK3)),
+        armorId = ID_ARMOR_COMMANDO,
+        traitIds = listOf(ID_INFLEXIBLE_PROGRAMMING),
+    )
 
     // An assault rifle enemy specializing in inflicting Fear
     val SOLDIER_RIFLEMAN = EnemyTemplate(
         id = "soldier_rifleman",
         name = "Soldier Rifleman",
-        strength = 1, perception = 2, endurance = 2, charisma = 3, intelligence = 2, agility = 4, luck = 1,
+        strength = 2, perception = 2, endurance = 2, charisma = 3, intelligence = 2, agility = 4, luck = 1,
         skills = mapOf(Skills.GUNS to 8, Skills.MELEE to 6),
         health = 6,
         weapons = listOf(ranged(ID_ASSAULT_RIFLE_MK2), carried(ID_BLADE_MK2)),
@@ -151,6 +164,16 @@ object EnemyDataSource {
         armorId = ID_ARMOR_COMBAT,
     )
 
+    val SOLDIER_PYRO = EnemyTemplate(
+        id = "soldier_pyro",
+        name = "Soldier Pyro",
+        strength = 3, perception = 2, endurance = 2, charisma = 3, intelligence = 2, agility = 4, luck = 1,
+        skills = mapOf(Skills.GUNS to 8, Skills.MELEE to 6),
+        health = 6,
+        weapons = listOf(ranged(ID_FLAMER)),
+        armorId = ID_ARMOR_COMBAT,
+    )
+
     val all: List<EnemyTemplate> = listOf(
         RAIDER_SHOTGUNNER,
         RAIDER_PSYCHO,
@@ -160,9 +183,11 @@ object EnemyDataSource {
         ZAPPER,
         GHOUL,
         PROTECTRON,
+        ARMORED_PROTECTRON,
         SOLDIER_RIFLEMAN,
         SOLDIER_BRUTE,
         SOLDIER_SNIPER,
+        SOLDIER_PYRO
     )
 
     fun getById(id: String): EnemyTemplate? = all.find { it.id == id }

@@ -14,6 +14,7 @@ object TraitDataSource {
     const val ID_STEALTHY = 8
     const val ID_ASSASSIN = 9
     const val ID_FEAR_EXPLOITER = 10
+    const val ID_STEADY = 11
 
     val traitMap: HashMap<Int, Trait> = HashMap()
     fun getTraitById(id: Int): Trait {
@@ -74,6 +75,11 @@ object TraitDataSource {
             name = "Fear Exploiter",
             description = "Gain Advantage on attacks against enemies who are Panicked or Broken.",
             id = 10,
+        )
+        traitMap[11] = Trait(
+            name = "Steady",
+            description = "Gain Advantage on attacks if you do not move this turn.",
+            id = 11,
         )
      }
 }

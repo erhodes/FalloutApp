@@ -43,6 +43,7 @@ object ItemDataSource {
     const val ID_PA_RAIDER = 1001
     const val ID_ARMOR_COMBAT = 1002
     const val ID_PA_T45 = 1003
+    const val ID_ARMOR_COMMANDO = 1004
     const val ID_BATTLE_STANDARD = 3000
     const val ID_ASSAULT_RIFLE = 0
     const val ID_FRAG_GRENADE = 1
@@ -56,6 +57,8 @@ object ItemDataSource {
     const val ID_COMBAT_SHOTGUN = 15
     const val ID_SUPER_SLEDGE = 16
     const val ID_BLADE_MK2 = 21
+    const val ID_FLAMER = 27
+    const val ID_LASER_PISTOL_MK3 = 30
     const val ID_SHRIEKER_ROUNDS = 4013
     const val ID_RATIONS = 1996
     const val ID_CAPS = 1997
@@ -428,6 +431,19 @@ object ItemDataSource {
             magazineSize = 0
         )
 
+        itemMap[30] = WeaponTemplate(
+            name = "Laser Pistol MK 3",
+            description = "Am AEP7 Laser Pistol. The sidearm of choice for Pre-War military officers.",
+            load = 1,
+            tier = 2,
+            id = 30,
+            damage = listOf(2, 4, 5),
+            ability = listOf(NoAbility, Ignite(3), Ignite(5)),
+            passive = listOf(Flexible),
+            range = 10,
+            magazineSize = 0
+        )
+
         // Armors
         itemMap[1000] = ArmorTemplate(
             name = "Leather Armor",
@@ -466,6 +482,15 @@ object ItemDataSource {
             durability = 5,
             toughness = 1,
             abilities = listOf(Powered(), RadResistant(2), Loud(2), Complicated(2))
+        )
+        itemMap[1004] = ArmorTemplate(
+            name = "Commando Armor",
+            description = "The standard body armor for Pre-War elite infantry",
+            load = 2,
+            tier = 3,
+            id = 1004,
+            durability = 7,
+            toughness = 1
         )
 
         // Currencies
