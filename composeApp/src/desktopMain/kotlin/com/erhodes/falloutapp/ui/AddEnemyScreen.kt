@@ -6,13 +6,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.erhodes.falloutapp.model.EnemyEnum
+import com.erhodes.falloutapp.data.EnemyDataSource
+import com.erhodes.falloutapp.model.EnemyTemplate
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
 
 @Composable
-fun AddEnemyScreen(onEnemySelected: (EnemyEnum) -> Unit) {
+fun AddEnemyScreen(onEnemySelected: (EnemyTemplate) -> Unit) {
     Column {
-        EnemyEnum.entries.forEach{
+        EnemyDataSource.all.forEach {
             Row {
                 Text(it.name)
                 Button(

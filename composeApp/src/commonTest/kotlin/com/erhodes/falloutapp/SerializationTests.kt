@@ -46,7 +46,7 @@ class SerializationTests {
     @Test
     fun serializeEncounter() {
         val encounter = Encounter("Battle")
-        val psycho = EnemyDataSource.createRaiderPsycho()
+        val psycho = EnemyDataSource.RAIDER_PSYCHO.create()
         val bob = PlayerCharacter("Bob")
         encounter.addCharacter(psycho)
         encounter.addCharacter(bob)
@@ -181,7 +181,7 @@ class SerializationTests {
     @Test
     fun serializeCharacterId() {
         val bob = PlayerCharacter("Bob")
-        val psycho = EnemyDataSource.createRaiderPsycho()
+        val psycho = EnemyDataSource.RAIDER_PSYCHO.create()
 
         val bobJson = json.encodeToString<Character>(bob)
         println(bobJson)
@@ -203,8 +203,8 @@ class SerializationTests {
      */
     @Test
     fun identicalEnemiesKeepDistinctIds() {
-        val first = EnemyDataSource.createRaiderPsycho()
-        val second = EnemyDataSource.createRaiderPsycho()
+        val first = EnemyDataSource.RAIDER_PSYCHO.create()
+        val second = EnemyDataSource.RAIDER_PSYCHO.create()
         assertNotEquals(first.id, second.id)
         assertEquals(first.name, second.name)
 

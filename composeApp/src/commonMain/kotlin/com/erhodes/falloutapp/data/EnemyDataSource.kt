@@ -1,286 +1,182 @@
 package com.erhodes.falloutapp.data
 
+import com.erhodes.falloutapp.data.EnemyItemDataSource.ID_LIGHTNING_ARC
+import com.erhodes.falloutapp.data.EnemyItemDataSource.ID_RADIOACTIVE_FISTS
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_COMBAT
 import com.erhodes.falloutapp.data.ItemDataSource.ID_ARMOR_LEATHER
+import com.erhodes.falloutapp.data.ItemDataSource.ID_ASSAULT_RIFLE
+import com.erhodes.falloutapp.data.ItemDataSource.ID_ASSAULT_RIFLE_MK2
+import com.erhodes.falloutapp.data.ItemDataSource.ID_BLADE_MK2
+import com.erhodes.falloutapp.data.ItemDataSource.ID_COMBAT_SHOTGUN
+import com.erhodes.falloutapp.data.ItemDataSource.ID_LASER_PISTOL_MK2
 import com.erhodes.falloutapp.data.ItemDataSource.ID_MINIGUN
 import com.erhodes.falloutapp.data.ItemDataSource.ID_PA_RAIDER
+import com.erhodes.falloutapp.data.ItemDataSource.ID_SHOTGUN
+import com.erhodes.falloutapp.data.ItemDataSource.ID_SHRIEKER_ROUNDS
+import com.erhodes.falloutapp.data.ItemDataSource.ID_SLEDGEHAMMER
 import com.erhodes.falloutapp.data.ItemDataSource.ID_SNIPER_RIFLE
-import com.erhodes.falloutapp.model.Armor
+import com.erhodes.falloutapp.data.ItemDataSource.ID_SUPER_SLEDGE
+import com.erhodes.falloutapp.data.TraitDataSource.ID_ASSASSIN
+import com.erhodes.falloutapp.data.TraitDataSource.ID_COORDINATED_ASSAULT
+import com.erhodes.falloutapp.data.TraitDataSource.ID_FEAR_EXPLOITER
+import com.erhodes.falloutapp.data.TraitDataSource.ID_GET_HIM
+import com.erhodes.falloutapp.data.TraitDataSource.ID_INFLEXIBLE_PROGRAMMING
+import com.erhodes.falloutapp.data.TraitDataSource.ID_POSITIVE_CHARGE
+import com.erhodes.falloutapp.data.TraitDataSource.ID_STEALTHY
+import com.erhodes.falloutapp.data.TraitDataSource.ID_SWARM_TACTICS
+import com.erhodes.falloutapp.model.Character
+import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.Enemy
+import com.erhodes.falloutapp.model.EnemyStack
+import com.erhodes.falloutapp.model.EnemyTemplate
 import com.erhodes.falloutapp.model.Skills
-import com.erhodes.falloutapp.model.StackableItem
-import com.erhodes.falloutapp.model.Weapon
-import com.erhodes.falloutapp.model.action.MeleeAttack
-import com.erhodes.falloutapp.model.action.RangedAttack
+import com.erhodes.falloutapp.model.carried
+import com.erhodes.falloutapp.model.melee
+import com.erhodes.falloutapp.model.ranged
+import com.erhodes.falloutapp.model.rangedAndMelee
 
+/**
+ * Catalog of enemy types. To add an enemy: declare an [EnemyTemplate] below and add it to [all].
+ * The `id` is persisted on every [Enemy] built from it, so don't change it once used.
+ */
 object EnemyDataSource {
 
-    fun createRaiderShotgunner(): Enemy {
-        val raiderShotgunner = Enemy(
-            name = "Raider Shotgunner",
-            strength = 2,
-            perception = 2,
-            endurance = 2,
-            charisma = 2,
-            intelligence = 2,
-            agility = 2,
-            luck = 2
-        )
-        raiderShotgunner.skills[Skills.GUNS.ordinal] = 5
-        val shotgun = Weapon(ItemDataSource.getItemTemplateById(6), 1)
-        raiderShotgunner.addItemToInventory(shotgun)
-        raiderShotgunner.equipItem(shotgun)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
-        raiderShotgunner.addItemToInventory(armor)
-        raiderShotgunner.equipItem(armor)
-        raiderShotgunner.actions.add(RangedAttack(shotgun))
-        return raiderShotgunner
+    val RAIDER_SHOTGUNNER = EnemyTemplate(
+        id = "raider_shotgunner",
+        name = "Raider Shotgunner",
+        strength = 2, perception = 2, endurance = 2, charisma = 2, intelligence = 2, agility = 2, luck = 2,
+        skills = mapOf(Skills.GUNS to 5),
+        weapons = listOf(ranged(ID_SHOTGUN)),
+        armorId = ID_ARMOR_LEATHER,
+    )
+
+    val RAIDER_PSYCHO = EnemyTemplate(
+        id = "raider_psycho",
+        name = "Raider Psycho",
+        strength = 3, perception = 2, endurance = 2, charisma = 2, intelligence = 2, agility = 2, luck = 2,
+        skills = mapOf(Skills.MELEE to 5),
+        weapons = listOf(melee(ID_SLEDGEHAMMER)),
+        armorId = ID_ARMOR_LEATHER,
+    )
+
+    val RAIDER_LIEUTENANT = EnemyTemplate(
+        id = "raider_lieutenant",
+        name = "Raider Lieutenant",
+        strength = 1, perception = 2, endurance = 2, charisma = 3, intelligence = 2, agility = 3, luck = 1,
+        skills = mapOf(Skills.GUNS to 5, Skills.SPEECH to 5),
+        weapons = listOf(ranged(ID_ASSAULT_RIFLE)),
+        armorId = ID_ARMOR_LEATHER,
+        traitIds = listOf(ID_GET_HIM),
+    )
+
+    val RAIDER_HEAVY = EnemyTemplate(
+        id = "raider_heavy",
+        name = "Raider Heavy",
+        strength = 3, perception = 2, endurance = 3, charisma = 1, intelligence = 1, agility = 3, luck = 1,
+        skills = mapOf(Skills.GUNS to 6),
+        weapons = listOf(ranged(ID_MINIGUN)),
+        armorId = ID_PA_RAIDER,
+    )
+
+    val RAIDER_STALKER = EnemyTemplate(
+        id = "raider_stalker",
+        name = "Raider Stalker",
+        strength = 2, perception = 3, endurance = 2, charisma = 1, intelligence = 2, agility = 3, luck = 1,
+        skills = mapOf(Skills.GUNS to 6, Skills.SNEAK to 6),
+        weapons = listOf(ranged(ID_SNIPER_RIFLE)),
+        armorId = ID_ARMOR_LEATHER,
+        traitIds = listOf(ID_ASSASSIN, ID_STEALTHY),
+    )
+
+    val ZAPPER = EnemyTemplate(
+        id = "zapper",
+        name = "Zapper",
+        strength = 2, perception = 2, endurance = 3, charisma = 1, intelligence = 1, agility = 3, luck = 2,
+        skills = mapOf(Skills.GUNS to 5, Skills.ATHLETICS to 5),
+        weapons = listOf(ranged(ID_LIGHTNING_ARC)),
+        traitIds = listOf(ID_POSITIVE_CHARGE),
+    )
+
+    val GHOUL = EnemyTemplate(
+        id = "ghoul",
+        name = "Ghoul",
+        strength = 3, perception = 2, endurance = 3, charisma = 1, intelligence = 1, agility = 2, luck = 2,
+        skills = mapOf(Skills.MELEE to 5),
+        weapons = listOf(melee(ID_RADIOACTIVE_FISTS)),
+        traitIds = listOf(ID_SWARM_TACTICS, ID_COORDINATED_ASSAULT),
+    )
+
+    val PROTECTRON = EnemyTemplate(
+        id = "protectron",
+        name = "Protectron",
+        strength = 2, perception = 2, endurance = 3, charisma = 1, intelligence = 3, agility = 2, luck = 1,
+        skills = mapOf(Skills.GUNS to 8, Skills.MELEE to 6),
+        weapons = listOf(rangedAndMelee(ID_LASER_PISTOL_MK2)),
+        armorId = ID_ARMOR_COMBAT,
+        traitIds = listOf(ID_INFLEXIBLE_PROGRAMMING),
+    )
+
+    // An assault rifle enemy specializing in inflicting Fear
+    val SOLDIER_RIFLEMAN = EnemyTemplate(
+        id = "soldier_rifleman",
+        name = "Soldier Rifleman",
+        strength = 1, perception = 2, endurance = 2, charisma = 3, intelligence = 2, agility = 4, luck = 1,
+        skills = mapOf(Skills.GUNS to 8, Skills.MELEE to 6),
+        health = 6,
+        weapons = listOf(ranged(ID_ASSAULT_RIFLE_MK2), carried(ID_BLADE_MK2)),
+        armorId = ID_ARMOR_COMBAT,
+        stacks = listOf(EnemyStack(ID_SHRIEKER_ROUNDS, 6)),
+        traitIds = listOf(ID_FEAR_EXPLOITER),
+    )
+
+    // A shotgun and sledgehammer wielding enemy focusing on Knockback and protecting ranged allies.
+    // Should he have a trait? Is gear enough for human enemies?
+    val SOLDIER_BRUTE = EnemyTemplate(
+        id = "soldier_brute",
+        name = "Soldier Brute",
+        strength = 2, perception = 2, endurance = 2, charisma = 3, intelligence = 1, agility = 3, luck = 1,
+        skills = mapOf(Skills.GUNS to 8, Skills.MELEE to 6),
+        health = 6,
+        weapons = listOf(ranged(ID_COMBAT_SHOTGUN), carried(ID_SUPER_SLEDGE)),
+        armorId = ID_ARMOR_COMBAT,
+    )
+
+    val SOLDIER_SNIPER = EnemyTemplate(
+        id = "soldier_sniper",
+        name = "Soldier Sniper",
+        strength = 1, perception = 3, endurance = 2, charisma = 3, intelligence = 2, agility = 4, luck = 1,
+        skills = mapOf(Skills.GUNS to 8, Skills.MELEE to 6),
+        health = 6,
+        weapons = listOf(ranged(ID_SNIPER_RIFLE)),
+        armorId = ID_ARMOR_COMBAT,
+    )
+
+    val all: List<EnemyTemplate> = listOf(
+        RAIDER_SHOTGUNNER,
+        RAIDER_PSYCHO,
+        RAIDER_LIEUTENANT,
+        RAIDER_HEAVY,
+        RAIDER_STALKER,
+        ZAPPER,
+        GHOUL,
+        PROTECTRON,
+        SOLDIER_RIFLEMAN,
+        SOLDIER_BRUTE,
+        SOLDIER_SNIPER,
+    )
+
+    fun getById(id: String): EnemyTemplate? = all.find { it.id == id }
+
+    /**
+     * Rebuilds the transient state (actions) of a deserialized enemy from its template.
+     * A no-op for player characters and for enemies whose template is unknown.
+     */
+    fun restore(character: Character) {
+        if (character !is Enemy) return
+        getById(character.templateId)?.buildActions(character)
     }
 
-    fun createRaiderPsycho(): Enemy {
-        val raiderPsycho = Enemy(
-            name = "Raider Psycho",
-            strength = 3,
-            perception = 2,
-            endurance = 2,
-            charisma = 2,
-            intelligence = 2,
-            agility = 2,
-            luck = 2
-        )
-        raiderPsycho.skills[Skills.MELEE.ordinal] = 5
-        val sledgehammer = Weapon(ItemDataSource.getItemTemplateById(7), 1)
-        raiderPsycho.addItemToInventory(sledgehammer)
-        raiderPsycho.equipItem(sledgehammer)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
-        raiderPsycho.addItemToInventory(armor)
-        raiderPsycho.equipItem(armor)
-        raiderPsycho.actions.add(MeleeAttack(sledgehammer))
-        return raiderPsycho
-    }
-
-    fun createRaiderLieutenant(): Enemy {
-        val raiderLieutenant = Enemy(
-            name = "Raider Lieutenant",
-            strength = 1,
-            perception = 2,
-            endurance = 2,
-            charisma = 3,
-            intelligence = 2,
-            agility = 3,
-            luck = 1,
-        )
-        raiderLieutenant.skills[Skills.GUNS.ordinal] = 5
-        raiderLieutenant.skills[Skills.SPEECH.ordinal] = 5
-        val assaultRifle = Weapon(ItemDataSource.getItemTemplateById(ItemDataSource.ID_ASSAULT_RIFLE), 1)
-        raiderLieutenant.addItemToInventory(assaultRifle)
-        raiderLieutenant.equipItem(assaultRifle)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
-        raiderLieutenant.addItemToInventory(armor)
-        raiderLieutenant.equipItem(armor)
-        raiderLieutenant.actions.add(RangedAttack(assaultRifle))
-        raiderLieutenant.traits.add(TraitDataSource.getTraitById(1))
-        return raiderLieutenant
-    }
-
-    fun createGhoul(): Enemy {
-        val ghoul = Enemy(
-            name = "Ghoul",
-            strength = 3,
-            perception = 2,
-            endurance = 3,
-            charisma = 1,
-            intelligence = 1,
-            agility = 2,
-            luck = 2,
-        )
-        ghoul.skills[Skills.MELEE.ordinal] = 5
-        val radioactiveFists = Weapon(EnemyItemDataSource.getItemTemplateById(1), 1)
-        ghoul.addItemToInventory(radioactiveFists)
-        ghoul.equipItem(radioactiveFists)
-        ghoul.actions.add(MeleeAttack(radioactiveFists))
-        ghoul.traits.add(TraitDataSource.getTraitById(3))
-        ghoul.traits.add(TraitDataSource.getTraitById(4))
-        return ghoul
-    }
-
-    fun createProtectron(): Enemy {
-        val protectron = Enemy(
-            name = "Protectron",
-            strength = 2,
-            perception = 2,
-            endurance = 3,
-            charisma = 1,
-            intelligence = 3,
-            agility = 2,
-            luck = 1,
-        )
-        protectron.skills[Skills.GUNS.ordinal] = 8
-        protectron.skills[Skills.MELEE.ordinal] = 6
-        val laserPistol = Weapon(ItemDataSource.getItemTemplateById(12), 1)
-        protectron.addItemToInventory(laserPistol)
-        protectron.equipItem(laserPistol)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
-        protectron.addItemToInventory(armor)
-        protectron.equipItem(armor)
-        protectron.actions.add(RangedAttack(laserPistol))
-        protectron.actions.add(MeleeAttack(laserPistol))
-        protectron.traits.add(TraitDataSource.getTraitById(5))
-        return protectron
-    }
-
-    fun createRaiderHeavy(): Enemy {
-        val raiderHeavy = Enemy(
-            name = "Raider Heavy",
-            strength = 3,
-            perception = 2,
-            endurance = 3,
-            charisma = 1,
-            intelligence = 1,
-            agility = 3,
-            luck = 1,
-        )
-        raiderHeavy.skills[Skills.GUNS.ordinal] = 6
-        val minigun = Weapon(ItemDataSource.getItemTemplateById(ID_MINIGUN), 1)
-        raiderHeavy.addItemToInventory(minigun)
-        raiderHeavy.equipItem(minigun)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_PA_RAIDER), 0)
-        raiderHeavy.addItemToInventory(armor)
-        raiderHeavy.equipItem(armor)
-        raiderHeavy.actions.add(RangedAttack(minigun))
-        return raiderHeavy
-    }
-
-    fun createRaiderStalker(): Enemy {
-        val raiderStalker = Enemy(
-            name = "Raider Stalker",
-            strength = 2,
-            perception = 3,
-            endurance = 2,
-            charisma = 1,
-            intelligence = 2,
-            agility = 3,
-            luck = 1,
-        )
-        raiderStalker.skills[Skills.GUNS.ordinal] = 6
-        raiderStalker.skills[Skills.SNEAK.ordinal] = 6
-        val sniperRifle = Weapon(ItemDataSource.getItemTemplateById(ID_SNIPER_RIFLE), 1)
-        raiderStalker.addItemToInventory(sniperRifle)
-        raiderStalker.equipItem(sniperRifle)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_LEATHER), 0)
-        raiderStalker.addItemToInventory(armor)
-        raiderStalker.equipItem(armor)
-        raiderStalker.actions.add(RangedAttack(sniperRifle))
-        raiderStalker.traits.add(TraitDataSource.getTraitById(9))
-        raiderStalker.traits.add(TraitDataSource.getTraitById(8))
-        return raiderStalker
-    }
-
-    fun createZapper(): Enemy {
-        val zapper = Enemy(
-            name = "Zapper",
-            strength = 2,
-            perception = 2,
-            endurance = 3,
-            charisma = 1,
-            intelligence = 1,
-            agility = 3,
-            luck = 2,
-        )
-        zapper.skills[Skills.GUNS.ordinal] = 5
-        zapper.skills[Skills.ATHLETICS.ordinal] = 5
-        val lightning = Weapon(EnemyItemDataSource.getItemTemplateById(0), 1)
-        zapper.addItemToInventory(lightning)
-        zapper.equipItem(lightning)
-        zapper.actions.add(RangedAttack(lightning))
-        zapper.traits.add(TraitDataSource.getTraitById(2))
-        return zapper
-    }
-
-    fun createSoldierRifleman(): Enemy {
-        // An assault rifle enemy specializing in inflicting Fear
-        val soldier = Enemy(
-            name = "Soldier Rifleman",
-            strength = 1,
-            perception = 2,
-            endurance = 2,
-            charisma = 3,
-            intelligence = 2,
-            agility = 4,
-            luck = 1,
-        )
-        soldier.skills[Skills.GUNS.ordinal] = 8
-        soldier.skills[Skills.MELEE.ordinal] = 6
-        soldier.health = 6
-        val assaultRifle = Weapon(ItemDataSource.getItemTemplateById(9), 1)
-        soldier.addItemToInventory(assaultRifle)
-        soldier.equipItem(assaultRifle)
-        val blade = Weapon(ItemDataSource.getItemTemplateById(21), 1)
-        soldier.addItemToInventory(blade)
-        soldier.equipItem(blade)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
-        soldier.addItemToInventory(armor)
-        soldier.equipItem(armor)
-        val bullets = StackableItem(ItemDataSource.getItemTemplateById(4013), 6)
-        soldier.addItemToInventory(bullets)
-        soldier.equipItem(bullets)
-        soldier.actions.add(RangedAttack(assaultRifle))
-        soldier.traits.add(TraitDataSource.getTraitById(10))
-        return soldier
-    }
-
-    fun createSoldierBrute(): Enemy {
-        // A shotgun and sledgehammer wielding enemy focusing on Knockback and protecting ranged allies.
-        val soldier = Enemy(
-            name = "Soldier Brute",
-            strength = 2,
-            perception = 2,
-            endurance = 2,
-            charisma = 3,
-            intelligence = 1,
-            agility = 3,
-            luck = 1,
-        )
-        soldier.skills[Skills.GUNS.ordinal] = 8
-        soldier.skills[Skills.MELEE.ordinal] = 6
-        soldier.health = 6
-        val shotgun = Weapon(ItemDataSource.getItemTemplateById(15), 1)
-        soldier.addItemToInventory(shotgun)
-        soldier.equipItem(shotgun)
-        val superSledge = Weapon(ItemDataSource.getItemTemplateById(16), 1)
-        soldier.addItemToInventory(superSledge)
-        soldier.equipItem(superSledge)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
-        soldier.addItemToInventory(armor)
-        soldier.equipItem(armor)
-        soldier.actions.add(RangedAttack(shotgun))
-//        should he have a trait? Is gear enough for human enemies?
-        return soldier
-    }
-
-    fun createSoldierSniper(): Enemy {
-        // A shotgun and sledgehammer wielding enemy focusing on Knockback and protecting ranged allies.
-        val soldier = Enemy(
-            name = "Soldier Sniper",
-            strength = 1,
-            perception = 3,
-            endurance = 2,
-            charisma = 3,
-            intelligence = 2,
-            agility = 4,
-            luck = 1,
-        )
-        soldier.skills[Skills.GUNS.ordinal] = 8
-        soldier.skills[Skills.MELEE.ordinal] = 6
-        soldier.health = 6
-        val sniper = Weapon(ItemDataSource.getItemTemplateById(11), 1)
-        soldier.addItemToInventory(sniper)
-        soldier.equipItem(sniper)
-        val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
-        soldier.addItemToInventory(armor)
-        soldier.equipItem(armor)
-        soldier.actions.add(RangedAttack(sniper))
-//        should he have a trait? Is gear enough for human enemies?
-        return soldier
+    fun restore(encounter: Encounter) {
+        encounter.characters.forEach { restore(it) }
     }
 }

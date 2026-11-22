@@ -15,7 +15,9 @@ class Enemy(
     override val agility: Int = 1,
     override val intelligence: Int = 1,
     override val luck: Int = 1,
-    override val skills: ArrayList<Int> = arrayListOf<Int>(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2)
+    override val skills: ArrayList<Int> = arrayListOf<Int>(2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2),
+    /** The [EnemyTemplate.id] this enemy was built from; used to rebuild its actions after loading. */
+    val templateId: String = "",
 ) : Character() {
 
     val traits = HashSet<Trait>()

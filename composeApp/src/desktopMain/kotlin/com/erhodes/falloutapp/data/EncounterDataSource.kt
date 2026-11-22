@@ -95,7 +95,10 @@ class EncounterDataSource {
     private fun rowToEncounter(row: ResultRow): Encounter {
         val encounter = Encounter(name = row[Encounters.name], id = row[Encounters.id])
         json.decodeFromString<List<Character>>(row[Encounters.data])
-            .forEach { encounter.addCharacter(it) }
+            .forEach {
+                EnemyDataSource.restore(it) // actions aren't serialized; rebuild them
+                encounter.addCharacter(it)
+            }
         return encounter
     }
 }

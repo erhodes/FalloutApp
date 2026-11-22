@@ -49,6 +49,14 @@ object ItemDataSource {
     const val ID_THROWING_KNIVES = 20
     const val ID_MINIGUN = 18
     const val ID_SNIPER_RIFLE = 11
+    const val ID_SHOTGUN = 6
+    const val ID_SLEDGEHAMMER = 7
+    const val ID_ASSAULT_RIFLE_MK2 = 9
+    const val ID_LASER_PISTOL_MK2 = 12
+    const val ID_COMBAT_SHOTGUN = 15
+    const val ID_SUPER_SLEDGE = 16
+    const val ID_BLADE_MK2 = 21
+    const val ID_SHRIEKER_ROUNDS = 4013
     const val ID_RATIONS = 1996
     const val ID_CAPS = 1997
     const val ID_MEDICAL_SUPPLIES = 1998

@@ -1,9 +1,8 @@
 package com.erhodes.falloutapp.presentation
 
 import androidx.lifecycle.ViewModel
-import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.model.Encounter
-import com.erhodes.falloutapp.model.EnemyEnum
+import com.erhodes.falloutapp.model.EnemyTemplate
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.repository.EncounterRepository
 import kotlinx.coroutines.CoroutineScope
@@ -35,22 +34,7 @@ class EncounterViewModel(
         }
     }
 
-    fun onAddEnemy(type: EnemyEnum) {
-        val newEnemy = when(type) {
-            EnemyEnum.RAIDER_SHOTGUNNER -> EnemyDataSource.createRaiderShotgunner()
-            EnemyEnum.RAIDER_PSYCHO -> EnemyDataSource.createRaiderPsycho()
-            EnemyEnum.RAIDER_LIEUTENANT -> EnemyDataSource.createRaiderLieutenant()
-            EnemyEnum.RAIDER_HEAVY -> EnemyDataSource.createRaiderHeavy()
-            EnemyEnum.RAIDER_STALKER -> EnemyDataSource.createRaiderStalker()
-            EnemyEnum.ZAPPER -> EnemyDataSource.createZapper()
-            EnemyEnum.GHOUL -> EnemyDataSource.createGhoul()
-            EnemyEnum.PROTECTRON -> EnemyDataSource.createProtectron()
-            EnemyEnum.SOLDIER_RIFLEMAN -> EnemyDataSource.createSoldierRifleman()
-            EnemyEnum.SOLDIER_BRUTE -> EnemyDataSource.createSoldierBrute()
-            EnemyEnum.SOLDIER_SNIPER -> EnemyDataSource.createSoldierSniper()
-        }
-        repo.addCharacterToEncounter(newEnemy)
-    }
+    fun onAddEnemy(template: EnemyTemplate) = repo.addCharacterToEncounter(template.create())
 
     fun loadSavedEncounters() {
         scope.launch { _savedEncounters.update { repo.loadAllEncounters() } }

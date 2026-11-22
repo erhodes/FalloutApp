@@ -19,7 +19,8 @@ object ItemTemplateSerializer: KSerializer<ItemTemplate> {
     }
 
     override fun deserialize(decoder: Decoder): ItemTemplate {
-        return ItemDataSource.getItemTemplateById(decoder.decodeInt())
+        val id = decoder.decodeInt()
+        return ItemDataSource.itemMap[id] ?: EnemyItemDataSource.getItemTemplateById(id)
     }
 
 }

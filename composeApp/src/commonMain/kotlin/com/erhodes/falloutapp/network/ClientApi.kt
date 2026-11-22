@@ -1,5 +1,6 @@
 package com.erhodes.falloutapp.network
 
+import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.PlayerCharacter
 import com.erhodes.falloutapp.model.User
@@ -83,6 +84,7 @@ class ClientApi(private val httpClient: HttpClient) {
         AppLogger.d("Eric", "got response $httpResponse")
         if (httpResponse.status.value in 200..299) {
             val encounter = httpResponse.body<Encounter>()
+            EnemyDataSource.restore(encounter) // actions aren't serialized; rebuild them
 
             return encounter
         } else {

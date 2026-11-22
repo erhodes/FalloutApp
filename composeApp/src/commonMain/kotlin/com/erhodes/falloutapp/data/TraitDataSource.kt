@@ -3,6 +3,18 @@ package com.erhodes.falloutapp.data
 import com.erhodes.falloutapp.model.Trait
 
 object TraitDataSource {
+    const val ID_IMMOBILE = 0
+    const val ID_GET_HIM = 1
+    const val ID_POSITIVE_CHARGE = 2
+    const val ID_SWARM_TACTICS = 3
+    const val ID_COORDINATED_ASSAULT = 4
+    const val ID_INFLEXIBLE_PROGRAMMING = 5
+    const val ID_LEAPING_CHARGE = 6
+    const val ID_EVASION = 7
+    const val ID_STEALTHY = 8
+    const val ID_ASSASSIN = 9
+    const val ID_FEAR_EXPLOITER = 10
+
     val traitMap: HashMap<Int, Trait> = HashMap()
     fun getTraitById(id: Int): Trait {
         return traitMap[id]!!
