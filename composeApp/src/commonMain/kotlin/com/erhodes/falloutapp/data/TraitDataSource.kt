@@ -59,8 +59,8 @@ object TraitDataSource {
             id = 9,
         )
         traitMap[10] = Trait(
-            name = "Suppress",
-            description = "Inflict +1 Fear when using Burst.",
+            name = "Fear Exploiter",
+            description = "Gain Advantage on attacks against enemies who are Panicked or Broken.",
             id = 9,
         )
      }

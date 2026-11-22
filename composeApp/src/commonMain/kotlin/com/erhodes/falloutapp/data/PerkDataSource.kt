@@ -381,5 +381,21 @@ object PerkDataSource {
             effect = null,
             requirements = arrayOf(StatRequirement(Stats.INTELLIGENCE, 3), SkillRequirement(Skills.MEDICINE, 7))
         )
+        perkMap[46] = Perk(
+            name = "Lucky Find",
+            description = "When Scavenging, each Lucky dice grants an extra success.",
+            id = 46,
+            tier = 1,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.LUCK, 3))
+        )
+        perkMap[47] = Perk(
+            name = "Bloody Mess",
+            description = "When attacking, each Lucky dice increases the attack damage by 1. If the target is Bloodied after the attack, inflict another 2 damage. If the target dies to this attack, they die bloodily.",
+            id = 47,
+            tier = 2,
+            effect = null,
+            requirements = arrayOf(StatRequirement(Stats.LUCK, 3))
+        )
     }
 }

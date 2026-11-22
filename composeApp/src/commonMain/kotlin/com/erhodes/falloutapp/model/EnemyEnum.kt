@@ -8,5 +8,8 @@ enum class EnemyEnum {
     RAIDER_STALKER,
     ZAPPER,
     GHOUL,
-    PROTECTRON
+    PROTECTRON,
+    SOLDIER_RIFLEMAN,
+    SOLDIER_BRUTE,
+    SOLDIER_SNIPER
 }

@@ -44,6 +44,9 @@ class EncounterViewModel(
             EnemyEnum.ZAPPER -> EnemyDataSource.createZapper()
             EnemyEnum.GHOUL -> EnemyDataSource.createGhoul()
             EnemyEnum.PROTECTRON -> EnemyDataSource.createProtectron()
+            EnemyEnum.SOLDIER_RIFLEMAN -> EnemyDataSource.createSoldierRifleman()
+            EnemyEnum.SOLDIER_BRUTE -> EnemyDataSource.createSoldierBrute()
+            EnemyEnum.SOLDIER_SNIPER -> EnemyDataSource.createSoldierSniper()
         }
         repo.addCharacterToEncounter(newEnemy)
     }

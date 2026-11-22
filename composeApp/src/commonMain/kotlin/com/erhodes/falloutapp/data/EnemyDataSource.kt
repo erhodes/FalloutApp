@@ -8,6 +8,7 @@ import com.erhodes.falloutapp.data.ItemDataSource.ID_SNIPER_RIFLE
 import com.erhodes.falloutapp.model.Armor
 import com.erhodes.falloutapp.model.Enemy
 import com.erhodes.falloutapp.model.Skills
+import com.erhodes.falloutapp.model.StackableItem
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.model.action.MeleeAttack
 import com.erhodes.falloutapp.model.action.RangedAttack
@@ -197,7 +198,7 @@ object EnemyDataSource {
     }
 
     fun createSoldierRifleman(): Enemy {
-        // An assault rifle enemy specializing in inflictin Fear
+        // An assault rifle enemy specializing in inflicting Fear
         val soldier = Enemy(
             name = "Soldier Rifleman",
             strength = 1,
@@ -205,7 +206,7 @@ object EnemyDataSource {
             endurance = 2,
             charisma = 3,
             intelligence = 2,
-            agility = 3,
+            agility = 4,
             luck = 1,
         )
         soldier.skills[Skills.GUNS.ordinal] = 8
@@ -220,6 +221,9 @@ object EnemyDataSource {
         val armor = Armor(ItemDataSource.getItemTemplateById(ID_ARMOR_COMBAT), 0)
         soldier.addItemToInventory(armor)
         soldier.equipItem(armor)
+        val bullets = StackableItem(ItemDataSource.getItemTemplateById(4013), 6)
+        soldier.addItemToInventory(bullets)
+        soldier.equipItem(bullets)
         soldier.actions.add(RangedAttack(assaultRifle))
         soldier.traits.add(TraitDataSource.getTraitById(10))
         return soldier
@@ -259,11 +263,11 @@ object EnemyDataSource {
         val soldier = Enemy(
             name = "Soldier Sniper",
             strength = 1,
-            perception = 2,
+            perception = 3,
             endurance = 2,
             charisma = 3,
             intelligence = 2,
-            agility = 3,
+            agility = 4,
             luck = 1,
         )
         soldier.skills[Skills.GUNS.ordinal] = 8
