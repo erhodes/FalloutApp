@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Enemy
+import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.presentation.EncounterUiState
 import com.erhodes.falloutapp.presentation.EnemyUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
@@ -52,6 +53,8 @@ fun EncounterScreen(
     onHealDamage: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
     onRepair: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
     onModifyFear: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
+    onModifyCondition: (enemyIndex: Int, condition: Condition, amount: Int) -> Unit = { _, _, _ -> },
+    onManageConditions: (enemyIndex: Int) -> Unit = {},
     onRemoveEnemy: (enemyIndex: Int) -> Unit = {},
     onRenameEnemy: (enemyIndex: Int, newName: String) -> Unit = { _, _ -> },
     onRenameEncounter: (newName: String) -> Unit = {},
@@ -119,6 +122,8 @@ fun EncounterScreen(
                 onHealDamage = { onHealDamage(enemy.index, it) },
                 onRepair = { onRepair(enemy.index, it) },
                 onModifyFear = { onModifyFear(enemy.index, it) },
+                onModifyCondition = { condition, amount -> onModifyCondition(enemy.index, condition, amount) },
+                onManageConditions = { onManageConditions(enemy.index) },
                 onRemove = { onRemoveEnemy(enemy.index) },
                 onRename = { onRenameEnemy(enemy.index, it) },
                 readOnly = readOnly,
@@ -148,6 +153,8 @@ private fun EnemyRow(
     onHealDamage: (Int) -> Unit,
     onRepair: (Int) -> Unit,
     onModifyFear: (Int) -> Unit,
+    onModifyCondition: (Condition, Int) -> Unit,
+    onManageConditions: () -> Unit,
     onRemove: () -> Unit,
     onRename: (String) -> Unit,
     readOnly: Boolean,
@@ -231,6 +238,8 @@ private fun EnemyRow(
         EnemyCharacterDisplay(
             state = enemyUiState,
             onModifyFear = onModifyFear,
+            onModifyCondition = onModifyCondition,
+            onManageConditions = onManageConditions,
             readOnly = readOnly,
         )
     }

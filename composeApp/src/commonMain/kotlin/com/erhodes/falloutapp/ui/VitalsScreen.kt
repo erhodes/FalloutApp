@@ -65,7 +65,7 @@ fun VitalsScreen(
                         onModifyRadiation = onModifyRadiation
                     )
                     ConditionsPanel(
-                        characterState = characterState,
+                        conditions = characterState.character.conditions,
                         onModifyConditionValue = onModifyCondition,
                         onManageConditions = onManageConditions
                     )
@@ -88,7 +88,7 @@ fun VitalsScreen(
                         onModifyRadiation = onModifyRadiation
                     )
                     ConditionsPanel(
-                        characterState = characterState,
+                        conditions = characterState.character.conditions,
                         onModifyConditionValue = onModifyCondition,
                         onManageConditions = onManageConditions
                     )
@@ -239,14 +239,19 @@ fun SecondaryVitalsPanel(
 }
 
 @Composable
-fun ConditionsPanel(characterState: CharacterUiState, onModifyConditionValue: (Condition, Int) -> Unit, onManageConditions: () -> Unit) {
+fun ConditionsPanel(
+    conditions: Collection<Condition>,
+    onModifyConditionValue: (Condition, Int) -> Unit,
+    onManageConditions: () -> Unit,
+    readOnly: Boolean = false,
+) {
     Column {
         Text(
             text = "Conditions",
             style = MaterialTheme.typography.titleMedium
         )
         var showAbilityPopup by remember { mutableStateOf<Condition?>(null) }
-        characterState.character.conditions.forEach { c ->
+        conditions.forEach { c ->
             Row {
                 Text(
                     text = if (c is ScalableCondition) "${c.template.name} ${c.count}" else c.template.name,
@@ -255,7 +260,7 @@ fun ConditionsPanel(characterState: CharacterUiState, onModifyConditionValue: (C
                     modifier = Modifier
                         .clickable { showAbilityPopup = c },
                 )
-                if (c is ScalableCondition) {
+                if (c is ScalableCondition && !readOnly) {
                     PlusMinusButtons(
                         onIncrease = { onModifyConditionValue(c, 1) },
                         onDecrease = { onModifyConditionValue(c, -1) }
@@ -275,12 +280,14 @@ fun ConditionsPanel(characterState: CharacterUiState, onModifyConditionValue: (C
                 }
             )
         }
-        Button(
-            onClick = {
-                onManageConditions()
+        if (!readOnly) {
+            Button(
+                onClick = {
+                    onManageConditions()
+                }
+            ) {
+                Text(stringResource(Res.string.manage_conditions))
             }
-        ) {
-            Text(stringResource(Res.string.manage_conditions))
         }
     }
 }
@@ -376,7 +383,7 @@ fun ConditionsPanelPreview() {
     character.addCondition(burning)
     FalloutAppTheme {
         ConditionsPanel(
-            characterState = CharacterUiState(character),
+            conditions = character.conditions,
             onModifyConditionValue = { _, _ -> },
             onManageConditions = {}
         )

@@ -2,6 +2,7 @@ package com.erhodes.falloutapp.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -27,6 +28,7 @@ import com.erhodes.falloutapp.model.Stats
 import com.erhodes.falloutapp.model.Weapon
 import com.erhodes.falloutapp.model.action.Attack
 import com.erhodes.falloutapp.model.action.RangedAttack
+import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.presentation.EnemyUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
@@ -41,6 +43,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun EnemyCharacterDisplay(
     state: EnemyUiState,
     onModifyFear: (Int) -> Unit = {},
+    onModifyCondition: (Condition, Int) -> Unit = { _, _ -> },
+    onManageConditions: () -> Unit = {},
     readOnly: Boolean = false,
 ) {
     Column {
@@ -82,6 +86,15 @@ fun EnemyCharacterDisplay(
                     onDecrease = { onModifyFear(-1) }
                 )
             }
+        }
+        //Conditions
+        Box(modifier = Modifier.padding(horizontal = Dimens.paddingMedium)) {
+            ConditionsPanel(
+                conditions = state.character.conditions,
+                onModifyConditionValue = onModifyCondition,
+                onManageConditions = onManageConditions,
+                readOnly = readOnly,
+            )
         }
         //Skills
         FlowRow(

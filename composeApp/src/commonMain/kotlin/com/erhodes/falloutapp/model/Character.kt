@@ -3,6 +3,7 @@ package com.erhodes.falloutapp.model
 import com.erhodes.falloutapp.model.action.Action
 import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.model.condition.ConditionTemplate
+import com.erhodes.falloutapp.model.condition.ScalableCondition
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlin.math.max
@@ -388,6 +389,15 @@ sealed class Character {
 
     fun removeCondition(condition: Condition) {
         conditions.remove(condition)
+    }
+
+    /** Adjusts a scalable condition's count, removing it once the count drops below 1. */
+    fun modifyCondition(condition: Condition, amount: Int) {
+        if (condition !is ScalableCondition) return
+        condition.count += amount
+        if (condition.count < 1) {
+            removeCondition(condition)
+        }
     }
 
     fun removeCondition(condition: ConditionTemplate) {

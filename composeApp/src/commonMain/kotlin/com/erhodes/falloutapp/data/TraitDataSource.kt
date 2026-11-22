@@ -61,7 +61,7 @@ object TraitDataSource {
         traitMap[10] = Trait(
             name = "Fear Exploiter",
             description = "Gain Advantage on attacks against enemies who are Panicked or Broken.",
-            id = 9,
+            id = 10,
         )
      }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.erhodes.falloutapp.data.EnemyDataSource
 import com.erhodes.falloutapp.model.Encounter
 import com.erhodes.falloutapp.model.EnemyEnum
+import com.erhodes.falloutapp.model.condition.Condition
 import com.erhodes.falloutapp.repository.EncounterRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -77,6 +78,20 @@ class EncounterViewModel(
     fun onRepairArmor(enemyIndex: Int, amount: Int) = repo.repairArmor(enemyIndex, amount)
 
     fun onModifyFear(enemyIndex: Int, amount: Int) = repo.modifyFear(enemyIndex, amount)
+
+    /** The enemy the Manage Conditions screen will add to; set before navigating there. */
+    private var conditionTargetIndex: Int? = null
+
+    fun onManageConditions(enemyIndex: Int) {
+        conditionTargetIndex = enemyIndex
+    }
+
+    fun onAddCondition(condition: Condition) {
+        conditionTargetIndex?.let { repo.addCondition(it, condition) }
+    }
+
+    fun onModifyCondition(enemyIndex: Int, condition: Condition, amount: Int) =
+        repo.modifyCondition(enemyIndex, condition, amount)
 
     fun onRenameEnemy(enemyIndex: Int, newName: String) {
         activeEncounter.characters.getOrNull(enemyIndex)?.let {

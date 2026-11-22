@@ -231,12 +231,7 @@ class CharacterRepository(
     }
 
     fun modifyConditionForCharacter(condition: Condition, amount: Int, character: PlayerCharacter) {
-        if (condition is ScalableCondition) {
-            condition.count+=amount
-            if (condition.count < 1) {
-                removeConditionFromCharacter(condition, character)
-            }
-        }
+        character.modifyCondition(condition, amount)
         saveCharacters()
     }
 

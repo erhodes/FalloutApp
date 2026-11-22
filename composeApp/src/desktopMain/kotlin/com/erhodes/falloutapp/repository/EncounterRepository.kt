@@ -3,6 +3,7 @@ package com.erhodes.falloutapp.repository
 import com.erhodes.falloutapp.data.EncounterDataSource
 import com.erhodes.falloutapp.model.Character
 import com.erhodes.falloutapp.model.Encounter
+import com.erhodes.falloutapp.model.condition.Condition
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.BufferOverflow
@@ -55,6 +56,20 @@ class EncounterRepository(
     fun modifyFear(index: Int, amount: Int) {
         activeEncounter.characters.getOrNull(index)?.let {
             it.modifyFear(amount)
+            notifyChanged()
+        }
+    }
+
+    fun addCondition(index: Int, condition: Condition) {
+        activeEncounter.characters.getOrNull(index)?.let {
+            it.addCondition(condition)
+            notifyChanged()
+        }
+    }
+
+    fun modifyCondition(index: Int, condition: Condition, amount: Int) {
+        activeEncounter.characters.getOrNull(index)?.let {
+            it.modifyCondition(condition, amount)
             notifyChanged()
         }
     }

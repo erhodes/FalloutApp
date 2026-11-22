@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.erhodes.falloutapp.presentation.CampaignViewModel
 import com.erhodes.falloutapp.presentation.CharacterViewModel
+import com.erhodes.falloutapp.presentation.ConditionsViewModel
 import com.erhodes.falloutapp.presentation.EncounterViewModel
 import com.erhodes.falloutapp.presentation.ItemViewModel
 import com.erhodes.falloutapp.presentation.LocationViewModel
@@ -35,6 +36,7 @@ import com.erhodes.falloutapp.ui.EncounterListScreen
 import com.erhodes.falloutapp.ui.EncounterScreen
 import com.erhodes.falloutapp.ui.LocationListScreen
 import com.erhodes.falloutapp.ui.LocationScreen
+import com.erhodes.falloutapp.ui.ManageConditionsScreen
 import com.erhodes.falloutapp.ui.SettlementScreen
 import com.erhodes.falloutapp.ui.StoreScreen
 import com.erhodes.falloutapp.ui.UserListScreen
@@ -46,6 +48,7 @@ import falloutapp.composeapp.generated.resources.encounter_list
 import falloutapp.composeapp.generated.resources.encounters
 import falloutapp.composeapp.generated.resources.location
 import falloutapp.composeapp.generated.resources.locations
+import falloutapp.composeapp.generated.resources.manage_conditions
 import falloutapp.composeapp.generated.resources.store
 import falloutapp.composeapp.generated.resources.user_list
 import org.jetbrains.compose.resources.StringResource
@@ -60,7 +63,8 @@ enum class ServerScreen(val title: StringResource) {
     EncounterListScreen(title = Res.string.encounter_list),
     LocationListScreen(title = Res.string.locations),
     LocationScreen(title = Res.string.location),
-    StoreScreen(title = Res.string.store)
+    StoreScreen(title = Res.string.store),
+    ManageConditionsScreen(title = Res.string.manage_conditions)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,6 +76,7 @@ fun ServerApp(
     locationViewModel: LocationViewModel = viewModel { LocationViewModel() },
     campaignViewModel: CampaignViewModel = viewModel { CampaignViewModel() },
     itemViewModel: ItemViewModel = viewModel { ItemViewModel() },
+    conditionsViewModel: ConditionsViewModel = viewModel { ConditionsViewModel() },
     navController: NavHostController = rememberNavController()
 ) {
     Scaffold(
@@ -116,6 +121,13 @@ fun ServerApp(
                     onHealDamage = { index, amount -> encounterViewModel.onHealDamage(index, amount) },
                     onRepair = { index, amount -> encounterViewModel.onRepairArmor(index, amount) },
                     onModifyFear = { index, amount -> encounterViewModel.onModifyFear(index, amount) },
+                    onModifyCondition = { index, condition, amount ->
+                        encounterViewModel.onModifyCondition(index, condition, amount)
+                    },
+                    onManageConditions = { index ->
+                        encounterViewModel.onManageConditions(index)
+                        navController.navigate(ServerScreen.ManageConditionsScreen.name)
+                    },
                     onRemoveEnemy = { index -> encounterViewModel.onRemoveEnemy(index) },
                     onRenameEnemy = { index, newName -> encounterViewModel.onRenameEnemy(index, newName) },
                     onRenameEncounter = { newName -> encounterViewModel.onRenameEncounter(newName) },
@@ -126,6 +138,15 @@ fun ServerApp(
                 AddEnemyScreen(
                     onEnemySelected = {
                         encounterViewModel.onAddEnemy(it)
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(route = ServerScreen.ManageConditionsScreen.name) {
+                ManageConditionsScreen(
+                    conditionTemplates = conditionsViewModel.getManageableConditions(),
+                    onAddCondition = {
+                        encounterViewModel.onAddCondition(it)
                         navController.popBackStack()
                     }
                 )
