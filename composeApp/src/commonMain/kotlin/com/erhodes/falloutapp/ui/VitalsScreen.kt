@@ -203,12 +203,7 @@ fun SecondaryVitalsPanel(
         Row {
             Text(
                 text = "${stringResource(Res.string.fear)}: ${character.fear}  ${stringResource(Res.string.courage)}: ${character.getCourage()}",
-                color = when (character.getFearLevel()) {
-                    FearLevel.STEADY -> MaterialTheme.colorScheme.onSurface
-                    FearLevel.SHAKEN -> MaterialTheme.colorScheme.secondary
-                    FearLevel.PANICKED -> MaterialTheme.colorScheme.error
-                    FearLevel.BROKEN -> Color.Green
-                },
+                color = fearLevelColor(character.getFearLevel()),
                 modifier = Modifier.fillMaxWidth(0.2f))
             if (editable) {
                 PlusMinusButtons(
@@ -288,6 +283,14 @@ fun ConditionsPanel(characterState: CharacterUiState, onModifyConditionValue: (C
             Text(stringResource(Res.string.manage_conditions))
         }
     }
+}
+
+@Composable
+fun fearLevelColor(level: FearLevel): Color = when (level) {
+    FearLevel.STEADY -> MaterialTheme.colorScheme.onSurface
+    FearLevel.SHAKEN -> MaterialTheme.colorScheme.secondary
+    FearLevel.PANICKED -> MaterialTheme.colorScheme.error
+    FearLevel.BROKEN -> Color.Green
 }
 
 @Composable

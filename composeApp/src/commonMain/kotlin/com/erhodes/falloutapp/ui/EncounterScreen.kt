@@ -51,6 +51,7 @@ fun EncounterScreen(
     onTakeDamage: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
     onHealDamage: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
     onRepair: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
+    onModifyFear: (enemyIndex: Int, amount: Int) -> Unit = { _, _ -> },
     onRemoveEnemy: (enemyIndex: Int) -> Unit = {},
     onRenameEnemy: (enemyIndex: Int, newName: String) -> Unit = { _, _ -> },
     onRenameEncounter: (newName: String) -> Unit = {},
@@ -117,6 +118,7 @@ fun EncounterScreen(
                 onTakeDamage = { onTakeDamage(enemy.index, it) },
                 onHealDamage = { onHealDamage(enemy.index, it) },
                 onRepair = { onRepair(enemy.index, it) },
+                onModifyFear = { onModifyFear(enemy.index, it) },
                 onRemove = { onRemoveEnemy(enemy.index) },
                 onRename = { onRenameEnemy(enemy.index, it) },
                 readOnly = readOnly,
@@ -145,6 +147,7 @@ private fun EnemyRow(
     onTakeDamage: (Int) -> Unit,
     onHealDamage: (Int) -> Unit,
     onRepair: (Int) -> Unit,
+    onModifyFear: (Int) -> Unit,
     onRemove: () -> Unit,
     onRename: (String) -> Unit,
     readOnly: Boolean,
@@ -225,7 +228,11 @@ private fun EnemyRow(
         }
     }
     if (expanded) {
-        EnemyCharacterDisplay(state = enemyUiState)
+        EnemyCharacterDisplay(
+            state = enemyUiState,
+            onModifyFear = onModifyFear,
+            readOnly = readOnly,
+        )
     }
     if (showEditNameDialog) {
         var newName by remember { mutableStateOf(enemy.name) }

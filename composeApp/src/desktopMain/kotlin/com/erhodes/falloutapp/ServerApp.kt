@@ -115,6 +115,7 @@ fun ServerApp(
                     onTakeDamage = { index, amount -> encounterViewModel.onTakeDamage(index, amount) },
                     onHealDamage = { index, amount -> encounterViewModel.onHealDamage(index, amount) },
                     onRepair = { index, amount -> encounterViewModel.onRepairArmor(index, amount) },
+                    onModifyFear = { index, amount -> encounterViewModel.onModifyFear(index, amount) },
                     onRemoveEnemy = { index -> encounterViewModel.onRemoveEnemy(index) },
                     onRenameEnemy = { index, newName -> encounterViewModel.onRenameEnemy(index, newName) },
                     onRenameEncounter = { newName -> encounterViewModel.onRenameEncounter(newName) },

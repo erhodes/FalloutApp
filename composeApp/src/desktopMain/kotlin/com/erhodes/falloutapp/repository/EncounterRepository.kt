@@ -52,6 +52,13 @@ class EncounterRepository(
         }
     }
 
+    fun modifyFear(index: Int, amount: Int) {
+        activeEncounter.characters.getOrNull(index)?.let {
+            it.modifyFear(amount)
+            notifyChanged()
+        }
+    }
+
     fun removeCharacter(index: Int) {
         activeEncounter.removeCharacter(index)
         notifyChanged()

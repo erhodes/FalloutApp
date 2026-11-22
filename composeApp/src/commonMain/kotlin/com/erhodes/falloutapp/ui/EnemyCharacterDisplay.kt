@@ -30,6 +30,9 @@ import com.erhodes.falloutapp.model.action.RangedAttack
 import com.erhodes.falloutapp.presentation.EnemyUiState
 import com.erhodes.falloutapp.ui.theme.Dimens
 import com.erhodes.falloutapp.ui.theme.FalloutAppTheme
+import falloutapp.composeapp.generated.resources.Res
+import falloutapp.composeapp.generated.resources.courage
+import falloutapp.composeapp.generated.resources.fear
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -37,6 +40,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun EnemyCharacterDisplay(
     state: EnemyUiState,
+    onModifyFear: (Int) -> Unit = {},
+    readOnly: Boolean = false,
 ) {
     Column {
         Row(
@@ -59,6 +64,23 @@ fun EnemyCharacterDisplay(
                         textAlign = TextAlign.Center
                     )
                 }
+            }
+        }
+        //Fear
+        Row(
+            modifier = Modifier.padding(horizontal = Dimens.paddingMedium),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Text(
+                text = "${stringResource(Res.string.fear)}: ${state.character.fear}  ${stringResource(Res.string.courage)}: ${state.character.getCourage()}",
+                color = fearLevelColor(state.character.getFearLevel())
+            )
+            if (!readOnly) {
+                PlusMinusButtons(
+                    onIncrease = { onModifyFear(1) },
+                    onDecrease = { onModifyFear(-1) }
+                )
             }
         }
         //Skills

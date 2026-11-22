@@ -76,6 +76,8 @@ class EncounterViewModel(
 
     fun onRepairArmor(enemyIndex: Int, amount: Int) = repo.repairArmor(enemyIndex, amount)
 
+    fun onModifyFear(enemyIndex: Int, amount: Int) = repo.modifyFear(enemyIndex, amount)
+
     fun onRenameEnemy(enemyIndex: Int, newName: String) {
         activeEncounter.characters.getOrNull(enemyIndex)?.let {
             it.name = newName
