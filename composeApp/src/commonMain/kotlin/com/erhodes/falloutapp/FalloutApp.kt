@@ -1,15 +1,21 @@
 package com.erhodes.falloutapp
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -46,10 +52,12 @@ enum class FalloutScreen(val title: StringResource) {
 fun FalloutAppBar(
     currentScreen: FalloutScreen,
     canNavigateBack: Boolean,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         title = { Text(stringResource(currentScreen.title)) },
+        actions = actions,
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(onClick = navigateUp) {
@@ -82,12 +90,36 @@ fun FalloutApp(
     LaunchedEffect(Unit) {
         loginStateViewModel.automaticLogin()
     }
+    // Hoisted so the app bar can tell when the current screen is scrolled to the top.
+    val scrollState = rememberScrollState()
+    val atTop by remember { derivedStateOf { scrollState.value == 0 } }
+
+    val openCampaign: () -> Unit = {
+        loginStateViewModel.syncCampaign()
+        loginStateViewModel.getActiveEncounter()
+        loginStateViewModel.getActiveLocation()
+        navController.navigate(FalloutScreen.CampaignScreen.name) { launchSingleTop = true }
+    }
+
     Scaffold(
         topBar = {
             FalloutAppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
+                navigateUp = { navController.navigateUp() },
+                actions = {
+                    if (currentScreen == FalloutScreen.CharacterScreen) {
+                        // Only offered at the top of the character screen; fades out on scroll down.
+                        AnimatedVisibility(visible = atTop, enter = fadeIn(), exit = fadeOut()) {
+                            IconButton(onClick = openCampaign) {
+                                Icon(
+                                    imageVector = Icons.Filled.Place,
+                                    contentDescription = stringResource(Res.string.open_campaign)
+                                )
+                            }
+                        }
+                    }
+                }
             )
         }
     ) { innerPadding ->
@@ -95,7 +127,7 @@ fun FalloutApp(
             navController = navController,
             startDestination = FalloutScreen.CharacterList.name,
             modifier = Modifier.fillMaxSize()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
                 .padding(innerPadding)
         ) {
             composable(route = FalloutScreen.CharacterList.name) {
@@ -114,12 +146,7 @@ fun FalloutApp(
                         navController.navigate(FalloutScreen.CharacterCreation.name)
                     },
                     onLogin = { navController.navigate(FalloutScreen.Login.name) },
-                    onCampaignClicked = {
-                        loginStateViewModel.syncCampaign()
-                        loginStateViewModel.getActiveEncounter()
-                        loginStateViewModel.getActiveLocation()
-                        navController.navigate(FalloutScreen.CampaignScreen.name)
-                    }
+                    onCampaignClicked = openCampaign
                 )
             }
             composable(route = FalloutScreen.CharacterCreation.name) {
