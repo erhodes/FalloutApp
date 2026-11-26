@@ -43,8 +43,7 @@ enum class FalloutScreen(val title: StringResource) {
     Login(title = Res.string.login),
     EncounterScreen(title = Res.string.encounters),
     LocationScreen(title = Res.string.location_screen),
-    StoreScreen(title = Res.string.store),
-    CampaignScreen(title = Res.string.campaign_screen)
+    StoreScreen(title = Res.string.store)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,11 +93,10 @@ fun FalloutApp(
     val scrollState = rememberScrollState()
     val atTop by remember { derivedStateOf { scrollState.value == 0 } }
 
-    val openCampaign: () -> Unit = {
+    // The Login screen hosts the campaign view; refresh campaign data on the way in.
+    val openLogin: () -> Unit = {
         loginStateViewModel.syncCampaign()
-        loginStateViewModel.getActiveEncounter()
-        loginStateViewModel.getActiveLocation()
-        navController.navigate(FalloutScreen.CampaignScreen.name) { launchSingleTop = true }
+        navController.navigate(FalloutScreen.Login.name) { launchSingleTop = true }
     }
 
     Scaffold(
@@ -111,7 +109,7 @@ fun FalloutApp(
                     if (currentScreen == FalloutScreen.CharacterScreen) {
                         // Only offered at the top of the character screen; fades out on scroll down.
                         AnimatedVisibility(visible = atTop, enter = fadeIn(), exit = fadeOut()) {
-                            IconButton(onClick = openCampaign) {
+                            IconButton(onClick = openLogin) {
                                 Icon(
                                     imageVector = Icons.Filled.Place,
                                     contentDescription = stringResource(Res.string.open_campaign)
@@ -145,8 +143,7 @@ fun FalloutApp(
                         creationViewModel.startNewCreation()
                         navController.navigate(FalloutScreen.CharacterCreation.name)
                     },
-                    onLogin = { navController.navigate(FalloutScreen.Login.name) },
-                    onCampaignClicked = openCampaign
+                    onLogin = openLogin
                 )
             }
             composable(route = FalloutScreen.CharacterCreation.name) {
@@ -267,16 +264,33 @@ fun FalloutApp(
                 val loginState = loginStateViewModel.loginState.collectAsState()
                 val savedName = loginStateViewModel.savedUsername.collectAsState()
                 val savedAddress = loginStateViewModel.savedServerAddress.collectAsState()
+                val connectExpanded = loginStateViewModel.connectExpanded.collectAsState()
+                val campaign = loginStateViewModel.campaignFlow.collectAsState()
+                val campaignJoined = loginStateViewModel.campaignJoined.collectAsState()
                 LoginScreen(
                     loggedIn = loginState.value,
                     characters = characterViewModel.characters,
                     initialName = savedName.value,
                     initialAddress = savedAddress.value,
+                    connectExpanded = connectExpanded.value,
+                    onConnectExpandedChange = { loginStateViewModel.setConnectExpanded(it) },
+                    // Campaign id is empty until real data has been fetched ("Loading"/"ERROR").
+                    campaignName = campaign.value.takeIf { it.id.isNotEmpty() }?.name,
+                    campaignJoined = campaignJoined.value,
                     onLogin = { name, address ->
                         loginStateViewModel.login(name, address)
                     },
                     onJoinCampaign = { character ->
                         loginStateViewModel.joinCampaign(character)
+                    },
+                    // Fetch the latest remote state before showing it.
+                    onActiveEncounterClicked = {
+                        loginStateViewModel.getActiveEncounter()
+                        navController.navigate(FalloutScreen.EncounterScreen.name)
+                    },
+                    onActiveLocationClicked = {
+                        loginStateViewModel.getActiveLocation()
+                        navController.navigate(FalloutScreen.LocationScreen.name)
                     }
                 )
             }
@@ -318,14 +332,6 @@ fun FalloutApp(
                         canBuy = true
                     )
                 }
-            }
-            composable(route = FalloutScreen.CampaignScreen.name) {
-                val campaign by loginStateViewModel.campaignFlow.collectAsState()
-                CampaignScreen(
-                    campaign = campaign,
-                    onActiveEncounterClicked = { navController.navigate(FalloutScreen.EncounterScreen.name) },
-                    onActiveLocationClicked = { navController.navigate(FalloutScreen.LocationScreen.name) }
-                )
             }
         }
     }

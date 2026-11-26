@@ -32,8 +32,7 @@ fun CharacterListScreen(
     onSelect: (PlayerCharacter) -> Unit,
     onNewCharacter: () -> Unit,
     onDeleteClicked: (PlayerCharacter) -> Unit,
-    onLogin: () -> Unit,
-    onCampaignClicked: () -> Unit
+    onLogin: () -> Unit
 ) {
     Column(
         modifier = Modifier.padding(horizontal = 10.dp)
@@ -47,11 +46,6 @@ fun CharacterListScreen(
             Text(
                 text = if (connected) "Connected" else "Not Connected"
             )
-        }
-        Button(
-            onClick = onCampaignClicked
-        ) {
-            Text("Campaign")
         }
 
         val greeting = Greeting().greet()
@@ -155,7 +149,6 @@ fun CharacterListScreenPreview() {
         CharacterListScreen(
             characters = listOf(character1, character2),
             connected = false,
-            {},
             {},
             {},
             {},

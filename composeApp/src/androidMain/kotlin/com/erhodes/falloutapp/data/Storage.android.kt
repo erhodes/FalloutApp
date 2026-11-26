@@ -39,3 +39,10 @@ actual val serverAddressStore: KStore<String> by lazy {
         default = ""
     )
 }
+actual val joinedCampaignStore: KStore<String> by lazy {
+    val filesDir = appContext.filesDir.absolutePath
+    storeOf(
+        file = Path("$filesDir/joinedCampaign.json"),
+        default = ""
+    )
+}

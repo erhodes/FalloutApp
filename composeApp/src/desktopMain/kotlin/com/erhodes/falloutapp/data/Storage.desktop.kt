@@ -59,6 +59,19 @@ actual val serverAddressStore: KStore<String> by lazy {
         default = ""
     )
 }
+actual val joinedCampaignStore: KStore<String> by lazy {
+    val homeDir = System.getProperty("user.home")
+    val appDir = Path("$homeDir/.falloutapp")
+
+    if (!SystemFileSystem.exists(appDir)) {
+        SystemFileSystem.createDirectories(appDir)
+    }
+
+    storeOf(
+        file = Path("$homeDir/.falloutapp/joinedCampaign.json"),
+        default = ""
+    )
+}
 
 val localUserStore: KStore<String> by lazy {
     val homeDir = System.getProperty("user.home")

@@ -54,6 +54,10 @@ class LoginRepository(
     private val _campaignFlow = MutableStateFlow(Campaign("Loading", ""))
     val campaignFlow = _campaignFlow.asStateFlow()
 
+    /** Id of the campaign this device has joined (persisted across restarts), or empty if none. */
+    private val _joinedCampaignId = MutableStateFlow("")
+    val joinedCampaignId = _joinedCampaignId.asStateFlow()
+
     private var serverAddress: String = ""
 
     init {
@@ -70,6 +74,7 @@ class LoginRepository(
 
             _savedUsername.value = localDataSource.getUsername()
             _savedServerAddress.value = localDataSource.getAddress()
+            _joinedCampaignId.value = localDataSource.getJoinedCampaign()
 
             dataSource = NetworkDataSource(_savedServerAddress.value)
         }
@@ -100,19 +105,45 @@ class LoginRepository(
                 localDataSource.updateLoginInfo(username, address)
             }
             _loggedIn.value = success
+            if (success) {
+                getCampaignData()
+            }
         } catch (_: SocketTimeoutException) {
             _loggedIn.value = false
         }
     }
 
-    suspend fun joinCampaign(character: PlayerCharacter) {
-        dataSource.joinCampaign(character)
+    /**
+     * Joins the fetched campaign with [character]. On success the campaign's id is persisted so the
+     * app treats it as joined across restarts.
+     */
+    suspend fun joinCampaign(character: PlayerCharacter): Boolean {
+        val campaignId = _campaignFlow.value.id
+        val success = try {
+            dataSource.joinCampaign(character)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            AppLogger.d("Eric", "failed to join campaign: ${e.message}")
+            false
+        }
+        if (success) {
+            _joinedCampaignId.value = campaignId
+            localDataSource.setJoinedCampaign(campaignId)
+        }
+        return success
     }
 
     fun getCampaignData() {
         scope.launch {
-            _campaignFlow.update {
-                dataSource.getCampaignState()
+            try {
+                _campaignFlow.update {
+                    dataSource.getCampaignState()
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                AppLogger.d("Eric", "failed to get campaign data: ${e.message}")
             }
         }
     }

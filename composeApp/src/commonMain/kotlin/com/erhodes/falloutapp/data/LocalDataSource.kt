@@ -22,4 +22,12 @@ class LocalDataSource(
     suspend fun getAddress(): String {
         return serverAddressStore.get() ?: ""
     }
+
+    suspend fun setJoinedCampaign(campaignId: String) {
+        joinedCampaignStore.set(campaignId)
+    }
+
+    suspend fun getJoinedCampaign(): String {
+        return joinedCampaignStore.get() ?: ""
+    }
 }

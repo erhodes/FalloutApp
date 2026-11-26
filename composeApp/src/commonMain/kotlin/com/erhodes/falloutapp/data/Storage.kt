@@ -9,3 +9,6 @@ expect val localIdStore: KStore<String>
 expect val usernameStore: KStore<String>
 
 expect val serverAddressStore: KStore<String>
+
+/** Id of the campaign this device has joined, or empty if none. */
+expect val joinedCampaignStore: KStore<String>

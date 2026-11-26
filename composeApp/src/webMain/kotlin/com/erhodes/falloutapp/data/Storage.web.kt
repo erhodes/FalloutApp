@@ -30,3 +30,10 @@ actual val serverAddressStore: KStore<String> by lazy {
         default = ""
     )
 }
+
+actual val joinedCampaignStore: KStore<String> by lazy {
+    storeOf(
+        key = "joinedCampaign",
+        default = ""
+    )
+}
